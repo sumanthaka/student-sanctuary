@@ -1,0 +1,24 @@
+<ul>
+    {% for role in roles %}
+        {% for role_value, permissions in role.items() %}
+            <li>
+                {{ role_value.replace('_', ' ') }} <button id="{{ role_value }}" onclick="delete_role(this.id)">-</button><br />
+                Current holder:
+                {% for candidate in candidates if candidate["role"] == role_value %}
+                        <p>{{ candidate["name"] }}</p>
+                        <p>{{ candidate["email"] }}</p>
+                {% endfor %}
+                <input type="email" placeholder="Email" id="user_email">
+                <button>OK</button><br />
+                <h4>Role Permissions</h4>
+                <ul>
+                    {% for perm in permissions %}
+                        <li>{{ perm }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    {% endfor %}
+</ul>
+<button id="add_role" onclick="create_role()">Add</button>
+<div id="role_container"></div>

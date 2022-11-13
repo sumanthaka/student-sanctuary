@@ -1,0 +1,10 @@
+<ul>
+    {% if courses %}
+        {% for course in courses%}
+            <li>{{ course }} <button id="{{ course }}" onclick="delete_course(this.id)">-</button></li>
+        {% endfor %}
+    {% endif %}
+</ul>
+<button id="add">Add</button>
+<div id="input_container"></div>
+

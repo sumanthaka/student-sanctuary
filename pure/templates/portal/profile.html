@@ -1,0 +1,24 @@
+{% if current_user.user == "admin" %}
+    {% include 'portal/admin.html' %}
+{% elif current_user.user == "faculty" %}
+    {% include 'portal/faculty.html' %}
+{% elif current_user.user == "student" %}
+    {% include 'portal/student.html' %}
+{% endif %}
+
+{% block content %}
+    <h1>Hi, {{ current_user.name }}</h1>
+    <p>Name: </p>
+    <p>{{ current_user.name }}
+    <p>Email: </p>
+    <p>{{ current_user.email }}</p>
+    <p>College: </p>
+    <p>{{ current_user.college.replace('_',' ') }}</p>
+    {% if current_user.user == "faculty" %}
+        <p>Qualification: </p>
+        <p>{{ current_user.qualification }}</p>
+    {% elif current_user.user == "student" %}
+        <p>Course: </p>
+        <p>{{ current_user.course }}</p>
+    {% endif %}
+{% endblock %}

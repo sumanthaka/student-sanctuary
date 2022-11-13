@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css?family=Silkscreen&display=swap&effect=anaglyph|fire|fire-animation|3d-float');
+@import url('https://fonts.googleapis.com/css?family=Fuzzy+Bubbles&family=Open+Sans:ital,wght@1,300&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box
+}
+
+body {
+    height: 100%;
+    background-color: #222e50;
+    color: #B8C2E0;
+}
+
+.cover {
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 10rem;
+    line-height: 4rem;
+}
+
+.cover > h1 {
+    font-family: 'Silkscreen', cursive;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 3rem;
+    color: #B8C2E0;
+    padding-bottom: 1em;
+}
+
+.cover > p {
+    font-family: 'Fuzzy Bubbles', cursive;
+    color: #B8C2E0;
+    font-size: 2rem;
+    width: 60%;
+    margin: auto;
+    padding-bottom: 1.5em;
+}
+
+.apply {
+    background-color: #B8C2E0;
+    font-size: 2rem;
+    font-family: 'Silkscreen', cursive;
+    padding: 0.5em;
+    border-radius: 2em;
+    cursor: pointer;
+}
+
+.apply:hover, .apply:focus {
+    color: #f42c04;
+}

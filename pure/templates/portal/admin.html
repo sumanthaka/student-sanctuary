@@ -1,0 +1,21 @@
+{% extends 'portal_base.html' %}
+
+{% block title %}
+    <title>Admin Portal</title>
+{% endblock %}
+
+{% block links %}
+{% endblock %}
+
+{% block navbar %}
+    <a href="{{ url_for('admin.college_management') }}">Manager</a>
+    <a href="{{ url_for('announcement.announcement_maker') }}">Announcement Maker</a>
+    <a href={{ url_for('profile.profile_page') }}>{{ current_user.name }}</a>
+{% endblock %}
+
+{% block logout %}
+    <a href="{{ url_for('admin.logout_page') }}">Log Out</a>
+{% endblock %}
+
+{% block content %}
+{% endblock %}

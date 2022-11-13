@@ -1,0 +1,13 @@
+{% if faculty_list %}
+    <ul>
+        {% for faculty in faculty_list %}
+            <li>
+                <pre>Name: {{ faculty.name }}           Email: {{ faculty.email }}</pre>
+                <button name="{{ faculty.email }}" onclick="approve_faculty(this.name, 'approve')">Tick</button>
+                <button name="{{ faculty.email }}" onclick="approve_faculty(this.name, 'reject')">Cross</button>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <h3>No one to approve at the moment</h3>
+{% endif %}

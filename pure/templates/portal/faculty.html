@@ -1,0 +1,16 @@
+{% extends 'portal_base.html' %}
+
+{% block title %}
+    <title>Faculty Portal</title>
+{% endblock %}
+
+{% block navbar %}
+    <a href={{ url_for('profile.profile_page') }}>{{ current_user.name }}</a>
+{%
+        endblock %}
+{% block logout %}
+    <a href="{{ url_for('faculty.logout_page') }}">Log Out</a>
+{% endblock %}
+
+{% block content %}
+{% endblock %}

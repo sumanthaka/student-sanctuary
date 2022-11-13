@@ -1,0 +1,41 @@
+{% extends 'home_base.html' %}
+
+{% block links %}
+    <link rel="stylesheet" href="../../static/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <div class="alert">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endwith %}
+    <div class="container" id="container">
+        <h1>{{ user }} Sign in</h1>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <button class="google-button social">
+                <em class="fa fa-google-plus"></em>
+            </button>
+            <p class="or">or use your account</p>
+            {{ form.email.label() }}
+            {{ form.email(placeholder="Email") }}
+            <br>
+            {{ form.password.label() }}
+            {{ form.password(placeholder="Password") }}
+            <br>
+            <p class="forgot-password">
+                <a href="{{ url_for('main.reset_request') }}">Forgot your password?</a>
+            </p>
+            <br>
+            {{ form.submit() }}
+        </form>
+        {% if user != 'admin' %}
+            <button class="sign-up" onclick="location.href='/{{ user }}/signup'">Sign Up</button>
+        {% endif %}
+	</div>
+{% endblock %}

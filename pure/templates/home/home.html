@@ -1,0 +1,15 @@
+{% extends 'home_base.html' %}
+{% block links %}
+    <link rel="stylesheet" href="../../static/home.css">
+{% endblock %}
+
+{% block content %}
+    <section class="container" id="container">
+        <div class="cover">
+            <h1 class="font-effect-anaglyph font-effect-3d-float">Student Sanctuary</h1>
+            <p class="font-effect-anaglyph">We provide a platform for students to connect with each other and share their experiences.</p>
+            <button id="apply_now" class="apply font-effect-fire" onclick="location.href = '{{ url_for('main.apply_now') }}'">Apply Now!</button>
+        </div>
+    </section>
+    <script defer type="application/javascript" src="../../static/home.js"></script>
+{% endblock %}

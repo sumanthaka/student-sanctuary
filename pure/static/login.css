@@ -1,0 +1,84 @@
+*{
+	margin: 0;
+	border: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #0f1a20;
+}
+
+.alert {
+    background-color: #f44336;
+    color: white;
+    padding: 20px;
+    margin-bottom: 15px
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s
+}
+
+.container {
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+	background-color: #4da1a9;
+	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+	margin: 3rem auto;
+	width: 70%;
+}
+
+h1{
+	margin: 0;
+	text-align: center;
+}
+
+.google-button {
+	border: 2px solid #DDDDDD;
+	border-radius: 3rem;
+	width: 100%;
+	height: 2rem;
+	background-color: white;
+}
+
+form {
+	margin-top: 2rem;
+	padding: 3rem;
+	height: 100%;
+	text-align: center;
+}
+
+input,label {
+	width: 60%;
+	margin-top: 0.5em;
+	font-size: 1.4rem;
+	margin-bottom: 0.2em;
+}
+
+label{
+	margin-right: 0.5rem;
+}
+
+input[type=email]{
+	margin-left: 2rem;
+}
+
+.or{
+	padding-top: 0.5rem ;
+}
+
+input[type=submit],.sign-up {
+	border-radius: 20px;
+	border: 1px;
+	background-color: #FF4B2B;
+	font-size: 1rem;
+	padding: 1em;
+	text-align: center;
+}

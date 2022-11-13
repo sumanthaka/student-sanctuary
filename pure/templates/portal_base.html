@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+    {% endblock %}
+    <link rel="stylesheet" href="{{ url_for('main.catch_all', path='portal_base.css') }}">
+    {% block links %}
+    {% endblock %}
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('main.home_page') }}"><img src="{{ url_for('main.catch_all', path='logo.png') }}" alt="logo"></a>
+        <nav>
+            <a href="#">Announcements</a>
+            <a href="#">Chat</a>
+            {% block navbar %}
+            {% endblock %}
+
+            {% block logout %}
+            {% endblock %}
+        </nav>
+    </header>
+    <main>
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        Copyright 2022          Student Sanctuary
+    </footer>
+</body>
+</html>

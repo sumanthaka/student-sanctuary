@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Sanctuary</title>
+    <link rel="stylesheet" href="../static/home_base.css">
+    <script  src="../static/home_base.js" type="application/javascript"></script>
+    {% block links %}
+    {% endblock %}
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('main.home_page') }}"><img src="../static/logo.png" alt="logo"></a>
+        <nav>
+            <button class="font-effect-emboss" id="apply_now_nav" onclick="location.href = '{{ url_for('main.apply_now') }}'"><strong>Apply Now!</strong></button>
+            <button id="student" onclick="location.href = '{{ url_for('student.student_signin') }}'">Student</button>
+            <button id="faculty" onclick="location.href = '{{ url_for('faculty.faculty_signin') }}'">Faculty</button>
+            <button id="admin" onclick="location.href = '{{ url_for('admin.admin_signin') }}'">Admin</button>
+            <button id="contact" onclick="location.href='{{ url_for('main.contact_us') }}'">Contact Us</button>
+            {% if current_user %}
+                {% if current_user.user == 'student' %}
+                    <script>check_login("student", "{{ url_for('profile.profile_page') }}")</script>
+                {% elif current_user.user == 'faculty' %}
+                    <script>check_login("faculty", "{{ url_for('profile.profile_page') }}")</script>
+                {% elif current_user.user == 'admin' %}
+                    <script>check_login("admin", "{{ url_for('profile.profile_page') }}")</script>
+                {% endif %}
+            {% endif %}
+        </nav>
+    </header>
+    <main id="main">
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        Copyright 2022          Student Sanctuary
+    </footer>
+</body>
+</html>

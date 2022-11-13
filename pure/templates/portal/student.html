@@ -1,0 +1,23 @@
+{% extends 'portal_base.html' %}
+
+{% block title %}
+    <title>Student Portal</title>
+{% endblock %}
+
+{% block links %}
+{% endblock %}
+
+{% block navbar %}
+    {% if current_user.role == "president" %}
+        <a href="{{ url_for('announcement.announcement_maker') }}">Announcement Maker</a>
+    {% endif %}
+    <a href={{ url_for('profile.profile_page') }}>{{ current_user.name }}</a>
+{% endblock %}
+
+{% block logout %}
+    <a href="{{ url_for('student.logout_page') }}">Log Out</a>
+{% endblock %}
+
+{% block content %}
+    <p>{{ current_user.role }}</p>
+{% endblock %}
