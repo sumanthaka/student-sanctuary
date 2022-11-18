@@ -6,8 +6,8 @@ from pure.models import User
 
 
 class ContactForm(FlaskForm):
-    name = StringField('Name', validators=[Length(min=2, max=30)])
-    email = EmailField('Email', validators=[Email()])
+    name = StringField('Name', validators=[Length(min=2, max=30), DataRequired()])
+    email = EmailField('Email', validators=[Email(), DataRequired()])
     subject = StringField('Subject', validators=[DataRequired()])
     message = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Send')

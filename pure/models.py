@@ -198,6 +198,3 @@ class Announcement:
                                                      'title': self.title,
                                                      'subject': self.subject,
                                                      'desc': self.desc})
-
-
-

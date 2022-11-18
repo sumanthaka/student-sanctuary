@@ -8,6 +8,7 @@
     <div class="contact-container">
         <h1 class="topic-text">Send us a message</h1>
         <form method="POST">
+            {{ form.hidden_tag() }}
             {{ form.name.label() }}
             {{ form.name(placeholder="Your name..") }}
             {{ form.email.label() }}

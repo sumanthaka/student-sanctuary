@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, send_from_directory, redirect, url
 
 from pure import bcrypt
 from pure.main.forms import ContactForm, RequestResetForm, ResetForm
-from pure.main.utils import send_reset_mail
+from pure.main.utils import send_reset_mail, send_contact_mail
 from pure.models import User
 
 
@@ -28,6 +28,10 @@ def apply_now():
 @main.route('/contact_us', methods=['POST', 'GET'])
 def contact_us():
     contact_form = ContactForm()
+    if contact_form.validate_on_submit():
+        send_contact_mail(contact_form.name.data, contact_form.email.data, contact_form.subject.data,
+                          contact_form.message.data)
+        return redirect(url_for('main.home_page'))
     return render_template('home/contact_us.html', form=contact_form)
 
 
