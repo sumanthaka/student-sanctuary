@@ -182,6 +182,9 @@ class Admin(User):
     def change_role(self, email):
         client[self.college]["user"].update_one({'email': email}, {'$set': {'role': "regular"}})
 
+    def assign_role(self, email, role):
+        client[self.college]["user"].update_one({'email': email}, {'$set': {'role': role}})
+
 
 class Announcement:
     def __init__(self, author, target, title, subject, desc):

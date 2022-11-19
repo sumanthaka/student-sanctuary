@@ -68,6 +68,10 @@ def role_management():
                 if candidate['role'] == data['role']:
                     current_user.change_role(candidate['email'])
             current_user.delete_role(data['role'])
+        elif 'delete_candidate' in data.keys():
+            current_user.change_role(data['email'])
+        elif 'assign_role' in data.keys():
+            current_user.assign_role(data['candidate_mail'], data['role'])
     return render_template('portal/role_management.html', roles=current_user.get_roles(), candidates=current_user.get_candidates())
 
 

@@ -70,3 +70,38 @@ function delete_role(role_id) {
             container.innerHTML = text
         })
 }
+
+function delete_candidate(candidate_mail) {
+    let data = {}
+    data["delete_candidate"] = "true"
+    data["email"] = candidate_mail
+    fetch(role_url, {
+        method: "POST",
+        "headers": {"Content-Type": "application/json"},
+        "body": JSON.stringify(data)
+    })
+        .then(response => {
+            return response.text()
+        })
+        .then(text => {
+            container.innerHTML = text
+        })
+}
+
+function assign_role(role_value) {
+    let data = {}
+    data["assign_role"] = "true"
+    data["role"] = role_value.slice(0, -6)
+    data["candidate_mail"] = document.getElementById(role_value).value
+    fetch(role_url, {
+        method: "POST",
+        "headers": {"Content-Type": "application/json"},
+        "body": JSON.stringify(data)
+    })
+        .then(response => {
+            return response.text()
+        })
+        .then(text => {
+            container.innerHTML = text
+        })
+}
