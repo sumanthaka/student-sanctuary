@@ -8,7 +8,8 @@
 {% endblock %}
 
 {% block navbar %}
-    {% if current_user.role == "president" %}
+    {% set permissions=current_user.get_permissions() %}
+    {% if 'announcement_maker' in permissions %}
         <a href="{{ url_for('announcement.announcement_maker') }}">Announcement Maker</a>
     {% endif %}
     <a href={{ url_for('profile.profile_page') }}>{{ current_user.name }}</a>

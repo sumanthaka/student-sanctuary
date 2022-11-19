@@ -59,7 +59,6 @@ class User(UserMixin):
             self.role = user["role"]
         elif self.user == "faculty":
             self.qualification = user["qualification"]
-            self.role = user["role"]
             self.approved = user["approved"]
 
     @staticmethod
@@ -122,6 +121,9 @@ class User(UserMixin):
         colleges.remove('config')
         return [college.replace('_', ' ') for college in colleges]
 
+    def get_permissions(self):
+        return client[self.college]["info"].find_one({'roles': {'$exists': 'true'}}, {'_id': 0, 'roles': {'$elemMatch': {self.role: {'$exists': 'true'}}}})["roles"][0][self.role]
+
 
 class Student(User):
     def create_user(self, name, email, college, course, password):
@@ -130,7 +132,7 @@ class Student(User):
 
 class Faculty(User):
     def create_user(self, name, email, college, qualification, password):
-        User.create_user(self, name=name, email=email, college=college, qualification=qualification, password=password, user="faculty", role="regular", approved=False)
+        User.create_user(self, name=name, email=email, college=college, qualification=qualification, password=password, user="faculty", approved=False)
 
 
 class Admin(User):
@@ -166,6 +168,7 @@ class Admin(User):
         return candidates
     
     def create_role(self, role_name, role_perm):
+        print(role_perm)
         role_name = role_name.lower()
         check_role = client[self.college]["info"].find_one({f'roles.{role_name}': {'$exists': 'true'}}, {'roles': 1, '_id': 0})
         if check_role is None:
@@ -183,7 +186,11 @@ class Admin(User):
         client[self.college]["user"].update_one({'email': email}, {'$set': {'role': "regular"}})
 
     def assign_role(self, email, role):
-        client[self.college]["user"].update_one({'email': email}, {'$set': {'role': role}})
+        candidate = client[self.college]["user"].find_one({'email': email})
+        if candidate["user"] != "student":
+            return False
+        else:
+            client[self.college]["user"].update_one({'email': email}, {'$set': {'role': role}})
 
 
 class Announcement:

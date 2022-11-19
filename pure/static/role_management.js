@@ -8,7 +8,9 @@ async function role_management(container) {
         })
 }
 
-function create_role() {
+function create_role(add_button_id) {
+    const add_button = document.getElementById(add_button_id)
+    add_button.disabled = true
     const role_container = document.getElementById("role_container")
     let input_role = document.createElement("input")
     input_role.type = "text"
@@ -89,19 +91,24 @@ function delete_candidate(candidate_mail) {
 }
 
 function assign_role(role_value) {
-    let data = {}
-    data["assign_role"] = "true"
-    data["role"] = role_value.slice(0, -6)
-    data["candidate_mail"] = document.getElementById(role_value).value
-    fetch(role_url, {
-        method: "POST",
-        "headers": {"Content-Type": "application/json"},
-        "body": JSON.stringify(data)
-    })
-        .then(response => {
-            return response.text()
-        })
-        .then(text => {
-            container.innerHTML = text
-        })
+    const candidate_value = document.getElementById(role_value).value
+    if (candidate_value === "") {
+        alert("Please type a candidate email to add")
+    } else {
+        let data = {}
+        data["assign_role"] = "true"
+        data["role"] = role_value.slice(0, -6)
+        data["candidate_mail"] = candidate_value
+            fetch(role_url, {
+                method: "POST",
+                "headers": {"Content-Type": "application/json"},
+                "body": JSON.stringify(data)
+            })
+                .then(response => {
+                    return response.text()
+                })
+                .then(text => {
+                    container.innerHTML = text
+                })
+    }
 }

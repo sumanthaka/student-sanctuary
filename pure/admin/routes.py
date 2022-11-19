@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, url_for, render_template, make_response, request
+from flask import Blueprint, flash, redirect, url_for, render_template, request
 from flask_login import login_user, logout_user, current_user
 
 from pure.admin.forms import Admin_LoginForm
@@ -71,7 +71,9 @@ def role_management():
         elif 'delete_candidate' in data.keys():
             current_user.change_role(data['email'])
         elif 'assign_role' in data.keys():
-            current_user.assign_role(data['candidate_mail'], data['role'])
+            if current_user.assign_role(data['candidate_mail'], data['role']) is False:
+                flash("User is not a student! Roles feature available only for students")
+
     return render_template('portal/role_management.html', roles=current_user.get_roles(), candidates=current_user.get_candidates())
 
 
