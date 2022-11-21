@@ -1,10 +1,11 @@
 {% if current_user.user == "admin" %}
-    {% include 'portal/admin.html' %}
+    {% extends 'portal/admin.html' %}
 {% elif current_user.user == "faculty" %}
-    {% include 'portal/faculty.html' %}
+    {% extends 'portal/faculty.html' %}
 {% elif current_user.user == "student" %}
-    {% include 'portal/student.html' %}
+    {% extends 'portal/student.html' %}
 {% endif %}
+
 
 {% block content %}
     <h1>Announcement Maker</h1>
@@ -16,14 +17,18 @@
         {{ form.subject() }}
         {{ form.target.label() }}
         <br />
-        {{ form.target_everyone(id="target_everyone") }}
-        {{ form.target_everyone.label() }}
-        <br />
-        {{ form.target_faculty(id="target_faculty") }}
-        {{ form.target_faculty.label() }}
-        <br />
-        {{ form.target_students(id="target_students") }}
-        {{ form.target_students.label() }}
+        {% if current_user.role != 'cr' %}
+            {% if current_user.user == 'admin' %}
+                {{ form.target_everyone(id="target_everyone") }}
+                {{ form.target_everyone.label() }}
+                <br />
+                {{ form.target_faculty(id="target_faculty") }}
+                {{ form.target_faculty.label() }}
+                <br />
+            {% endif %}
+            {{ form.target_students(id="target_students") }}
+            {{ form.target_students.label() }}
+        {% endif %}
         {{ form.target() }}
         {{ form.desc.label() }}
         {{ form.desc() }}

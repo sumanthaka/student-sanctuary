@@ -112,3 +112,78 @@ function assign_role(role_value) {
                 })
     }
 }
+
+async function display_cr(course) {
+    const candidate_container = document.getElementById("cr_container")
+    if(course === "") {
+        candidate_container.innerHTML = ''
+    } else {
+        const name = document.createElement("p")
+        const email = document.createElement("p")
+        let candidate = {}
+        await fetch(role_url + '/' + 'candidates' + '/' + course, {
+            'method': 'GET'
+        })
+            .then(response => {
+                return response.text()
+            })
+            .then(text => {
+                candidate = JSON.parse(text)
+                name.textContent = candidate["name"]
+                email.textContent = candidate["email"]
+                const assign_cr = document.createElement("input")
+                assign_cr.type = 'email'
+                assign_cr.id = "assign_cr_email"
+                const cr_ok = document.createElement("button")
+                cr_ok.textContent = 'OK'
+                cr_ok.addEventListener("click", () => {
+                    assign_rep(assign_cr.value, course)
+                })
+                candidate_container.innerHTML = ''
+                candidate_container.appendChild(name)
+                candidate_container.appendChild(email)
+                if(name.textContent !== "") {
+                    const rem = document.createElement("button")
+                    rem.textContent = '-'
+                    rem.id = candidate["email"]
+                    rem.addEventListener("click", () => {
+                        remove_cr(rem.id, course)
+                    })
+                    candidate_container.appendChild(rem)
+                }
+                candidate_container.appendChild(assign_cr)
+                candidate_container.appendChild(cr_ok)
+            })
+    }
+}
+
+async function remove_cr(cr_mail, course) {
+    const course_dropdown = document.getElementById('course')
+    let data = {}
+    data["delete_cr"] = "true"
+    data["email"] = cr_mail
+    await fetch(role_url+'/'+'candidates'+'/'+course, {
+        method: "POST",
+        "headers": {"Content-Type": "application/json"},
+        "body": JSON.stringify(data)
+    })
+    await display_cr(course_dropdown.value)
+}
+
+async function assign_rep(cr_email, course) {
+    if(cr_email === "") {
+        alert("Please enter CR email to add")
+    } else {
+        const course_dropdown = document.getElementById('course')
+        let data= {}
+        data["assign_cr"] = "true"
+        data["email"] = cr_email
+        await fetch(role_url+'/'+'candidates'+'/'+course, {
+            'method': 'POST',
+            "headers": {"Content-Type": "application/json"},
+            'body': JSON.stringify(data)
+        })
+        // await display_cr(course_dropdown.value)
+        role_management(container)
+    }
+}

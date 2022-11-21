@@ -23,3 +23,16 @@
 </ul>
 <button id="add_role" onclick="create_role(this.id)">Add</button>
 <div id="role_container"></div>
+
+<div>
+    <h3>Class Representatives</h3>
+    <label for="course">Course</label>
+    <select id="course" onchange="display_cr(this.value)">
+        <option value="" selected>Select a course</option>
+        {% for course in courses %}
+            <option value="{{ course }}">{{ course }}</option>
+        {% endfor %}
+    </select>
+    <div id="cr_container">
+    </div>
+</div>

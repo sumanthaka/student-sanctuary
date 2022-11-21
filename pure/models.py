@@ -136,6 +136,9 @@ class Faculty(User):
 
 
 class Admin(User):
+    def get_student(self, email):
+        return client[self.college]["user"].find_one({'email': email})
+
     def get_courses(self):
         courses = client[self.college]["info"].find_one({'courses': {'$exists': 'true'}}, {'courses': 1, '_id': 0})["courses"]
         return courses
@@ -162,14 +165,24 @@ class Admin(User):
 
     def get_candidates(self):
         candidates = client[self.college]["user"].find(
-            {'$and': [{'role': {'$ne': 'regular'}}, {'role': {'$exists': 'true'}}]},
-            {'email': 1, 'name': 1, 'role': 1, '_id': 0})
+            {'$and': [{'role': {'$ne': 'cr'}}, {'role': {'$ne': 'regular'}}, {'role': {'$exists': 'true'}}]},
+            {'email': 1, 'name': 1, 'role': 1, 'course': 1, '_id': 0})
         candidates = [candidate for candidate in candidates]
         return candidates
+
+    def get_crs(self, course):
+        crs = client[self.college]["user"].find_one(
+            {'$and': [{'role': {'$exists': 'true'}}, {'role': 'cr'}, {'course': course}]},
+            {'email': 1, 'name': 1, '_id': 0}
+        )
+        if crs is None:
+            return {'name': None, 'email': None}
+        else:
+            return crs
     
     def create_role(self, role_name, role_perm):
         print(role_perm)
-        role_name = role_name.lower()
+        role_name = role_name.lower().replace(' ', '_')
         check_role = client[self.college]["info"].find_one({f'roles.{role_name}': {'$exists': 'true'}}, {'roles': 1, '_id': 0})
         if check_role is None:
             client[self.college]["info"].update_one({'roles': {'$exists': 'true'}},
@@ -178,7 +191,7 @@ class Admin(User):
         return False
 
     def delete_role(self, role_name):
-        role_name = role_name.lower()
+        role_name = role_name.lower().replace(' ', '_')
         client[self.college]["info"].update_one({'roles': {'$exists': 'true'}},
                                                 {'$pull': {'roles': {role_name: {'$exists': 'true'}}}})
 
@@ -208,3 +221,15 @@ class Announcement:
                                                      'title': self.title,
                                                      'subject': self.subject,
                                                      'desc': self.desc})
+
+    @staticmethod
+    def get_announcements(college, user, course):
+        if user == 'admin':
+            announcements = client[college]["announcements"].find().sort("date", -1)
+        elif user == 'student':
+            announcements = client[college]["announcements"].find({'$or': [{'target': ['Everyone']}, {'target': {'$in': [course]}}]}).sort("date", -1)
+        elif user == 'faculty':
+            announcements = client[college]["announcements"].find({'$or': [{'target': ['Everyone']}, {'target': ['All faculty']}]}).sort("date", -1)
+        announcements = [announcement for announcement in announcements]
+        return announcements
+

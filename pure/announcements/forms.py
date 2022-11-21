@@ -14,6 +14,14 @@ class Announcement_Form(FlaskForm):
     target_everyone = BooleanField('Everyone')
     target_students = BooleanField('Only Students')
     target_faculty = BooleanField('Only Faculty')
-    target = MultiCheckboxField('Target', choices=['BCA', 'BSc'])
+    target = MultiCheckboxField('Target', choices=[])
+    desc = TextAreaField('Description', validators=[DataRequired()])
+    submit = SubmitField('Publish')
+
+
+class Cr_Announcement_Form(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    subject = StringField('Subject', validators=[DataRequired()])
+    target = MultiCheckboxField('Target', choices=[])
     desc = TextAreaField('Description', validators=[DataRequired()])
     submit = SubmitField('Publish')

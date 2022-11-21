@@ -71,10 +71,37 @@ def role_management():
         elif 'delete_candidate' in data.keys():
             current_user.change_role(data['email'])
         elif 'assign_role' in data.keys():
-            if current_user.assign_role(data['candidate_mail'], data['role']) is False:
-                flash("User is not a student! Roles feature available only for students")
+            student = current_user.get_student(data['candidate_mail'])
+            if student is None:
+                flash("No such student exists")
+            else:
+                if current_user.assign_role(data['candidate_mail'], data['role']) is False:
+                    flash("User is not a student! Roles feature available only for students")
 
-    return render_template('portal/role_management.html', roles=current_user.get_roles(), candidates=current_user.get_candidates())
+    return render_template('portal/role_management.html', roles=current_user.get_roles(),
+                           candidates=current_user.get_candidates(), courses=current_user.get_courses())
+
+
+@admin.route('/role_management/candidates/<course>', methods=['POST', 'GET'])
+def handle_crs(course):
+    if request.method == 'POST':
+        data = request.json
+        if 'delete_cr' in data.keys():
+            current_user.change_role(data["email"])
+        elif 'assign_cr' in data.keys():
+            student = current_user.get_student(data['email'])
+            if student is None:
+                flash("No such user exists")
+            else:
+                if student['course'] == course:
+                    cr = current_user.get_crs(course)
+                    if cr["email"] is not None:
+                        current_user.change_role(cr["email"])
+                    current_user.assign_role(data["email"], 'cr')
+                else:
+                    flash(f"User does not belong to {course}")
+
+    return current_user.get_crs(course)
 
 
 @admin.route('/logout', methods=['POST', 'GET'])
