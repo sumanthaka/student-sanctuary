@@ -1,6 +1,7 @@
 let everyone_checkbox = document.getElementById("target_everyone")
 let faculty_checkbox = document.getElementById("target_faculty")
 const student_checkbox = document.getElementById("target_students")
+let announcement_url = document.currentScript.getAttribute("announcement_url")
 
 if(everyone_checkbox === null) {
     everyone_checkbox = document.createElement("input")
@@ -71,3 +72,11 @@ student_checkbox.addEventListener("change", () => {
     }
 
 })
+
+async function del_announcement(announcement_id) {
+    await fetch(announcement_url, {
+        'method': 'POST',
+        'body': announcement_id
+    })
+    location.reload()
+}

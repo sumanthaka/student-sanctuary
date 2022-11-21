@@ -26,6 +26,11 @@
                 {{ form.target_faculty.label() }}
                 <br />
             {% endif %}
+            {% if current_user.user == 'faculty' %}
+                {{ form.target_faculty(id="target_faculty") }}
+                {{ form.target_faculty.label() }}
+                <br />
+            {% endif %}
             {{ form.target_students(id="target_students") }}
             {{ form.target_students.label() }}
         {% endif %}
@@ -34,6 +39,19 @@
         {{ form.desc() }}
         {{ form.submit() }}
     </form>
-    <script defer src="{{ url_for('main.catch_all', path='announcement_maker.js') }}"></script>
+    <ul>
+        {% for announcement in announcements %}
+            <p>{{ announcement["author"][1] }}</p>
+            <p>{{ announcement["date"].date() }}</p>
+            <p>{{ announcement["date"].time() }}</p>
+            <h3>{{ announcement["title"] }}</h3>
+            <h4>{{ announcement["subject"] }}</h4>
+            <p>{{ announcement["desc"] }}</p>
+            <button id="{{ announcement["_id"] }}" onclick="del_announcement(this.id)">-</button>
+            <br><br>
+        {% endfor %}
+    </ul>
+    <script defer src="{{ url_for('main.catch_all', path='announcement_maker.js') }}"
+            announcement_url="{{ url_for('announcement.manipulate_announcements') }}"></script>
 {% endblock %}
 

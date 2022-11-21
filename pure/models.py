@@ -229,7 +229,17 @@ class Announcement:
         elif user == 'student':
             announcements = client[college]["announcements"].find({'$or': [{'target': ['Everyone']}, {'target': {'$in': [course]}}]}).sort("date", -1)
         elif user == 'faculty':
-            announcements = client[college]["announcements"].find({'$or': [{'target': ['Everyone']}, {'target': ['All faculty']}]}).sort("date", -1)
+            announcements = client[college]["announcements"].find({'$or': [{'target': ['Everyone']}, {'target': ['All Faculty']}]}).sort("date", -1)
         announcements = [announcement for announcement in announcements]
         return announcements
 
+    @staticmethod
+    def get_user_announcements(college, email=None):
+        if email is None:
+            return client[college]["announcements"].find().sort("date", -1)
+        else:
+            return client[college]["announcements"].find({'author.0': email}).sort("date", -1)
+
+    @staticmethod
+    def delete_announcement(college, data):
+        client[college]["announcements"].delete_one({'_id': ObjectId(str(data)[2:-1])})

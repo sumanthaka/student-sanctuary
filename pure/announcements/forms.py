@@ -17,11 +17,3 @@ class Announcement_Form(FlaskForm):
     target = MultiCheckboxField('Target', choices=[])
     desc = TextAreaField('Description', validators=[DataRequired()])
     submit = SubmitField('Publish')
-
-
-class Cr_Announcement_Form(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    subject = StringField('Subject', validators=[DataRequired()])
-    target = MultiCheckboxField('Target', choices=[])
-    desc = TextAreaField('Description', validators=[DataRequired()])
-    submit = SubmitField('Publish')

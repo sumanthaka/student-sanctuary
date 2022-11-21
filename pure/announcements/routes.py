@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 
-from pure.announcements.forms import Announcement_Form, Cr_Announcement_Form
+from pure.announcements.forms import Announcement_Form
 from pure.models import Announcement, User
 
 announcement = Blueprint('announcement', __name__)
@@ -10,14 +10,19 @@ announcement = Blueprint('announcement', __name__)
 @announcement.route('/announcement_maker', methods=['POST', 'GET'])
 @login_required
 def announcement_maker():
+    if current_user.user == "admin":
+        user_announcements = Announcement.get_user_announcements(current_user.college)
+    else:
+        user_announcements = Announcement.get_user_announcements(current_user.college, current_user.email)
+
     if current_user.user == "student":
         if 'announcement_maker' not in current_user.get_permissions():
             return redirect(url_for('profile.profile_page'))
+
+    announcement_maker_form = Announcement_Form()
     if current_user.role == 'cr':
-        announcement_maker_form = Cr_Announcement_Form()
         announcement_maker_form.target.choices.append(current_user.course)
     else:
-        announcement_maker_form = Announcement_Form()
         announcement_maker_form.target.choices = User.get_courses(current_user.college)
 
     if announcement_maker_form.validate_on_submit():
@@ -40,7 +45,7 @@ def announcement_maker():
                                     desc=announcement_maker_form.desc.data)
         announcement.create_announcement(current_user.college)
         return redirect(url_for('announcement.announcement_maker'))
-    return render_template('portal/announcements_maker.html', form=announcement_maker_form)
+    return render_template('portal/announcements_maker.html', form=announcement_maker_form, announcements=user_announcements)
 
 
 @announcement.route('/announcements', methods=['POST', 'GET'])
@@ -48,3 +53,12 @@ def announcement_maker():
 def announcements():
     announcements_list = Announcement.get_announcements(current_user.college, current_user.user, current_user.course)
     return render_template('portal/announcements.html', announcements=announcements_list)
+
+
+@announcement.route('/manipulate_announcements', methods=['POST'])
+@login_required
+def manipulate_announcements():
+    if request.method == 'POST':
+        data = request.data
+        Announcement.delete_announcement(current_user.college, data)
+    return ""
