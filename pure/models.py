@@ -11,15 +11,18 @@ def load_user(user_id):
         user = client[college]["user"].find_one({'_id': ObjectId(user_id)})
         if user is not None:
             curr_user = None
-            if user["user"] == "student":
-                curr_user = Student()
-                curr_user.set_object(user["email"])
-            elif user["user"] == "faculty":
-                curr_user = Faculty()
-                curr_user.set_object(user["email"])
-            elif user["user"] == "admin":
-                curr_user = Admin()
-                curr_user.set_object(user["email"])
+            if college != "super_admin":
+                if user["user"] == "student":
+                    curr_user = Student()
+                    curr_user.set_object(user["email"])
+                elif user["user"] == "faculty":
+                    curr_user = Faculty()
+                    curr_user.set_object(user["email"])
+                elif user["user"] == "admin":
+                    curr_user = Admin()
+                    curr_user.set_object(user["email"])
+            else:
+                curr_user = Super_Admin(user["email"])
             return curr_user
 
 
@@ -204,6 +207,54 @@ class Admin(User):
             return False
         else:
             client[self.college]["user"].update_one({'email': email}, {'$set': {'role': role}})
+
+
+class Super_Admin(UserMixin):
+    def __init__(self, email):
+        user = client["super_admin"]["user"].find_one({'email': email})
+        self.id = user["_id"]
+        self.name = user["name"]
+        self.email = email
+
+    def check_password(self, password):
+        hash_password = client["super_admin"]["user"].find_one({'email': self.email})
+        if hash_password is not None:
+            hash_password = hash_password["password"]
+        return bcrypt.check_password_hash(hash_password, password)
+
+    @staticmethod
+    def create_college(college, email, name, mobile, password):
+        college = college.lower().replace(' ', '_')
+        if college in client.list_database_names():
+            return False
+        else:
+            db = client[college]
+            collection = db["info"]
+            collection.insert_one({'email': email, 'name': name, 'mobile': mobile})
+            collection.insert_one({'roles': [{'cr': ['announcement_maker']}, {'regular': []}]})
+            collection.insert_one({'courses': []})
+            collection = db["user"]
+            password = bcrypt.generate_password_hash(password).decode('utf-8')
+            collection.insert_one({"name": name, "email": email, "college": college,
+                                   "password": password,
+                                   "user": "admin"})
+            a = collection.find_one({'email': email})
+            return a
+
+    @staticmethod
+    def remove_college(college):
+        client.drop_database(college)
+
+    @staticmethod
+    def get_colleges():
+        colleges = client.list_database_names()
+        colleges_info = []
+        for college in colleges:
+            college_info = client[college]["info"].find_one({"email": {'$exists': 'true'}}, {"_id": 0})
+            if college_info is None:
+                continue
+            colleges_info.append({college: college_info})
+        return colleges_info
 
 
 class Announcement:

@@ -1,0 +1,15 @@
+{% extends 'super_admin_base.html' %}
+
+{% block content %}
+    {% for college in colleges %}
+        {% for college_name, college_info in college.items() %}
+            <p>{{ college_name.replace('_', ' ') }}</p>
+            <button id="{{ college_name }}" onclick="delete_college(this.id)">-</button>
+            {% for info, value in college_info.items() %}
+                <p>{{ info }}: {{ value }}</p>
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
+    <script type="application/javascript" src="{{ url_for("main.catch_all", path="super_delete_college.js") }}"
+            delete_url="{{ url_for('super_admin.delete_college')|tojson }}"></script>
+{% endblock %}

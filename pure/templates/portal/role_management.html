@@ -1,6 +1,6 @@
 <ul>
     {% for role in roles %}
-        {% for role_value, permissions in role.items() %}
+        {% for role_value, permissions in role.items() if role_value != 'cr' %}
             <li>
                 {{ role_value.replace('_', ' ') }} <button id="{{ role_value }}" onclick="delete_role(this.id)">-</button><br />
                 <strong>Current holder:</strong>

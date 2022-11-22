@@ -47,7 +47,7 @@ def reset_request():
     return render_template('auth/reset.html', form=reset_request_form)
 
 
-@main.route('/reset_password/<token>', methods=['POST','GET'])
+@main.route('/reset_password/<token>', methods=['POST', 'GET'])
 def reset_password(token):
     user = User.verify_reset_token(token)
     print(user.college)

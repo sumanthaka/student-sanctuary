@@ -8,3 +8,9 @@ profile = Blueprint('profile', __name__)
 @login_required
 def profile_page():
     return render_template('portal/profile.html')
+
+
+@profile.route('/super_admin/profile')
+@login_required
+def super_admin_profile_page():
+    return render_template('portal/super_admin_profile.html')

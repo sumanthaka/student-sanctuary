@@ -1,0 +1,30 @@
+{% extends 'super_admin_base.html' %}
+
+{% block content %}
+    <div id="load-wrapper">
+        <h1>Loading...</h1>
+    </div>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.college.label() }}
+        {{ form.college() }}
+        <br>
+        {{ form.college_mail.label() }}
+        {{ form.college_mail() }}
+        <br>
+        {{ form.name.label() }}
+        {{ form.name() }}
+        <br>
+        {{ form.mobile.label() }} with Region code
+        {{ form.mobile() }}
+        <br>
+        {{ form.submit() }}
+    </form>
+    <script>
+        window.addEventListener('load', () => {
+            const loader = document.getElementById("load-wrapper")
+            console.log(loader)
+            loader.style.display = "none"
+        })
+    </script>
+{% endblock %}
