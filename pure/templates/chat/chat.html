@@ -1,0 +1,28 @@
+{% if current_user.user == "admin" %}
+    {% extends 'portal/admin.html' %}
+{% elif current_user.user == "faculty" %}
+    {% extends 'portal/faculty.html' %}
+{% elif current_user.user == "student" %}
+    {% extends 'portal/student.html' %}
+{% endif %}
+
+{% block content %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
+    <h1>Chat</h1>
+    <div id="messages">
+    </div>
+    <form>
+        <input type="text" placeholder="Enter your message...">
+        <button type="submit">Send</button>
+    </form>
+    <script>
+        const socket = io.connect('http://127.0.0.1:5000')
+
+        socket.on('connect', () => {
+            socket.emit('join_room', {
+                {{ current_user.name }}
+            })
+        })
+    </script>
+{% endblock %}
+
