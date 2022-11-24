@@ -113,6 +113,7 @@ class User(UserMixin):
 
     @staticmethod
     def get_courses(college):
+        college=college.replace(' ', '_')
         courses = client[college]["info"].find_one({'courses': {'$exists': 'true'}}, {'courses': 1, '_id': 0})["courses"]
         return courses
 
@@ -122,6 +123,7 @@ class User(UserMixin):
         colleges.remove('admin')
         colleges.remove('local')
         colleges.remove('config')
+        colleges.remove('super_admin')
         return [college.replace('_', ' ') for college in colleges]
 
     def get_permissions(self):
