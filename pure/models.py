@@ -150,9 +150,12 @@ class Admin(User):
 
     def add_course(self, course):
         client[self.college]["info"].update_one({'courses': {'$exists': 'true'}}, {'$push': {'courses': course}})
+        client[self.college]["info"].update_one({'room_ids': {'$exists': 'true'}}, {'$set': {f'room_ids.{course}': ObjectId()}})
 
     def delete_course(self, course):
         client[self.college]["info"].update_one({'courses': {'$exists': 'true'}}, {'$pull': {'courses': course}})
+        client[self.college]["info"].update_one({'room_ids': {'$exists': 'true'}},
+                                                {'$unset': {f'room_ids.{course}': {'$exists': 'true'}}})
 
     def get_faculty_list(self):
         faculty_list = client[self.college]["user"].find({'user': 'faculty', 'approved': False})
@@ -214,9 +217,12 @@ class Admin(User):
 class Super_Admin(UserMixin):
     def __init__(self, email):
         user = client["super_admin"]["user"].find_one({'email': email})
-        self.id = user["_id"]
-        self.name = user["name"]
-        self.email = email
+        if user is not None:
+            self.id = user["_id"]
+            self.name = user["name"]
+            self.email = email
+        else:
+            self.id = ""
 
     def check_password(self, password):
         hash_password = client["super_admin"]["user"].find_one({'email': self.email})
@@ -240,8 +246,8 @@ class Super_Admin(UserMixin):
             collection.insert_one({"name": name, "email": email, "college": college,
                                    "password": password,
                                    "user": "admin"})
-            a = collection.find_one({'email': email})
-            return a
+            admin = collection.find_one({'email': email})
+            return admin
 
     @staticmethod
     def remove_college(college):
@@ -296,3 +302,16 @@ class Announcement:
     @staticmethod
     def delete_announcement(college, data):
         client[college]["announcements"].delete_one({'_id': ObjectId(str(data)[2:-1])})
+
+
+class Chat:
+    @staticmethod
+    def get_room_id_course(college, email):
+        course = client[college]["user"].find_one({'email': email})['course']
+        room_id = client[college]["info"].find_one({f'room_ids.{course}': {'$exists': 'true'}}, {'room_ids': 1, '_id': 0})['room_ids'][course]
+        return str(room_id)
+
+    @staticmethod
+    def get_room_id_college(college):
+        room_id = client[college]["info"].find_one({'room_ids': {'$exists': 'true'}})['_id']
+        return str(room_id)

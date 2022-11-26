@@ -9,19 +9,67 @@
 {% block content %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
     <h1>Chat</h1>
+    <select id="chat_room" onchange="changeRoom()">
+        <option value="Course" selected>{{ current_user.course }} Chat</option>
+        <option value="college">College Chat</option>
+    </select>
     <div id="messages">
     </div>
-    <form>
-        <input type="text" placeholder="Enter your message...">
+    <form id="message_input_form">
+        <input type="text" placeholder="Enter your message..." id="message_input">
         <button type="submit">Send</button>
     </form>
     <script>
+        const messages_container = document.getElementById('messages')
         const socket = io.connect('http://127.0.0.1:5000')
+        let room_id = ""
 
         socket.on('connect', () => {
             socket.emit('join_room', {
-                {{ current_user.name }}
+                name: "{{ current_user.name }}",
+                email: "{{ current_user.email }}"
             })
+        })
+
+        function changeRoom() {
+            messages_container.innerHTML = ``
+            room_select = document.getElementById('chat_room').value
+            socket.emit('change_room', {
+                name: "{{ current_user.name }}",
+                email: "{{ current_user.email }}",
+                'room_choice': room_select,
+                'current_room': room_id
+            })
+        }
+
+        socket.on('join_room_announcement', (data) => {
+            room_id = data.room
+            let message = document.createElement('p')
+            message.textContent = `${data.name} has joined the room`
+            messages_container.appendChild(message)
+        })
+
+        const message_input_form = document.getElementById("message_input_form")
+        const message_input = document.getElementById("message_input")
+        message_input_form.onsubmit = (event) => {
+            event.preventDefault()
+            let message = message_input.value.trim()
+            if(message.length){
+                socket.emit('send_message', {
+                    'name': "{{ current_user.name }}",
+                    'email': "{{ current_user.email }}",
+                    'room': room_id,
+                    'message': message
+                })
+            }
+            message_input.value = ''
+            message_input.focus()
+        }
+
+        socket.on('receive_message', (data) => {
+            const messg = document.createElement("p")
+            messg.innerHTML = `<b>${data.name}</b>` + ': ' + data.message
+            messages_container.appendChild(messg)
         })
     </script>
 {% endblock %}

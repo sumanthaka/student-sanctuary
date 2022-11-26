@@ -14,12 +14,15 @@ def admin_signin():
     super_admin_login_form = Super_Admin_LoginForm()
     if super_admin_login_form.validate_on_submit():
         attempted_admin = Super_Admin(super_admin_login_form.email.data)
-        if attempted_admin.check_password(super_admin_login_form.password.data):
-            login_user(attempted_admin)
-            flash(f"Logged in!! as {attempted_admin.name}")
-            return redirect(url_for('profile.super_admin_profile_page'))
+        if attempted_admin.id == "":
+            flash("Username and password does not match")
         else:
-            flash("Username password are not matching")
+            if attempted_admin.check_password(super_admin_login_form.password.data):
+                login_user(attempted_admin)
+                flash(f"Logged in!! as {attempted_admin.name}")
+                return redirect(url_for('profile.super_admin_profile_page'))
+            else:
+                flash("Username password are not matching")
     return render_template('auth/login.html', form=super_admin_login_form, user="Super Admin")
 
 
