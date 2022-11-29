@@ -64,6 +64,13 @@ class User(UserMixin):
             self.qualification = user["qualification"]
             self.approved = user["approved"]
 
+    def update_user(self):
+        if self.user == 'student':
+            update_values = {'name': self.name, 'course': self.course}
+        else:
+            update_values = {'name': self.name}
+        client[self.college]["user"].update_one({'_id': self.id}, {'$set': update_values})
+
     @staticmethod
     def check_existence(email):
         for college in client.list_database_names():

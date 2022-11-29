@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, url_for, render_template, request
+from flask import Blueprint, flash, redirect, url_for, render_template, request, abort
 from flask_login import login_user, logout_user, current_user
 
 from pure.admin.forms import Admin_LoginForm
@@ -28,7 +28,11 @@ def admin_signin():
 
 @admin.route('/college_management', methods=['POST', 'GET'])
 def college_management():
-    return render_template('portal/management.html')
+    try:
+        current_user.user
+        return render_template('portal/management.html')
+    except AttributeError:
+        abort(403)
 
 
 @admin.route('/course_management', methods=['POST', 'GET'])

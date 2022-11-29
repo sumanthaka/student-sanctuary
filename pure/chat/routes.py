@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, abort
 from flask_login import login_required, current_user
 from flask_socketio import join_room, leave_room
 
@@ -11,7 +11,13 @@ chat = Blueprint('chat', __name__)
 @chat.route('/chat')
 @login_required
 def chat_page():
-    return render_template('chat/chat.html')
+    try:
+        if current_user.user == 'student':
+            return render_template('chat/chat.html')
+        else:
+            abort(403)
+    except AttributeError:
+        abort(403)
 
 
 @socketio.on('join_room')

@@ -1,6 +1,6 @@
 import phonenumbers as phonenumbers
-from flask import Blueprint, flash, redirect, url_for, render_template, request
-from flask_login import login_user, logout_user
+from flask import Blueprint, flash, redirect, url_for, render_template, request, abort
+from flask_login import login_user, logout_user, login_required, current_user
 
 from pure.models import Super_Admin, Admin
 from pure.super_admin.forms import Super_Admin_LoginForm, Create_College
@@ -27,30 +27,40 @@ def admin_signin():
 
 
 @super_admin.route('/create_college', methods=['POST', 'GET'])
+@login_required
 def create_college():
-    create_college_form = Create_College()
-    if create_college_form.validate_on_submit():
-        number = create_college_form.mobile.data
-        phone_number = phonenumbers.parse(number)
-        if phonenumbers.is_valid_number(phone_number):
-            admin = Super_Admin.create_college(create_college_form.college.data, create_college_form.college_mail.data,
-                                               create_college_form.name.data, create_college_form.mobile.data,
-                                               generate_random_password())
-            if admin:
-                send_reset_mail(admin)
-            else:
-                flash("College already exists")
-            return redirect(url_for('super_admin.create_college'))
+    try:
+        if current_user.user:
+            abort(403)
+    except AttributeError:
+        create_college_form = Create_College()
+        if create_college_form.validate_on_submit():
+            number = create_college_form.mobile.data
+            phone_number = phonenumbers.parse(number)
+            if phonenumbers.is_valid_number(phone_number):
+                admin = Super_Admin.create_college(create_college_form.college.data, create_college_form.college_mail.data,
+                                                   create_college_form.name.data, create_college_form.mobile.data,
+                                                   generate_random_password())
+                if admin:
+                    send_reset_mail(admin)
+                else:
+                    flash("College already exists")
+                return redirect(url_for('super_admin.create_college'))
 
-    return render_template('portal/create_college.html', form=create_college_form)
+        return render_template('portal/create_college.html', form=create_college_form)
 
 
 @super_admin.route('/delete_college', methods=['POST', 'GET'])
+@login_required
 def delete_college():
-    if request.method == 'POST':
-        college = str(request.data, 'utf-8')
-        Super_Admin.remove_college(college)
-    return render_template('portal/delete_college.html', colleges=Super_Admin.get_colleges())
+    try:
+        if current_user.user:
+            abort(403)
+    except AttributeError:
+        if request.method == 'POST':
+            college = str(request.data, 'utf-8')
+            Super_Admin.remove_college(college)
+        return render_template('portal/delete_college.html', colleges=Super_Admin.get_colleges())
 
 
 @super_admin.route('/logout', methods=['POST', 'GET'])
