@@ -19,7 +19,7 @@ class Student_SignupForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     email = EmailField('Email', validators=[Email(), DataRequired()])
     college = SelectField('College', choices=Student.get_colleges(), validators=[DataRequired()])
-    course = SelectField('Course', choices=Student.get_courses(Student.get_colleges()[0]), validators=[DataRequired()])
+    course = SelectField('Course', choices=Student.get_all_courses())
     password = PasswordField('Password', validators=[Length(min=8), DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[EqualTo('password'), DataRequired()])
     submit = SubmitField('Register')

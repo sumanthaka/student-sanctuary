@@ -1,7 +1,7 @@
 const college_dropdown = document.getElementById("college")
 const course_dropdown = document.getElementById("course")
 
-college_dropdown.addEventListener('change', async () => {
+async function course_list() {
     college = college_dropdown.value
     await fetch('/course_options/' + college)
         .then(response => response.json())
@@ -14,4 +14,6 @@ college_dropdown.addEventListener('change', async () => {
                 course_dropdown.appendChild(option)
             }
         })
-})
+}
+course_list()
+college_dropdown.addEventListener('change', course_list)

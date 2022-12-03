@@ -120,7 +120,7 @@ class User(UserMixin):
 
     @staticmethod
     def get_courses(college):
-        college=college.replace(' ', '_')
+        college = college.replace(' ', '_')
         courses = client[college]["info"].find_one({'courses': {'$exists': 'true'}}, {'courses': 1, '_id': 0})["courses"]
         return courses
 
@@ -132,6 +132,19 @@ class User(UserMixin):
         colleges.remove('config')
         colleges.remove('super_admin')
         return [college.replace('_', ' ') for college in colleges]
+
+    @staticmethod
+    def get_all_courses():
+        colleges = client.list_database_names()
+        colleges.remove('admin')
+        colleges.remove('local')
+        colleges.remove('config')
+        colleges.remove('super_admin')
+        courses = []
+        for college in colleges:
+            courses.extend(
+                client[college]["info"].find_one({'courses': {'$exists': 'true'}}, {'courses': 1, '_id': 0})["courses"])
+        return courses
 
     def get_permissions(self):
         return client[self.college]["info"].find_one({'roles': {'$exists': 'true'}}, {'_id': 0, 'roles': {'$elemMatch': {self.role: {'$exists': 'true'}}}})["roles"][0][self.role]
