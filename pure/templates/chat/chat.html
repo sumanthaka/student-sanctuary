@@ -10,8 +10,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
     <h1>Chat</h1>
     <select id="chat_room" onchange="changeRoom()">
-        <option value="Course" selected>{{ current_user.course }} Chat</option>
-        <option value="college">College Chat</option>
+        {% if current_user.user == 'student' %}
+            <option value="Course" selected>{{ current_user.course }} Chat</option>
+            <option value="college">College Chat</option>
+            {% if 'student_council_chat' in current_user.get_permissions() %}
+                <option value="student_council">Student Council Chat</option>
+            {% endif %}
+        {% elif current_user.user == 'faculty' %}
+            <option value="faculty_chat" selected>Faculty Chat</option>
+        {% endif %}
     </select>
     <div id="messages">
     </div>
@@ -27,7 +34,7 @@
         socket.on('connect', () => {
             socket.emit('join_room', {
                 name: "{{ current_user.name }}",
-                email: "{{ current_user.email }}"
+                email: "{{ current_user.email }}",
             })
         })
 
@@ -44,9 +51,13 @@
 
         socket.on('join_room_announcement', (data) => {
             room_id = data.room
-            let message = document.createElement('p')
-            message.textContent = `${data.name} has joined the room`
-            messages_container.appendChild(message)
+            console.log(data)
+            for(i=0;i<data.messages.length;i++) {
+                msg = data.messages[i]
+                const messg = document.createElement("p")
+                messg.innerHTML = `<b>${msg.name}</b>` + ': ' + msg.message
+                messages_container.appendChild(messg)
+            }
         })
 
         const message_input_form = document.getElementById("message_input_form")

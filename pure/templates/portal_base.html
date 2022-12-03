@@ -13,7 +13,7 @@
         <a href="{{ url_for('main.home_page') }}"><img src="{{ url_for('main.catch_all', path='logo.png') }}" alt="logo"></a>
         <nav>
             <a href="{{ url_for('announcement.announcements') }}">Announcements</a>
-            {% if current_user.user == 'student' %}
+            {% if current_user.user == 'student' or current_user.user == 'faculty' %}
                 <a href="{{ url_for('chat.chat_page') }}">Chat</a>
             {% endif %}
             {% block navbar %}

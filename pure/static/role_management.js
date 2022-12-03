@@ -25,11 +25,23 @@ function create_role(add_button_id) {
     announce_make_perm_label.setAttribute("for", "announce_make_perm")
     announce_make_perm_label.textContent = "Announcement Maker"
     role_container.appendChild(announce_make_perm_label)
+
+    let student_council_chat_perm = document.createElement("input")
+    student_council_chat_perm.id = "student_council_chat_perm"
+    student_council_chat_perm.type = "checkbox"
+    student_council_chat_perm.value = "student_council_chat"
+    role_container.appendChild(student_council_chat_perm)
+    let student_council_chat_label = document.createElement("label")
+    student_council_chat_label.setAttribute("for", "student_council_chat_perm")
+    student_council_chat_label.textContent = "Student Council Chat"
+    role_container.appendChild(student_council_chat_label)
+
     let ok_role = document.createElement("button")
     ok_role.textContent = "OK"
     ok_role.addEventListener("click", async () => {
         const role = input_role.value
         const announce_perm = announce_make_perm.checked
+        const council_perm = student_council_chat_perm.checked
         if (role === "") {
             alert("Please enter role name")
         } else {
@@ -39,6 +51,9 @@ function create_role(add_button_id) {
             data["permissions"] = []
             if (announce_perm) {
                 data["permissions"].push("announcement_maker")
+            }
+            if (council_perm) {
+                data["permissions"].push("student_council_chat")
             }
             await fetch(role_url, {
                 method: "POST",

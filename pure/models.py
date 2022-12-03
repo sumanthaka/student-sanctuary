@@ -136,6 +136,12 @@ class User(UserMixin):
     def get_permissions(self):
         return client[self.college]["info"].find_one({'roles': {'$exists': 'true'}}, {'_id': 0, 'roles': {'$elemMatch': {self.role: {'$exists': 'true'}}}})["roles"][0][self.role]
 
+    def save_message(self, room_id, email, name, message):
+        return client[self.college]["chat"].insert_one({'room_id': room_id, 'email': email, 'name': name, 'message': message})
+
+    def get_messages(self, room_id):
+        return list(client[self.college]["chat"].find({'room_id': room_id}, {'_id': 0, 'room_id': 0}))
+
 
 class Student(User):
     def create_user(self, name, email, college, course, password):
@@ -248,6 +254,7 @@ class Super_Admin(UserMixin):
             collection.insert_one({'email': email, 'name': name, 'mobile': mobile})
             collection.insert_one({'roles': [{'cr': ['announcement_maker']}, {'regular': []}]})
             collection.insert_one({'courses': []})
+            collection.insert_one({'room_ids': {}, 'faculty_room': ObjectId(), 'student_council_room': ObjectId()})
             collection = db["user"]
             password = bcrypt.generate_password_hash(password).decode('utf-8')
             collection.insert_one({"name": name, "email": email, "college": college,
@@ -321,4 +328,14 @@ class Chat:
     @staticmethod
     def get_room_id_college(college):
         room_id = client[college]["info"].find_one({'room_ids': {'$exists': 'true'}})['_id']
+        return str(room_id)
+
+    @staticmethod
+    def get_room_id_faculty(college):
+        room_id = client[college]["info"].find_one({'faculty_room': {'$exists': 'true'}}, {'_id': 0, 'faculty_room': 1})
+        return str(room_id)
+
+    @staticmethod
+    def get_room_id_council(college):
+        room_id = client[college]["info"].find_one({'student_council_room': {'$exists': 'true'}}, {'_id': 0, 'student_council_room': 1})
         return str(room_id)

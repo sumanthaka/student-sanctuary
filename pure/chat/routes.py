@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, render_template, abort, request
 from flask_login import login_required, current_user
 from flask_socketio import join_room, leave_room
 
 from pure import socketio
-from pure.models import Chat
+from pure.models import Chat, User
 
 chat = Blueprint('chat', __name__)
 
@@ -12,7 +12,7 @@ chat = Blueprint('chat', __name__)
 @login_required
 def chat_page():
     try:
-        if current_user.user == 'student':
+        if current_user.user == 'student' or current_user.user == 'faculty':
             return render_template('chat/chat.html')
         else:
             abort(403)
@@ -22,11 +22,19 @@ def chat_page():
 
 @socketio.on('join_room')
 def handle_join_room(data):
-    room_id = Chat.get_room_id_course(current_user.college, data['email'])
+    if current_user.user == 'student':
+        room_id = Chat.get_room_id_course(current_user.college, data['email'])
+    else:
+        room_id = Chat.get_room_id_faculty(current_user.college)
     join_room(room_id)
-    print('change', room_id)
+    session_id = request.sid
+    data = {}
     data.update({'room': room_id})
-    socketio.emit('join_room_announcement', data, room=room_id)
+    messages = current_user.get_messages(room_id)
+    data.update({'messages': messages})
+    # for i in range(len(messages)):
+    #     data.update({i: messages[i]})
+    socketio.emit('join_room_announcement', data, to=session_id)
 
 
 @socketio.on('change_room')
@@ -35,19 +43,42 @@ def handle_change_room(data):
     if data['room_choice'] == 'college':
         room_id = Chat.get_room_id_college(current_user.college)
         join_room(room_id)
-        data.pop('current_room')
+        session_id = request.sid
+        data = {}
         data.update({'room': room_id})
-        socketio.emit('join_room_announcement', data, room=room_id)
+        messages = current_user.get_messages(room_id)
+        data.update({'messages': messages})
+        # for i in range(len(messages)):
+        #     data.update({i: messages[i]})
+        socketio.emit('join_room_announcement', data, to=session_id)
 
-    if data['room_choice'] == 'Course':
+    elif data['room_choice'] == 'Course':
         room_id = Chat.get_room_id_course(current_user.college, data['email'])
         join_room(room_id)
+        session_id = request.sid
+        data = {}
         data.update({'room': room_id})
-        socketio.emit('join_room_announcement', data, room=room_id)
+        messages = current_user.get_messages(room_id)
+        data.update({'messages': messages})
+        # for i in range(len(messages)):
+        #     data.update({i: messages[i]})
+        socketio.emit('join_room_announcement', data, to=session_id)
+
+    elif data['room_choice'] == 'student_council':
+        room_id = Chat.get_room_id_council(current_user.college)
+        join_room(room_id)
+        session_id = request.sid
+        data = {}
+        data.update({'room': room_id})
+        messages = current_user.get_messages(room_id)
+        data.update({'messages': messages})
+        # for i in range(len(messages)):
+        #     data.update({i: messages[i]})
+        socketio.emit('join_room_announcement', data, to=session_id)
 
 
 @socketio.on('send_message')
 def handle_send_message(data):
     room_id = data['room']
-    print(data['name'], room_id)
+    current_user.save_message(room_id, data['email'], data['name'], data['message'])
     socketio.emit('receive_message', data, to=room_id)
