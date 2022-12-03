@@ -259,6 +259,8 @@ class Super_Admin(UserMixin):
     @staticmethod
     def create_college(college, email, name, mobile, password):
         college = college.lower().replace(' ', '_')
+        if User.check_existence(email):
+            return False
         if college in client.list_database_names():
             return False
         else:

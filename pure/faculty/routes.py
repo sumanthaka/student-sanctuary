@@ -32,6 +32,7 @@ def faculty_signin():
 @faculty.route('/faculty/signup', methods=['POST', 'GET'])
 def faculty_signup():
     faculty_signup_form = Faculty_SignupForm()
+    faculty_signup_form.college.choices = Faculty.get_colleges()
     if faculty_signup_form.validate_on_submit():
         student_to_create = Faculty()
         student_to_create.create_user(name=faculty_signup_form.name.data,
