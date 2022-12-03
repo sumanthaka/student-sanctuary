@@ -4,6 +4,12 @@
     box-sizing: border-box;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 header {
     position: sticky;
     display: flex;
@@ -43,14 +49,17 @@ nav > a:hover {
     text-decoration: underline;
 }
 
+main {
+    padding-bottom: 2em;
+}
+
 footer {
     height: 1.2em;
     font-size: 1.5rem;
     color: #ffffff;
     background-color: grey;
+    width: 100%;
+    text-align: center;
     position: fixed;
     bottom: 0;
-    left: 0;
-    right: 0;
-    text-align: center;
 }

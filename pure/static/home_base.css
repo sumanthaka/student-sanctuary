@@ -1,4 +1,6 @@
 body {
+    display: flex;
+    flex-direction: column;
     background-color: #222e50;
 }
 
@@ -63,16 +65,18 @@ img {
     max-height: 100%;
 }
 
+main {
+    padding-bottom: 2em;
+}
+
 footer {
     height: 1.2em;
     font-size: 1.5rem;
     color: #ffffff;
     background-color: grey;
+    text-align: center;
     position: fixed;
     bottom: 0;
-    left: 0;
-    right: 0;
-    text-align: center;
 }
 
 @media only screen and (max-width: 600px) {

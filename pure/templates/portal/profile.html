@@ -8,6 +8,7 @@
 
 {% block content %}
     <h1>Hi, {{ current_user.name }}</h1>
+    <a href="{{ url_for('profile.edit_profile') }}">Edit Profile</a>
     <p>Name: </p>
     <p>{{ current_user.name }}
     <p>Email: </p>
