@@ -28,6 +28,7 @@ def student_signin():
 def student_signup():
     student_signup_form = Student_SignupForm()
     student_signup_form.college.choices = Student.get_colleges()
+    student_signup_form.course.choices = Student.get_all_courses()
     if student_signup_form.validate_on_submit():
         student_to_create = Student()
         student_to_create.create_user(name=student_signup_form.name.data,
