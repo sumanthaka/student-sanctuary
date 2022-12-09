@@ -28,7 +28,7 @@
     </form>
     <script>
         const messages_container = document.getElementById('messages')
-        const socket = io.connect('https://' + document.domain + ':' + location.port)
+        const socket = io.connect('http://127.0.0.1:5000')
         let room_id = ""
 
         socket.on('connect', () => {

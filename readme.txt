@@ -1,0 +1,1 @@
+'https://' + document.domain + ':' + location.port
