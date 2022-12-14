@@ -5,6 +5,8 @@
 {% endblock %}
 
 {% block navbar %}
+    <a href="{{ url_for('faculty.upload_marks') }}">Upload Marks</a>
+    <a href="{{ url_for('faculty.view_report') }}">View Report</a>
     <a href="{{ url_for('announcement.announcement_maker') }}">Announcement Maker</a>
     <a href={{ url_for('profile.profile_page') }}>{{ current_user.name }}</a>
 {% endblock %}

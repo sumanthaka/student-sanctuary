@@ -37,6 +37,7 @@ class User(UserMixin):
         self.role = ""
         self.course = ""
         self.qualification = ""
+        self.course_faculty = None
         self.approved = ""
 
     def create_user(self, **kwargs):
@@ -62,6 +63,7 @@ class User(UserMixin):
             self.role = user["role"]
         elif self.user == "faculty":
             self.qualification = user["qualification"]
+            self.course_faculty = user["course_faculty"]
             self.approved = user["approved"]
 
     def update_user(self):
@@ -163,7 +165,12 @@ class Student(User):
 
 class Faculty(User):
     def create_user(self, name, email, college, qualification, password):
-        User.create_user(self, name=name, email=email, college=college, qualification=qualification, password=password, user="faculty", approved=False)
+        User.create_user(self, name=name, email=email, college=college, qualification=qualification, password=password, course_faculty=None, user="faculty", approved=False)
+
+    def get_course_student(self):
+        student_list = client[self.college]["user"].find({'course': self.course_faculty, 'user': 'student'})
+        student_list = [student for student in student_list]
+        return student_list
 
 
 class Admin(User):
@@ -175,18 +182,29 @@ class Admin(User):
         return courses
 
     def add_course(self, course):
+        if course in self.get_courses():
+            return False
         client[self.college]["info"].update_one({'courses': {'$exists': 'true'}}, {'$push': {'courses': course}})
         client[self.college]["info"].update_one({'room_ids': {'$exists': 'true'}}, {'$set': {f'room_ids.{course}': ObjectId()}})
+        return True
 
     def delete_course(self, course):
         client[self.college]["info"].update_one({'courses': {'$exists': 'true'}}, {'$pull': {'courses': course}})
         client[self.college]["info"].update_one({'room_ids': {'$exists': 'true'}},
                                                 {'$unset': {f'room_ids.{course}': {'$exists': 'true'}}})
 
-    def get_faculty_list(self):
+    def get_unapproved_faculty_list(self):
         faculty_list = client[self.college]["user"].find({'user': 'faculty', 'approved': False})
         faculty_list = [faculty for faculty in faculty_list]
         return faculty_list
+
+    def get_faculty_list(self):
+        faculty_list = client[self.college]["user"].find({'user': 'faculty', 'approved': True})
+        faculty_list = [faculty for faculty in faculty_list]
+        return faculty_list
+
+    def update_course_teacher(self, faculty_id, course):
+        client[self.college]["user"].update_one({'_id': ObjectId(faculty_id)}, {'$set': {'course_faculty': course}})
 
     def approve_faculty(self, email):
         client[self.college]["user"].update_one({'user': 'faculty', 'email': email}, {'$set': {'approved': True}})

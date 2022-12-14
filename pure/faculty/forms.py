@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import EmailField, StringField, SubmitField, ValidationError, SelectField, PasswordField
-from wtforms.validators import Email, DataRequired, Length, EqualTo
+from wtforms import EmailField, StringField, SubmitField, ValidationError, SelectField, PasswordField, FileField
+from wtforms.validators import Email, DataRequired, Length, EqualTo, InputRequired
 
 from pure.models import Faculty
 
@@ -23,3 +23,9 @@ class Faculty_SignupForm(FlaskForm):
     password = PasswordField('Password', validators=[Length(min=8), DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[EqualTo('password'), DataRequired()])
     submit = SubmitField('Register')
+
+
+class UploadMarks_Form(FlaskForm):
+    exam_name = StringField('Exam Name', validators=[DataRequired()])
+    marks_file = FileField('Marks List', validators=[InputRequired()])
+    submit = SubmitField('Submit')

@@ -1,0 +1,65 @@
+{% extends 'portal/faculty.html' %}
+
+{% block content %}
+    <style>
+        form {
+            padding: 10px;
+        }
+    </style>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        {{ form.exam_name.label() }}
+        {{ form.exam_name() }}
+        <br>
+        {{ form.marks_file.label() }}
+        {{ form.marks_file() }}
+        <button onclick="subjects()" id="download">
+            Download Template
+        </button>
+        <div id="template_conf"></div>
+        <br>
+        {{ form.submit() }}
+    </form>
+    <script>
+        function subjects() {
+            let download_button = document.getElementById('download')
+            download_button.disabled = true
+            let template_conf = document.getElementById('template_conf')
+            let subject_no_label = document.createElement('label')
+            subject_no_label.textContent = "Number of Subjects"
+            template_conf.appendChild(subject_no_label)
+            let subject_no = document.createElement('input')
+            subject_no.type = "number"
+            subject_no.min = "1"
+            subject_no.id = "subject_no"
+            template_conf.appendChild(subject_no)
+            let ok = document.createElement('a')
+            ok.textContent = 'Download'
+            ok.addEventListener('click', async () => {
+                await fetch('{{ url_for('faculty.send_template') }}', {
+                    'method': 'POST',
+                    'body': ['add', subject_no.value]
+                })
+                    .then((response) => {
+                        return response.blob()
+                    })
+                    .then((file_blob) => {
+                        let hidden_a = document.createElement('a')
+                        hidden_a.href = URL.createObjectURL(file_blob)
+                        hidden_a.download = "marks_template"
+                        template_conf.appendChild(hidden_a)
+                        hidden_a.click()
+                        template_conf.innerHTML = ``
+                        download_button.disabled = false
+                    })
+                    .then(() => {
+                        fetch('{{ url_for('faculty.send_template') }}', {
+                            'method': 'POST',
+                            'body': ['delete', document.cookie]
+                        })
+                    })
+            })
+            template_conf.appendChild(ok)
+        }
+    </script>
+{% endblock %}

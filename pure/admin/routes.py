@@ -40,7 +40,8 @@ def course_management():
     if request.method == 'POST':
         data = str(request.data, 'utf-8').split(',')
         if data[1] == 'add':
-            current_user.add_course(data[0])
+            if not current_user.add_course(data[0]):
+                flash('Course already exists')
         else:
             current_user.delete_course(data[0])
 
@@ -56,7 +57,15 @@ def faculty_approval():
         else:
             current_user.reject_faculty(data[0])
 
-    return render_template('portal/faculty_approval.html', faculty_list=current_user.get_faculty_list())
+    return render_template('portal/faculty_approval.html', faculty_list=current_user.get_unapproved_faculty_list())
+
+
+@admin.route('/faculty_management', methods=['POST', 'GET'])
+def faculty_management():
+    if request.method == 'POST':
+        data = str(request.data, 'utf-8').split(',')
+        current_user.update_course_teacher(data[0], data[1])
+    return render_template('portal/faculty_management.html', faculty_list=current_user.get_faculty_list(), course_list=current_user.get_courses())
 
 
 @admin.route('/role_management', methods=['POST', 'GET'])

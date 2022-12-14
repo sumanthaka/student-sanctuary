@@ -1,0 +1,22 @@
+<ul>
+    {% for faculty in faculty_list %}
+        <li>
+            {{ faculty.name }}
+            <select id="{{ faculty._id }}">
+                {% if faculty.course_teacher == None %}
+                    <option value="None" selected>None</option>
+                {% else %}
+                    <option value="None">None</option>
+                {% endif %}
+                {% for course in course_list %}
+                    {% if course == faculty.course_teacher %}
+                        <option value="{{ course }}" selected>{{ course }}</option>
+                    {% else %}
+                        <option value="{{ course }}">{{ course }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <button onclick="faculty_class_update('{{ faculty._id }}')">Save</button>
+        </li>
+    {% endfor %}
+</ul>

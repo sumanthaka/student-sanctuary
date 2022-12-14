@@ -10,17 +10,20 @@
     <select id="manager">
         <option value="Course">Course Management</option>
         <option value="Approval">Faculty Login Approval</option>
+        <option value="Faculty_manage">Faculty Management</option>
         <option value="Role">Role Management</option>
     </select>
     <div id="container">
     </div>
     <script src="{{ url_for('main.catch_all', path="role_management.js") }}" type="application/javascript"></script>
     <script src="{{ url_for('main.catch_all', path="faculty_approval.js") }}" type="application/javascript"></script>
+    <script src="{{ url_for('main.catch_all', path="faculty_management.js") }}" type="application/javascript"></script>
     <script src="{{ url_for('main.catch_all', path="course_management.js") }}" type="application/javascript"></script>
     <script src="{{ url_for('main.catch_all', path="management.js") }}"
             type="application/javascript"
             course_url={{ url_for('admin.course_management')|tojson }}
             approval_url={{ url_for('admin.faculty_approval')|tojson }}
-            role_url={{ url_for('admin.role_management')|tojson }} defer>
+            role_url={{ url_for('admin.role_management')|tojson }}
+            faculty_manage_url={{ url_for('admin.faculty_management')|tojson }} defer>
     </script>
 {% endblock %}

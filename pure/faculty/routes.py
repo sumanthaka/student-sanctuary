@@ -1,7 +1,12 @@
-from flask import Blueprint, flash, redirect, url_for, render_template, send_from_directory
-from flask_login import login_user, logout_user, login_required
+import os.path
+import uuid
 
-from pure.faculty.forms import Faculty_LoginForm, Faculty_SignupForm
+import openpyxl as openpyxl
+
+from flask import Blueprint, flash, redirect, url_for, render_template, send_from_directory, abort, request, send_file
+from flask_login import login_user, logout_user, login_required, current_user
+
+from pure.faculty.forms import Faculty_LoginForm, Faculty_SignupForm, UploadMarks_Form
 from pure.models import Faculty
 
 faculty = Blueprint('faculty', __name__)
@@ -45,6 +50,55 @@ def faculty_signup():
         for error in faculty_signup_form.errors.values():
             flash(error)
     return render_template('auth/signup.html', form=faculty_signup_form, user="faculty")
+
+
+@faculty.route('/upload_marks', methods=['POST', 'GET'])
+@login_required
+def upload_marks():
+    if current_user.user != 'faculty':
+        abort(403)
+
+    marks_form = UploadMarks_Form()
+    student_list = current_user.get_course_student()
+    if marks_form.validate_on_submit():
+        pass
+    return render_template('portal/upload_marks.html', student_list=student_list, form=marks_form)
+
+
+@faculty.route('/download_template', methods=['POST', 'GET'])
+@login_required
+def send_template():
+    if request.method == 'POST':
+        data = str(request.data, 'utf-8').split(',')
+        if data[0] == 'add':
+            filepath = os.path.join(os.path.abspath(os.curdir), 'pure', 'static', 'mark_files')
+            filename = str(uuid.uuid4())
+            excel_file_path = os.path.join(filepath, filename)+'.xlsx'
+            book = openpyxl.Workbook()
+            worksheet = book.active
+            headers = ['Name']
+            subjects = int(data[1])
+            for i in range(1, subjects+1):
+                headers.append('<Subject'+str(i)+'>')
+            worksheet.append(headers)
+            for i in range(ord('A'), ord('A')+subjects+1):
+                worksheet.column_dimensions[chr(i)].width = 15
+            book.save(excel_file_path)
+            response = send_file(excel_file_path, as_attachment=True)
+            response.set_cookie('filename', excel_file_path)
+            return response
+        else:
+            file_path = data[1].split('=')[1][1:-1]
+            os.remove(file_path)
+            return ""
+
+
+@faculty.route('/report', methods=['POST', 'GET'])
+@login_required
+def view_report():
+    if current_user.user != 'faculty':
+        abort(403)
+    return render_template('portal/report_marks.html')
 
 
 @faculty.route('/logout', methods=['POST', 'GET'])
