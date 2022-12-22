@@ -2,6 +2,7 @@ import os.path
 import uuid
 
 import openpyxl as openpyxl
+import pandas as pd
 
 from flask import Blueprint, flash, redirect, url_for, render_template, send_from_directory, abort, request, send_file
 from flask_login import login_user, logout_user, login_required, current_user
@@ -57,11 +58,34 @@ def faculty_signup():
 def upload_marks():
     if current_user.user != 'faculty':
         abort(403)
-
-    marks_form = UploadMarks_Form()
     student_list = current_user.get_course_student()
+    marks_form = UploadMarks_Form()
     if marks_form.validate_on_submit():
-        pass
+        file = marks_form.marks_file.data
+        marks_dataframe = pd.read_excel(file)
+        subjects_max = marks_dataframe.keys()[2:]
+        subjects = []
+        max_marks = []
+        columns = {}
+        for i in subjects_max:
+            rev = i[::-1]
+            idx = rev.find('(')
+            if idx == -1 or idx == 0 or rev[0] != ')':
+                flash("The excel file is not in correct template format, Please follow the template")
+                return redirect(url_for('faculty.upload_marks'))
+            else:
+                idx = -idx - 1
+                max_mark = i[idx + 1:-1]
+                subjects.append(i[:idx])
+                try:
+                    max_marks.append(int(max_mark))
+                except ValueError as e:
+                    flash("The excel file is not in correct template format, Please follow the template")
+                    return redirect(url_for('faculty.upload_marks'))
+                columns.update({i: i[:idx]})
+        print(max_marks)
+        marks_dataframe.rename(columns=columns, inplace=True)
+        print(marks_dataframe)
     return render_template('portal/upload_marks.html', student_list=student_list, form=marks_form)
 
 
@@ -76,13 +100,16 @@ def send_template():
             excel_file_path = os.path.join(filepath, filename)+'.xlsx'
             book = openpyxl.Workbook()
             worksheet = book.active
-            headers = ['Name']
+            headers = ['Name', 'Email']
             subjects = int(data[1])
             for i in range(1, subjects+1):
-                headers.append('<Subject'+str(i)+'>')
+                headers.append('<Subject'+str(i)+'>(<Max Marks>)')
             worksheet.append(headers)
-            for i in range(ord('A'), ord('A')+subjects+1):
-                worksheet.column_dimensions[chr(i)].width = 15
+            student_list = current_user.get_course_student()
+            for student in student_list:
+                worksheet.append([student['name'], student['email']])
+            for i in range(ord('A'), ord('A')+subjects+2):
+                worksheet.column_dimensions[chr(i)].width = 20
             book.save(excel_file_path)
             response = send_file(excel_file_path, as_attachment=True)
             response.set_cookie('filename', excel_file_path)

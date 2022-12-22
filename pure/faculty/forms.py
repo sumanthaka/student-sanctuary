@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileRequired, FileAllowed
 from wtforms import EmailField, StringField, SubmitField, ValidationError, SelectField, PasswordField, FileField
 from wtforms.validators import Email, DataRequired, Length, EqualTo, InputRequired
 
@@ -27,5 +28,5 @@ class Faculty_SignupForm(FlaskForm):
 
 class UploadMarks_Form(FlaskForm):
     exam_name = StringField('Exam Name', validators=[DataRequired()])
-    marks_file = FileField('Marks List', validators=[InputRequired()])
+    marks_file = FileField('Marks List', validators=[FileRequired(), FileAllowed(['xlsx'], 'Excel Files only!')])
     submit = SubmitField('Submit')

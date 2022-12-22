@@ -12,6 +12,7 @@ header {
     left: 0;
     top: 0;
     background: #B8C2E0;
+    background: linear-gradient(to right, #B8C2E0, #ffffff);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
@@ -36,8 +37,9 @@ nav > button {
     cursor: pointer;
 }
 nav > button:hover {
-    background-color: #c3cdeb;
+    background-color: #9aa6d1;
     text-decoration: underline;
+    transition: all 0.3s ease;
 }
 
 nav button:first-child {
@@ -94,3 +96,5 @@ footer {
         height: 8rem;
     }
 }
+
+
