@@ -9,6 +9,7 @@
     <label for="manager">Choose</label>
     <select id="manager">
         <option value="Course">Course Management</option>
+        <option value="Subject">Subject Management</option>
         <option value="Approval">Faculty Login Approval</option>
         <option value="Faculty_manage">Faculty Management</option>
         <option value="Role">Role Management</option>
@@ -19,11 +20,13 @@
     <script src="{{ url_for('main.catch_all', path="faculty_approval.js") }}" type="application/javascript"></script>
     <script src="{{ url_for('main.catch_all', path="faculty_management.js") }}" type="application/javascript"></script>
     <script src="{{ url_for('main.catch_all', path="course_management.js") }}" type="application/javascript"></script>
+    <script src="{{ url_for('main.catch_all', path="subject_management.js") }}" type="application/javascript"></script>
     <script src="{{ url_for('main.catch_all', path="management.js") }}"
             type="application/javascript"
             course_url={{ url_for('admin.course_management')|tojson }}
             approval_url={{ url_for('admin.faculty_approval')|tojson }}
             role_url={{ url_for('admin.role_management')|tojson }}
-            faculty_manage_url={{ url_for('admin.faculty_management')|tojson }} defer>
+            faculty_manage_url={{ url_for('admin.faculty_management')|tojson }}
+            subject_url={{ url_for('admin.subject_management')|tojson }} defer>
     </script>
 {% endblock %}

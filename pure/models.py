@@ -1,4 +1,4 @@
-from pure import client, bcrypt, login_manager, app
+from pure import client, cursor, bcrypt, login_manager, app, sql_client
 from flask_login import UserMixin
 from bson import ObjectId
 from itsdangerous import URLSafeTimedSerializer as Serializer
@@ -192,6 +192,26 @@ class Admin(User):
         client[self.college]["info"].update_one({'courses': {'$exists': 'true'}}, {'$pull': {'courses': course}})
         client[self.college]["info"].update_one({'room_ids': {'$exists': 'true'}},
                                                 {'$unset': {f'room_ids.{course}': {'$exists': 'true'}}})
+
+    def get_subjects(self, requested_course):
+        college_id = str(client[self.college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id'])
+        cursor.execute(f'SELECT * FROM {college_id}_subjects WHERE COURSE="{requested_course}";')
+        subjects = cursor.fetchall()
+        subjects = [subject[0] for subject in subjects]
+        return subjects
+
+    def add_subject(self, subject, course):
+        subject = subject.upper()
+        college_id = str(client[self.college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id'])
+        if subject in self.get_subjects(course):
+            return False
+        cursor.execute(f'INSERT INTO {college_id}_subjects VALUES("{subject}", "{course}");')
+        sql_client.commit()
+
+    def delete_subject(self, subject, course):
+        college_id = str(client[self.college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id'])
+        cursor.execute(f'DELETE FROM {college_id}_subjects WHERE SUBJECT="{subject}" AND COURSE="{course}";')
+        sql_client.commit()
 
     def get_unapproved_faculty_list(self):
         faculty_list = client[self.college]["user"].find({'user': 'faculty', 'approved': False})

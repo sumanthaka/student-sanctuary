@@ -1,4 +1,6 @@
-from flask import Blueprint, flash, redirect, url_for, render_template, request, abort
+import collections
+
+from flask import Blueprint, flash, redirect, url_for, render_template, request, abort, jsonify
 from flask_login import login_user, logout_user, current_user
 
 from pure.admin.forms import Admin_LoginForm
@@ -46,6 +48,23 @@ def course_management():
             current_user.delete_course(data[0])
 
     return render_template('portal/course_management.html', courses=current_user.get_courses())
+
+
+@admin.route('/subject_management', methods=['POST', 'GET'])
+def subject_management():
+    if request.method == 'POST':
+        data = str(request.data, 'utf-8').split(',')
+        if data[-1] == 'get':
+            requested_course = data[0]
+            subjects_list = current_user.get_subjects(requested_course)
+            return jsonify({'subjects': subjects_list})
+        elif data[-1] == 'add':
+            if not current_user.add_subject(data[1], data[0]):
+                flash('Subject already exists')
+        elif data[-1] == 'delete':
+            current_user.delete_subject(data[1], data[0])
+
+    return render_template('portal/subject_management.html', courses=current_user.get_courses())
 
 
 @admin.route('/faculty_approval', methods=['POST', 'GET'])

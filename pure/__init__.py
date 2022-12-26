@@ -6,12 +6,18 @@ from flask_login import LoginManager
 from flask_mail import Mail
 
 import pymongo
+import mysql.connector
 
 from pure.config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
 client = pymongo.MongoClient(app.config["MONGODB_DATABASE_URI"])
+sql_client = mysql.connector.connect(host=app.config["MYSQL_DATABASE_HOST"],
+                                     port=app.config["MYSQL_DATABASE_PORT"],
+                                     user=app.config["MYSQL_DATABASE_USER"],
+                                     database="student_sanctuary")
+cursor = sql_client.cursor()
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'student.student_signin'

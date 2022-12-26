@@ -1,0 +1,9 @@
+<label for="course_list">Select Course</label>
+<select id="course_list">
+    {% if courses %}
+        {% for course in courses%}
+            <option value="{{ course }}">{{ course }}</option>
+        {% endfor %}
+    {% endif %}
+</select>
+<div id="subject_container"></div>
