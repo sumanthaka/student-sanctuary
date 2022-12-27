@@ -1,4 +1,6 @@
-from pure import client, cursor, bcrypt, login_manager, app, sql_client
+import pandas
+
+from pure import client, cursor, bcrypt, login_manager, app, sql_client, engine
 from flask_login import UserMixin
 from bson import ObjectId
 from itsdangerous import URLSafeTimedSerializer as Serializer
@@ -126,6 +128,13 @@ class User(UserMixin):
         courses = client[college]["info"].find_one({'courses': {'$exists': 'true'}}, {'courses': 1, '_id': 0})["courses"]
         return courses
 
+    def get_subjects(self, requested_course):
+        college_id = str(client[self.college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id'])
+        cursor.execute(f'SELECT * FROM {college_id}_subjects WHERE COURSE="{requested_course}";')
+        subjects = cursor.fetchall()
+        subjects = [subject[0] for subject in subjects]
+        return subjects
+
     @staticmethod
     def get_colleges():
         colleges = client.list_database_names()
@@ -172,6 +181,28 @@ class Faculty(User):
         student_list = [student for student in student_list]
         return student_list
 
+    def upload_exam(self, exam_info, marks_file):
+        exam_info.update({'course': self.course_faculty})
+        exam_info.update({'date': datetime.now()})
+        exist = client[self.college]["exams"].find_one({'exam_name': exam_info['exam_name'], 'course': exam_info['course']})
+        if exist:
+            return [False, "Exam already exists"]
+        marks_dataframe = pandas.read_excel(marks_file)
+        headers = list(marks_dataframe.columns)
+        if not headers[:2] == ['Name', 'Email']:
+            return [False,
+                    "Please check format(including CAPITAL LETTERS in headers!!) Please download template for correct format"]
+        subjects = list(headers[2:])
+        course_subjects = self.get_subjects(self.course_faculty)
+        subjects.sort()
+        course_subjects.sort()
+        if not subjects == course_subjects:
+            return [False, "Subjects not matching with course, Please check format"]
+        client[self.college]["exams"].insert_one(exam_info)
+        exam_id = str(client[self.college]["exams"].find_one(exam_info, {'_id': 1})['_id'])
+        marks_dataframe.to_sql(name=exam_id, con=engine)
+        return [True, "Successfully uploaded"]
+
 
 class Admin(User):
     def get_student(self, email):
@@ -192,13 +223,6 @@ class Admin(User):
         client[self.college]["info"].update_one({'courses': {'$exists': 'true'}}, {'$pull': {'courses': course}})
         client[self.college]["info"].update_one({'room_ids': {'$exists': 'true'}},
                                                 {'$unset': {f'room_ids.{course}': {'$exists': 'true'}}})
-
-    def get_subjects(self, requested_course):
-        college_id = str(client[self.college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id'])
-        cursor.execute(f'SELECT * FROM {college_id}_subjects WHERE COURSE="{requested_course}";')
-        subjects = cursor.fetchall()
-        subjects = [subject[0] for subject in subjects]
-        return subjects
 
     def add_subject(self, subject, course):
         subject = subject.upper()
@@ -305,6 +329,7 @@ class Super_Admin(UserMixin):
             db = client[college]
             collection = db["info"]
             collection.insert_one({'email': email, 'name': name, 'mobile': mobile})
+            college_id = collection.find_one({'email': email})['_id']
             collection.insert_one({'roles': [{'cr': ['announcement_maker']}, {'regular': []}]})
             collection.insert_one({'courses': []})
             collection.insert_one({'room_ids': {}, 'faculty_room': ObjectId(), 'student_council_room': ObjectId()})
@@ -313,6 +338,8 @@ class Super_Admin(UserMixin):
             collection.insert_one({"name": name, "email": email, "college": college,
                                    "password": password,
                                    "user": "admin"})
+            cursor.execute(f'CREATE TABLE {college_id}_subjects(SUBJECT VARCHAR(80), COURSE VARCHAR(80))')
+            sql_client.commit()
             admin = collection.find_one({'email': email})
             return admin
 

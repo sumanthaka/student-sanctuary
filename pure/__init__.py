@@ -7,6 +7,7 @@ from flask_mail import Mail
 
 import pymongo
 import mysql.connector
+from sqlalchemy import create_engine
 
 from pure.config import Config
 
@@ -17,6 +18,7 @@ sql_client = mysql.connector.connect(host=app.config["MYSQL_DATABASE_HOST"],
                                      port=app.config["MYSQL_DATABASE_PORT"],
                                      user=app.config["MYSQL_DATABASE_USER"],
                                      database="student_sanctuary")
+engine = create_engine(app.config["MYSQL_DATABASE_URI"])
 cursor = sql_client.cursor()
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)

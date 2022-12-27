@@ -24,9 +24,3 @@ class Faculty_SignupForm(FlaskForm):
     password = PasswordField('Password', validators=[Length(min=8), DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[EqualTo('password'), DataRequired()])
     submit = SubmitField('Register')
-
-
-class UploadMarks_Form(FlaskForm):
-    exam_name = StringField('Exam Name', validators=[DataRequired()])
-    marks_file = FileField('Marks List', validators=[FileRequired(), FileAllowed(['xlsx'], 'Excel Files only!')])
-    submit = SubmitField('Submit')
