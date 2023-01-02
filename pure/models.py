@@ -198,10 +198,26 @@ class Faculty(User):
         course_subjects.sort()
         if not subjects == course_subjects:
             return [False, "Subjects not matching with course, Please check format"]
+        check = list(marks_dataframe.columns[2:])
+        for col in check:
+            if marks_dataframe[col].gt(exam_info["max_marks"][col]).any():
+                return [False, "Marks inputted is greater than the given max marks"]
         client[self.college]["exams"].insert_one(exam_info)
         exam_id = str(client[self.college]["exams"].find_one(exam_info, {'_id': 1})['_id'])
         marks_dataframe.to_sql(name=exam_id, con=engine)
         return [True, "Successfully uploaded"]
+
+    def get_exams(self):
+        raw_exams = client[self.college]["exams"].find({})
+        exam_list = [exam for exam in raw_exams]
+        return exam_list
+
+    def exam_sub_avg(self, exam_id):
+        df = pandas.read_sql_table(exam_id, engine, index_col="index")
+        average = df.mean(numeric_only=True).round()[1:]
+        x = list(average.index)
+        y = list(average.values)
+        return x, y
 
 
 class Admin(User):
@@ -231,6 +247,7 @@ class Admin(User):
             return False
         cursor.execute(f'INSERT INTO {college_id}_subjects VALUES("{subject}", "{course}");')
         sql_client.commit()
+        return True
 
     def delete_subject(self, subject, course):
         college_id = str(client[self.college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id'])
@@ -345,6 +362,13 @@ class Super_Admin(UserMixin):
 
     @staticmethod
     def remove_college(college):
+        exam_ids = client[college]["exams"].find({}, {'_id': 1})
+        for exam in exam_ids:
+            exam_table = exam['_id']
+            cursor.execute(f'DROP TABLE {exam_table}')
+        college_id = client[college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id']
+        cursor.execute(f'DROP TABLE {college_id}_subjects')
+        sql_client.commit()
         client.drop_database(college)
 
     @staticmethod

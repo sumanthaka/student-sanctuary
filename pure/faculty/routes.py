@@ -2,6 +2,9 @@ import os.path
 import uuid
 
 import openpyxl as openpyxl
+from bokeh.embed import components
+from bokeh.plotting import figure
+from bokeh.resources import CDN
 
 from flask import Blueprint, flash, redirect, url_for, render_template, send_from_directory, abort, request, send_file
 from flask_login import login_user, logout_user, login_required, current_user
@@ -106,7 +109,18 @@ def send_template():
 def view_report():
     if current_user.user != 'faculty':
         abort(403)
-    return render_template('portal/report_marks.html')
+    cdn_js = CDN.js_files
+    return render_template('portal/report_marks.html', js_cdn=cdn_js, exam_list=current_user.get_exams())
+
+
+@faculty.route('/graph/<examid>', methods=['POST', 'GET'])
+@login_required
+def exam_avg_graph(examid):
+    x, y = current_user.exam_sub_avg(examid)
+    plot = figure(x_range=x, y_range=(0, max(y) + 10), tools='save', tooltips=[("(x,y)", "(@x, $y)")])
+    plot.vbar(x, top=y, width=0.5, color="#CAB2D6")
+    script, div = components(plot, wrap_script=False)
+    return {'script': script, 'div': div}
 
 
 @faculty.route('/logout', methods=['POST', 'GET'])
