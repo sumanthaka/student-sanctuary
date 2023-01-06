@@ -3,6 +3,7 @@ import uuid
 
 import openpyxl as openpyxl
 from bokeh.embed import components
+from bokeh.models import CategoricalAxis
 from bokeh.plotting import figure
 from bokeh.resources import CDN
 
@@ -110,16 +111,59 @@ def view_report():
     if current_user.user != 'faculty':
         abort(403)
     cdn_js = CDN.js_files
-    return render_template('portal/report_marks.html', js_cdn=cdn_js, exam_list=current_user.get_exams())
+    return render_template('portal/report_marks.html', js_cdn=cdn_js)
 
 
-@faculty.route('/graph/<examid>', methods=['POST', 'GET'])
+@faculty.route('/exams_avg')
+@login_required
+def exams_avg():
+    if current_user.user != 'faculty':
+        abort(403)
+    return render_template('portal/exams_avg.html', exam_list=current_user.get_exams())
+
+
+@faculty.route('/exams_avg/<examid>', methods=['POST', 'GET'])
 @login_required
 def exam_avg_graph(examid):
     x, y = current_user.exam_sub_avg(examid)
     plot = figure(x_range=x, y_range=(0, max(y) + 10), tools='save', tooltips=[("(x,y)", "(@x, $y)")])
     plot.vbar(x, top=y, width=0.5, color="#CAB2D6")
     script, div = components(plot, wrap_script=False)
+    return {'script': script, 'div': div}
+
+
+@faculty.route('/student_report', methods=['POST', 'GET'])
+@login_required
+def student_report():
+    if current_user.user != 'faculty':
+        abort(403)
+    return render_template('portal/student_report.html', student_list=current_user.get_course_student())
+
+
+@faculty.route('/student_report/<studentid>', methods=['POST', 'GET'])
+@login_required
+def student_report_graphs(studentid):
+    if current_user.user != 'faculty':
+        abort(403)
+    x, y = current_user.student_all_marks(studentid)
+    average = y['avg']
+    marks = y['marks']
+    exam_names = y['exam_names']
+    script, div = "", ""
+    for i in range(len(marks)):
+        exam_mark = marks[i][1:]
+        plot = figure(x_range=x, y_range=(0, max(exam_mark)+10), tools='save', tooltips=[("(x,y)", "(@x, $y)")])
+        plot.vbar(x, top=exam_mark, width=0.5, color="#CAB2D6")
+        gen_script, gen_div = components(plot,  wrap_script=False)
+        script += gen_script
+        div += '<br>'+gen_div
+    plot = figure(x_range=exam_names, y_range=(0, max(average)+10), tools='save', tooltips=[("(x,y)", "(@x, $y)")])
+    plot.xaxis[0] = CategoricalAxis()
+    plot.line(x=exam_names, y=average, color="#000000")
+    plot.circle(average)
+    gen_script, gen_div = components(plot, wrap_script=False)
+    script += gen_script
+    div += '<br>' + gen_div
     return {'script': script, 'div': div}
 
 

@@ -4,30 +4,11 @@
     {% for cdns in js_cdn %}
         <script type="application/javascript" src="{{ cdns|safe }}"></script>
     {% endfor %}
-    <ul>
-        <li><button>Exam-wise Average</button></li>
-        <li><button>Student-wise Report</button></li>
+    <ul class="nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm">
+        <li class="nav-item"><button class="nav-link active rounded-5" onclick='get_report_req("exam_avg",{{ url_for('faculty.exams_avg')|tojson }})'>Exam-wise Average</button></li>
+        <li class="nav-item"><button class="nav-link active rounded-5" onclick='get_report_req("stu_avg",{{ url_for('faculty.student_report')|tojson }})'>Student-wise Report</button></li>
     </ul>
-    <select id="exams">
-        {% for exam in exam_list %}
-            <option value="{{ exam['_id'] }}">{{ exam['exam_name'] }}</option>
-        {% endfor %}
-    </select>
-    <div id="graph_container"></div>
-    <script>
-        let exams = document.getElementById("exams")
-        let graph_container = document.getElementById("graph_container")
-        set_graph(exams.value)
-        exams.addEventListener('change', () => { set_graph(exams.value) })
-
-        async function set_graph(examid){
-            await fetch({{ url_for('faculty.exam_avg_graph', examid="")|tojson }}+examid)
-                .then(response => { return response.json() })
-                .then(json => {
-                    console.log("change")
-                    graph_container.innerHTML = json.div
-                    eval(json.script)
-                })
-        }
-    </script>
+    <div id="report_container"></div>
+    <script src="{{ url_for('main.catch_all', path='report_marks.js') }}"></script>
+    <script>get_report_req("exam_avg",{{ url_for('faculty.exams_avg')|tojson }})</script>
 {% endblock %}

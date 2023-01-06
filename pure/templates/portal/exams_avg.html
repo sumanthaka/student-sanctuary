@@ -1,0 +1,6 @@
+<select id="exams" class="form-select form-select-lg mb-3">
+    {% for exam in exam_list %}
+        <option value="{{ exam['_id'] }}">{{ exam['exam_name'] }}</option>
+    {% endfor %}
+</select>
+<div id="graph_container" class="container-fluid"></div>

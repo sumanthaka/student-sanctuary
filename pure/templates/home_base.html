@@ -11,31 +11,40 @@
     {% endblock %}
 </head>
 <body>
-    <header>
-        <a href="{{ url_for('main.home_page') }}"><img src="../static/logo.png" alt="logo"></a>
-        <nav>
-            <button class="font-effect-emboss" id="apply_now_nav" onclick="location.href = '{{ url_for('main.apply_now') }}'"><strong>Apply Now!</strong></button>
-            <button id="student" onclick="location.href = '{{ url_for('student.student_signin') }}'">Student</button>
-            <button id="faculty" onclick="location.href = '{{ url_for('faculty.faculty_signin') }}'">Faculty</button>
-            <button id="admin" onclick="location.href = '{{ url_for('admin.admin_signin') }}'">Admin</button>
-            <button id="contact" onclick="location.href='{{ url_for('main.contact_us') }}'">Contact Us</button>
-            {% if current_user %}
-                {% if current_user.user == 'student' %}
-                    <script>check_login("student", "{{ url_for('profile.profile_page') }}")</script>
-                {% elif current_user.user == 'faculty' %}
-                    <script>check_login("faculty", "{{ url_for('profile.profile_page') }}")</script>
-                {% elif current_user.user == 'admin' %}
-                    <script>check_login("admin", "{{ url_for('profile.profile_page') }}")</script>
-                {% endif %}
+    <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark justify-content-end" data-bs-theme="dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('main.home_page') }}"><img src="../static/logo.png" alt="logo"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+              <a class="nav-link font-effect-emboss" id="apply_now_nav" onclick="location.href = '{{ url_for('main.apply_now') }}'"><strong>Apply Now!</strong></a>
+              <a class="nav-link" id="student" onclick="location.href = '{{ url_for('student.student_signin') }}'">Student</a>
+              <a class="nav-link" id="faculty" onclick="location.href = '{{ url_for('faculty.faculty_signin') }}'">Faculty</a>
+              <a class="nav-link" id="admin" onclick="location.href = '{{ url_for('admin.admin_signin') }}'">Admin</a>
+              <a class="nav-link" id="contact" onclick="location.href='{{ url_for('main.contact_us') }}'">Contact Us</a>
+          </div>
+        </div>
+      </div>
+        {% if current_user %}
+            {% if current_user.user == 'student' %}
+                <script>check_login("student", "{{ url_for('profile.profile_page') }}")</script>
+            {% elif current_user.user == 'faculty' %}
+                <script>check_login("faculty", "{{ url_for('profile.profile_page') }}")</script>
+            {% elif current_user.user == 'admin' %}
+                <script>check_login("admin", "{{ url_for('profile.profile_page') }}")</script>
             {% endif %}
-        </nav>
-    </header>
+        {% endif %}
+    </nav>
     <main id="main">
         {% block content %}
         {% endblock %}
     </main>
-    <footer>
-        Copyright 2022          Student Sanctuary
-    </footer>
+    <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50">
+    <div class="container text-center">
+      <small> Copyright 2022 &copy; Student Sanctuary</small>
+    </div>
+  </footer>
 </body>
 </html>

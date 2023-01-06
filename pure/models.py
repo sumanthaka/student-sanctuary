@@ -219,6 +219,31 @@ class Faculty(User):
         y = list(average.values)
         return x, y
 
+    def student_all_marks(self, student_id):
+        stu_id = ObjectId(student_id)
+        student_email = client[self.college]["user"].find_one({'_id': stu_id})["email"]
+        exams = self.get_exams()
+        student_marks = []
+        course_subjects = self.get_subjects(self.course_faculty)
+        columns = ['exam_id', 'exam_name'] + course_subjects
+        for exam in exams:
+            exam_id, exam_name = exam['_id'], exam['exam_name']
+            cursor.execute(f'SELECT * FROM {exam_id} WHERE EMAIL LIKE "{student_email}"')
+            mark = cursor.fetchall()[0][3:]
+            data = [exam_id, exam_name]
+            for i in mark:
+                data.append(i)
+            student_marks.append(tuple(data))
+        df = pandas.DataFrame(student_marks, columns=columns)
+        df = df.dropna(axis=1)
+        x = list(df.columns[2:])
+        y = {}
+        df['average'] = df.mean(axis=1, numeric_only=True).round()
+        y.update({'exam_names': list(df['exam_name'])})
+        y.update({'avg': list(df['average'])})
+        y.update({'marks': df.iloc[:, 1:-1].values.tolist()})
+        return x, y
+
 
 class Admin(User):
     def get_student(self, email):
