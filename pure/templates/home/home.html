@@ -1,15 +1,39 @@
 {% extends 'home_base.html' %}
 {% block links %}
-    <link rel="stylesheet" href="../../static/home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap" rel="stylesheet">
+    <style> @import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap'); </style>
 {% endblock %}
 
 {% block content %}
-    <section class="container" id="container">
-        <div class="cover">
-            <h1 class="font-effect-anaglyph font-effect-3d-float">Student Sanctuary</h1>
-            <p class="font-effect-anaglyph">We provide a platform for students to connect with each other and share their experiences.</p>
-            <button id="apply_now" class="apply font-effect-fire" onclick="location.href = '{{ url_for('main.apply_now') }}'">Apply Now!</button>
+    <div id="carousel-1" class="carousel slide" data-bs-ride="carousel" style="height: 600px;">
+        <div class="carousel-inner h-100">
+            <div class="carousel-item active h-100"><img class="w-100 d-block position-absolute h-100 fit-cover" src="background.webp" alt="Slide Image" style="z-index: -1;" />
+                <div class="container d-flex flex-column justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center justify-content-xl-center align-items-xxl-center h-100">
+                    <h1 class="text-uppercase text-center" style="font-family: 'Fredericka the Great',cursive;color: var(--bs-white);">Student sanctuary</h1>
+                    <p class="text-center d-lg-flex justify-content-lg-center" style="font-family: 'Fredericka the Great', serif;font-size: 21px;color: white;width: 60%;">We provide a platform for students to connect with each other and share their experiences.<br /></p>
+                </div>
+            </div>
         </div>
-    </section>
+        <div><a class="carousel-control-prev" href="#carousel-1" role="button" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span><span class="visually-hidden">Previous</span></a><a class="carousel-control-next" href="#carousel-1" role="button" data-bs-slide="next"><span class="carousel-control-next-icon"></span><span class="visually-hidden">Next</span></a></div>
+        <ol class="carousel-indicators">
+            <li class="active" data-bs-target="#carousel-1" data-bs-slide-to="0"></li>
+        </ol>
+    </div>
+    <div class="text-end" style="background: url('board.webp');">
+        <div class="row gy-4 gy-md-0">
+            <div class="col-md-6">
+                <div class="p-xl-5 m-xl-5"><img class="rounded img-fluid w-100 fit-cover" style="min-height: 300px;" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png" /></div>
+            </div>
+            <div class="col-md-6 col-xxl-6 d-md-flex align-items-md-center justify-content-xxl-end">
+                <div class="text-end" style="max-width: 350px;margin-right: 130px;">
+                    <h2 class="text-uppercase fw-normal" style="font-family: 'Fredericka the Great', serif;color: var(--bs-pink);font-size: 61px;">Admin</h2>
+                    <p class="my-3" style="color: var(--bs-white);font-family: 'Fredericka the Great', serif;font-size: 24px;margin-left: -1em;">A college admin is a person who is responsible for managing and maintaining their college&#39;s presence on a platform. They have the ability to send announcements, manage courses, approve faculty accounts, and assign custom roles to students within their college.<br /></p>
+                    <a class="btn btn-primary btn-lg me-2" role="button" href="{{ url_for('admin.admin_signin') }}">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <script defer type="application/javascript" src="../../static/home.js"></script>
 {% endblock %}
