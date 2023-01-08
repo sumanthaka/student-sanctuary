@@ -13,13 +13,10 @@
                 <div class="container d-flex flex-column justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center justify-content-xl-center align-items-xxl-center h-100">
                     <h1 class="text-uppercase text-center" style="font-family: 'Fredericka the Great',cursive;color: var(--bs-white);">Student sanctuary</h1>
                     <p class="text-center d-lg-flex justify-content-lg-center" style="font-family: 'Fredericka the Great', serif;font-size: 21px;color: white;width: 60%;">We provide a platform for students to connect with each other and share their experiences.<br /></p>
+                    <button class="btn btn-primary" type="button" onclick="location.href = '{{ url_for('main.apply_now') }}'" style="margin-top: 2em;font-family: 'Fredericka the Great', serif;font-size: 22px;background: var(--bs-border-color-translucent);border-color: var(--bs-btn-disabled-color);border-radius: 26px;width: 10em;">Apply Now!</button>
                 </div>
             </div>
         </div>
-        <div><a class="carousel-control-prev" href="#carousel-1" role="button" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span><span class="visually-hidden">Previous</span></a><a class="carousel-control-next" href="#carousel-1" role="button" data-bs-slide="next"><span class="carousel-control-next-icon"></span><span class="visually-hidden">Next</span></a></div>
-        <ol class="carousel-indicators">
-            <li class="active" data-bs-target="#carousel-1" data-bs-slide-to="0"></li>
-        </ol>
     </div>
     <div class="text-end" style="background: url('board.webp');">
         <div class="row gy-4 gy-md-0">
@@ -27,13 +24,45 @@
                 <div class="p-xl-5 m-xl-5"><img class="rounded img-fluid w-100 fit-cover" style="min-height: 300px;" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png" /></div>
             </div>
             <div class="col-md-6 col-xxl-6 d-md-flex align-items-md-center justify-content-xxl-end">
-                <div class="text-end" style="max-width: 350px;margin-right: 130px;">
+                <div class="text-end" style="margin-right: 1em;padding-right: 2em">
                     <h2 class="text-uppercase fw-normal" style="font-family: 'Fredericka the Great', serif;color: var(--bs-pink);font-size: 61px;">Admin</h2>
-                    <p class="my-3" style="color: var(--bs-white);font-family: 'Fredericka the Great', serif;font-size: 24px;margin-left: -1em;">A college admin is a person who is responsible for managing and maintaining their college&#39;s presence on a platform. They have the ability to send announcements, manage courses, approve faculty accounts, and assign custom roles to students within their college.<br /></p>
-                    <a class="btn btn-primary btn-lg me-2" role="button" href="{{ url_for('admin.admin_signin') }}">Login</a>
+                    <p class="my-3" style="color: var(--bs-white);font-family: 'Fredericka the Great', serif;font-size: 24px;padding-left: -2em">A college admin is a person who is responsible for managing and maintaining their college&#39;s presence on a platform. They have the ability to send announcements, manage courses, approve faculty accounts, and assign custom roles to students within their college.<br /></p>
+                    <a class="btn btn-primary btn-lg me-2" role="button" href="{{ url_for('admin.admin_signin') }}" style="font-family: 'Fredericka the Great', serif;border-color: white;background: var(--bs-border-color-translucent);">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="py-4 py-xl-5" style="background: url('board.webp');">
+        <div class="row gy-4 gy-md-0">
+            <div class="col-md-6 text-center text-md-start d-flex d-sm-flex d-md-flex justify-content-center align-items-center justify-content-md-start align-items-md-center justify-content-xl-center">
+                <div style="margin-left: 10%;">
+                    <h2 class="text-uppercase" style="font-family: 'Fredericka the Great', serif;color: var(--bs-pink);font-size: 61px;">Faculty</h2>
+                    <p class="my-3" style="font-family: 'Fredericka the Great', serif;color: white;font-size: 24px;">Faculty members are individuals who are responsible for teaching courses at a college. They have access to tools and resources that are designed to help them connect with their students and manage their courses, including the ability to make announcements and participate in a faculty-only chat.<br /></p>
+                    <a class="btn btn-primary btn-lg me-2" role="button" href="{{ url_for('faculty.faculty_signin') }}" style="border-color: white;background: var(--bs-border-color-translucent);font-family: 'Fredericka the Great', serif;">Login</a>
+                    <a class="btn btn-outline-primary btn-lg" role="button" href="{{ url_for('faculty.faculty_signup') }}" style="font-family: 'Fredericka the Great', serif;">Signup</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-xl-5 m-xl-5"><img class="rounded img-fluid w-100 fit-cover" style="min-height: 300px;" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png" /></div>
+            </div>
+        </div>
+    </div>
+    <div class="py-4 py-xl-5" style="background: url('board.webp');">
+        <div class="row gy-4 gy-md-0">
+            <div class="col-md-6">
+                <div class="p-xl-5 m-xl-5"><img class="rounded img-fluid w-100 fit-cover" style="min-height: 300px;" src="https://cdn.bootstrapstudio.io/placeholders/1400x800.png" /></div>
+            </div>
+            <div class="col-md-6 d-md-flex justify-content-xxl-end">
+                <div class="text-end" style="margin-right: 10%;">
+                    <h2 class="text-uppercase" style="font-family: 'Fredericka the Great', serif;color: var(--bs-pink);font-size: 61px;">Student</h2>
+                    <p class="my-3" style="font-size: 24px;color: white;font-family: 'Fredericka the Great', serif;">Students are the primary users of the platform. They can access various features and capabilities including chat rooms, announcements etc. Students have access to college-wide and class-specific chat rooms. The platform is designed to provide students with tools and resources that help them connect with their peers, teachers, and the college community and aims to support and enhance the student experience by helping them stay connected and engaged.</p>
+                    <a class="btn btn-primary btn-lg me-2" role="button" href="{{ url_for('student.student_signup') }}" style="font-family: 'Fredericka the Great', serif;background: var(--bs-border-color-translucent);color: var(--bs-btn-bg);">Signup</a>
+                    <a class="btn btn-outline-primary btn-lg" role="button" href="{{ url_for('student.student_signin') }}" style="color: white;font-family: 'Fredericka the Great', serif;border-color: white;">Login</a>
                 </div>
             </div>
         </div>
     </div>
     <script defer type="application/javascript" src="../../static/home.js"></script>
 {% endblock %}
+
+
