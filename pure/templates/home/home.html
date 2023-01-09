@@ -3,7 +3,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap" rel="stylesheet">
-    <style> @import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap'); </style>
+
 {% endblock %}
 
 {% block content %}
@@ -14,7 +14,7 @@
                     <img src="logo-only(1).png" width="219" height="202" style="margin-top: -1em;" />
                     <h1 class="text-uppercase text-center" style="font-family: 'Fredericka the Great',cursive;color: var(--bs-white);">Student sanctuary</h1>
                     <p class="text-center d-lg-flex justify-content-lg-center" style="font-family: 'Fredericka the Great', serif;font-size: 21px;color: white;width: 60%;">We provide a platform for students to connect with each other and share their experiences.<br /></p>
-                    <button class="btn btn-primary" type="button" onclick="location.href = '{{ url_for('main.apply_now') }}'" style="margin-top: 2em;font-family: 'Fredericka the Great', serif;font-size: 22px;background: var(--bs-border-color-translucent);border-color: var(--bs-btn-disabled-color);border-radius: 26px;width: 10em;">Apply Now!</button>
+                    <button class="btn btn-primary blackboard-button" id="apply_now" type="button" onclick="location.href = '{{ url_for('main.apply_now') }}'" style="margin-top: 2em;font-family: 'Fredericka the Great', serif;font-size: 22px;background: var(--bs-border-color-translucent);border-color: var(--bs-btn-disabled-color);border-radius: 26px;width: 10em;">Apply Now!</button>
                 </div>
             </div>
         </div>
@@ -57,8 +57,8 @@
                 <div class="text-end" style="margin-right: 10%;">
                     <h2 class="text-uppercase" style="font-family: 'Fredericka the Great', serif;color: var(--bs-pink);font-size: 61px;">Student</h2>
                     <p class="my-3" style="font-size: 24px;color: white;font-family: 'Fredericka the Great', serif;">Students are the primary users of the platform. They can access various features and capabilities including chat rooms, announcements etc. Students have access to college-wide and class-specific chat rooms. The platform is designed to provide students with tools and resources that help them connect with their peers, teachers, and the college community and aims to support and enhance the student experience by helping them stay connected and engaged.</p>
-                    <a class="btn btn-primary btn-lg me-2" role="button" href="{{ url_for('student.student_signup') }}" style="font-family: 'Fredericka the Great', serif;background: var(--bs-border-color-translucent);color: var(--bs-btn-bg);">Signup</a>
-                    <a class="btn btn-outline-primary btn-lg" role="button" href="{{ url_for('student.student_signin') }}" style="color: white;font-family: 'Fredericka the Great', serif;border-color: white;">Login</a>
+                    <a class="btn btn-primary btn-lg me-2" role="button" href="{{ url_for('student.student_signin') }}" style="font-family: 'Fredericka the Great', serif;background: var(--bs-border-color-translucent);color: var(--bs-white);border-color: white;">Login</a>
+                    <a class="btn btn-outline-primary btn-lg" role="button" href="{{ url_for('student.student_signup') }}" style="font-family: 'Fredericka the Great', serif;">Signup</a>
                 </div>
             </div>
         </div>
