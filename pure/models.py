@@ -84,9 +84,11 @@ class User(UserMixin):
 
     @staticmethod
     def get_data(email):
-        for college in client.list_database_names():
+        databases = client.list_database_names()
+        databases.remove('super_admin')
+        for college in databases:
             user = client[college]["user"].find_one({'email': email})
-            if user:
+            if user is not None:
                 return user
         return None
 

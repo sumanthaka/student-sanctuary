@@ -2,7 +2,7 @@ import phonenumbers as phonenumbers
 from flask import Blueprint, flash, redirect, url_for, render_template, request, abort
 from flask_login import login_user, logout_user, login_required, current_user
 
-from pure.models import Super_Admin, Admin
+from pure.models import Super_Admin
 from pure.super_admin.forms import Super_Admin_LoginForm, Create_College
 from pure.super_admin.utils import generate_random_password, send_reset_mail
 

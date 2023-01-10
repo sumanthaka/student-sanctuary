@@ -19,7 +19,7 @@ class RequestResetForm(FlaskForm):
             raise ValidationError('Email does not exist')
 
     email = EmailField('Email', validators=[Email(), DataRequired()])
-    submit = SubmitField('reset password')
+    submit = SubmitField('Reset')
 
 
 class ResetForm(FlaskForm):

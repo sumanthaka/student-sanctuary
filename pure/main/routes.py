@@ -40,6 +40,9 @@ def reset_request():
     reset_request_form = RequestResetForm()
     if reset_request_form.validate_on_submit():
         user = User.get_data(reset_request_form.email.data)
+        if user is None:
+            flash("Cannot change password for this user")
+            return render_template('auth/reset.html', form=reset_request_form)
         send_reset_mail(user)
         return redirect(url_for('main.home_page'))
     else:
