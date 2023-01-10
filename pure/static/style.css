@@ -1,7 +1,17 @@
 @import url('https://fonts.googleapis.com/css?family=Fredericka+the+Great&display=swap');
 
 .form-control::placeholder{
-    color: white;
+  color: white;
+}
+
+.form-select{
+  background-color: transparent;
+  -webkit-appearance: listbox;
+}
+
+.form-select option{
+  color: white;
+  background-color: grey;
 }
 
 .blackboard-button {
