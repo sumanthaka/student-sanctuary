@@ -1,25 +1,77 @@
 {% if current_user.user == "admin" %}
-    {% include 'portal/admin.html' %}
+    {% extends 'portal/admin.html' %}
 {% elif current_user.user == "faculty" %}
-    {% include 'portal/faculty.html' %}
+    {% extends 'portal/faculty.html' %}
 {% elif current_user.user == "student" %}
-    {% include 'portal/student.html' %}
+    {% extends 'portal/student.html' %}
 {% endif %}
 
 {% block content %}
-    <h1>Hi, {{ current_user.name }}</h1>
-    <a href="{{ url_for('profile.edit_profile') }}">Edit Profile</a>
-    <p>Name: </p>
-    <p>{{ current_user.name }}
-    <p>Email: </p>
-    <p>{{ current_user.email }}</p>
-    <p>College: </p>
-    <p>{{ current_user.college.replace('_',' ') }}</p>
-    {% if current_user.user == "faculty" %}
-        <p>Qualification: </p>
-        <p>{{ current_user.qualification }}</p>
-    {% elif current_user.user == "student" %}
-        <p>Course: </p>
-        <p>{{ current_user.course }}</p>
-    {% endif %}
+    <div class="d-xxl-flex align-items-xxl-center" style="background: url('../../static/board.webp') repeat;height: 100vh;width: 100vw;background-size: auto;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-xxl-4">
+                    <div class="card" style="font-family: 'Fredericka the Great', serif;background: var(--bs-border-color-translucent);color: white;">
+                        <div class="card-body">
+                            <h4 class="card-title">Profile</h4>
+                            <div class="card" style="background: var(--bs-card-cap-bg);">
+                                <img class="card-img-top d-block" style="border-radius: 50%;" src="https://api.dicebear.com/5.x/fun-emoji/svg?seed={{ current_user.email }}&mouth=cute,lilSmile,wideSmile&eyes=closed,cute,glasses,shades,wink,wink2" />
+                                <div class="card-body d-xxl-flex flex-column justify-content-xxl-center align-items-xxl-center">
+                                    <h4 class="text-center card-title">{{ current_user.name }}</h4>
+{#                                    <button class="btn btn-primary text-center" type="button">Edit Profile</button>#}
+                                    <a class="btn btn-primary text-center" href="{{ url_for('profile.edit_profile') }}">Edit Profile</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 d-xxl-flex flex-column justify-content-xxl-center align-items-xxl-start" style="background: var(--bs-border-color-translucent);padding-left: 32px;color: white;font-size: 23px;font-family: 'Fredericka the Great', serif;">
+                    <div class="row" style="color: white;font-size: 23px;font-family: 'Fredericka the Great', serif;">
+                        <div class="col-xxl-12 d-xxl-flex flex-row justify-content-xxl-center">
+                            <p>Name: </p>
+                            <p>{{ current_user.name }}</p>
+                        </div>
+                    </div>
+                    <div class="row" style="font-family: 'Fredericka the Great', serif;color: white;">
+                        <div class="col d-xxl-flex flex-row justify-content-xxl-center">
+                            <p style="color: white;font-size: 23px;">Email: </p>
+                            <p style="font-size: 22px;">{{ current_user.email }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-xxl-flex flex-row justify-content-xxl-center">
+                            <p>College: </p>
+                            <p>{{ current_user.college.replace('_',' ') }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-xxl-flex justify-content-xxl-center">
+                            {% if current_user.user == "faculty" %}
+                                <p>Qualification: </p>
+                                <p>{{ current_user.qualification }}</p>
+                            {% elif current_user.user == "student" %}
+                                <p>Course: </p>
+                                <p>BCA</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{#    <h1>Hi, {{ current_user.name }}</h1>#}
+{#    <a href="{{ url_for('profile.edit_profile') }}">Edit Profile</a>#}
+{#    <p>Name: </p>#}
+{#    <p>{{ current_user.name }}#}
+{#    <p>Email: </p>#}
+{#    <p>{{ current_user.email }}</p>#}
+{#    <p>College: </p>#}
+{#    <p>{{ current_user.college.replace('_',' ') }}</p>#}
+{#    {% if current_user.user == "faculty" %}#}
+{#        <p>Qualification: </p>#}
+{#        <p>{{ current_user.qualification }}</p>#}
+{#    {% elif current_user.user == "student" %}#}
+{#        <p>Course: </p>#}
+{#        <p>{{ current_user.course }}</p>#}
+{#    {% endif %}#}
 {% endblock %}

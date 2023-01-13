@@ -1,34 +1,80 @@
 {% if current_user.user == "admin" %}
-    {% include 'portal/admin.html' %}
+    {% extends 'portal/admin.html' %}
 {% elif current_user.user == "faculty" %}
-    {% include 'portal/faculty.html' %}
+    {% extends 'portal/faculty.html' %}
 {% elif current_user.user == "student" %}
-    {% include 'portal/student.html' %}
+    {% extends 'portal/student.html' %}
 {% endif %}
 
 {% block content %}
-    <form method="POST">
-        <label for="name">Name: </label>
-        <input id="name" name="username" type="text" value="{{ current_user.name }}">
-        <p>Email: </p>
-        <p>{{ current_user.email }}</p>
-        <p>College: </p>
-        <p>{{ current_user.college.replace('_',' ') }}</p>
-        {% if current_user.user == "faculty" %}
-            <p>Qualification: </p>
-            <p>{{ current_user.qualification }}</p>
-        {% elif current_user.user == "student" %}
-            <label for="course">Course: </label>
-            {% if current_user.course not in current_user.get_courses(current_user.college) %}
-                <select id="course" name="course">
-                    {% for course in current_user.get_courses(current_user.college) %}
-                        <option value={{ course }}>{{ course }}</option>
-                    {% endfor %}
-                </select>
-            {% else %}
-                <p>{{ current_user.course }}</p>
-            {% endif %}
-        {% endif %}
-        <button type="submit">Save</button>
-    </form>
+    <div class="d-md-flex d-xxl-flex flex-column align-items-md-center align-items-xxl-center" style="background: url('../../static/board.webp') repeat;height: 100vh;width: 100vw;background-size: auto;">
+        <h1 style="color: white;font-family: 'Fredericka the Great', serif;padding-top: 1em">Edit Profile</h1>
+        <div class="container d-md-flex justify-content-md-center" style="margin-right: 0px;margin-left: 0px;margin-top: 1em">
+            <div class="row" style="background: var(--bs-border-color-translucent);">
+                <form method="POST">
+                    <div class="col-md-9 d-xxl-flex flex-column justify-content-xxl-center align-items-xxl-start" style="color: white;font-size: 23px;font-family: 'Fredericka the Great', serif;width: 100%;padding: 2em;">
+                        <div class="row" style="color: white;font-size: 23px;font-family: 'Fredericka the Great', serif;">
+                            <div class="col-xxl-12 d-md-flex d-xxl-flex flex-row justify-content-md-start align-items-md-center justify-content-xxl-center">
+                                <p>Name: </p>
+                                <input type="text" style="color: white;background: var(--bs-border-color-translucent);border-radius: 15px;border-style: solid;" placeholder="Name" value="{{ current_user.name }}" />
+                            </div>
+                        </div>
+                        <div class="row" style="font-family: 'Fredericka the Great', serif;color: white;">
+                            <div class="col d-md-flex d-xxl-flex flex-row justify-content-md-start justify-content-xxl-center">
+                                <p style="color: white;font-size: 23px;">Email: </p>
+                                <p style="font-size: 22px;">{{ current_user.email }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col d-md-flex d-xxl-flex flex-row justify-content-md-start justify-content-xxl-center">
+                                <p>College: </p>
+                                <p>{{ current_user.college.replace('_',' ').title() }}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col d-md-flex d-xxl-flex justify-content-md-start justify-content-xxl-center">
+                                <p>Course: </p>
+                                {% if current_user.course not in current_user.get_courses(current_user.college) %}
+                                    <select style="border-radius: 15px;background: var(--bs-border-color-translucent);color: white;">
+                                        <optgroup label="Courses">
+                                            {% for course in current_user.get_courses(current_user.college) %}
+                                                <option value={{ course }}>{{ course }}</option>
+                                            {% endfor %}
+                                        </optgroup>
+                                    </select>
+                                {% else %}
+                                    <p>{{ current_user.course }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="font-family: 'Fredericka the Great', serif;margin-top: 2em;font-size: 23px">Save</button>
+    </div>
+{#    <form method="POST">#}
+{#        <label for="name">Name: </label>#}
+{#        <input id="name" name="username" type="text" value="{{ current_user.name }}">#}
+{#        <p>Email: </p>#}
+{#        <p>{{ current_user.email }}</p>#}
+{#        <p>College: </p>#}
+{#        <p>{{ current_user.college.replace('_',' ') }}</p>#}
+{#        {% if current_user.user == "faculty" %}#}
+{#            <p>Qualification: </p>#}
+{#            <p>{{ current_user.qualification }}</p>#}
+{#        {% elif current_user.user == "student" %}#}
+{#            <label for="course">Course: </label>#}
+{#            {% if current_user.course not in current_user.get_courses(current_user.college) %}#}
+{#                <select id="course" name="course">#}
+{#                    {% for course in current_user.get_courses(current_user.college) %}#}
+{#                        <option value={{ course }}>{{ course }}</option>#}
+{#                    {% endfor %}#}
+{#                </select>#}
+{#            {% else %}#}
+{#                <p>{{ current_user.course }}</p>#}
+{#            {% endif %}#}
+{#        {% endif %}#}
+{##}
+{#    </form>#}
 {% endblock %}

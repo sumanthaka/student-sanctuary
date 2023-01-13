@@ -53,7 +53,6 @@ def reset_request():
 @main.route('/reset_password/<token>', methods=['POST', 'GET'])
 def reset_password(token):
     user = User.verify_reset_token(token)
-    print(user.college)
     password_reset_form = ResetForm()
     if user is None:
         flash("This is an invalid or expired token")
