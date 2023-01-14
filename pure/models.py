@@ -216,7 +216,9 @@ class Faculty(User):
 
     def exam_sub_avg(self, exam_id):
         df = pandas.read_sql_table(exam_id, engine, index_col="index")
-        average = df.mean(numeric_only=True).round()[1:]
+        average = df.mean(numeric_only=True).round()
+        print(average)
+        print(average.index)
         x = list(average.index)
         y = list(average.values)
         return x, y
