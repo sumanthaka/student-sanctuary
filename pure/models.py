@@ -230,6 +230,7 @@ class Faculty(User):
         columns = ['exam_id', 'exam_name'] + course_subjects
         for exam in exams:
             exam_id, exam_name = exam['_id'], exam['exam_name']
+            cursor = sql_client.cursor()
             cursor.execute(f'SELECT * FROM {exam_id} WHERE EMAIL LIKE "{student_email}"')
             mark = cursor.fetchall()[0][3:]
             data = [exam_id, exam_name]
@@ -393,6 +394,7 @@ class Super_Admin(UserMixin):
         for exam in exam_ids:
             exam_table = exam['_id']
             cursor.execute(f'DROP TABLE {exam_table}')
+            sql_client.commit()
         college_id = client[college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id']
         cursor.execute(f'DROP TABLE {college_id}_subjects')
         sql_client.commit()
