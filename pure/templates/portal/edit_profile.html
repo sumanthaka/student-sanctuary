@@ -33,17 +33,20 @@
                         </div>
                         <div class="row">
                             <div class="col d-md-flex d-xxl-flex justify-content-md-start justify-content-xxl-center">
-                                <p>Course: </p>
-                                {% if current_user.course not in current_user.get_courses(current_user.college) %}
-                                    <select style="border-radius: 15px;background: var(--bs-border-color-translucent);color: white;">
-                                        <optgroup label="Courses">
-                                            {% for course in current_user.get_courses(current_user.college) %}
-                                                <option value={{ course }}>{{ course }}</option>
-                                            {% endfor %}
-                                        </optgroup>
-                                    </select>
-                                {% else %}
-                                    <p>{{ current_user.course }}</p>
+                                
+                                {% if current_user.user != 'admin' %}
+                                    <p>Course: </p>
+                                    {% if current_user.course not in current_user.get_courses(current_user.college) %}
+                                        <select style="border-radius: 15px;background: var(--bs-border-color-translucent);color: white;">
+                                            <optgroup label="Courses">
+                                                {% for course in current_user.get_courses(current_user.college) %}
+                                                        <option value={{ course }}>{{ course }}</option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        </select>
+                                    {% else %}
+                                        <p>{{ current_user.course }}</p>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
