@@ -1,25 +1,65 @@
 {% extends 'super_admin_base.html' %}
 
+{% block links %}
+    <link rel="stylesheet" href="{{ url_for('main.catch_all', path='style.css') }}">
+{% endblock %}
+
 {% block content %}
     <div id="load-wrapper">
         <h1>Loading...</h1>
     </div>
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        {{ form.college.label() }}
-        {{ form.college() }}
-        <br>
-        {{ form.college_mail.label() }}
-        {{ form.college_mail() }}
-        <br>
-        {{ form.name.label() }}
-        {{ form.name() }}
-        <br>
-        {{ form.mobile.label() }} with Region code
-        {{ form.mobile() }}
-        <br>
-        {{ form.submit() }}
-    </form>
+    <div class="position-relative py-4 py-xl-5" style="background: url('../../static/background.webp') center / cover no-repeat;height: 100vh;display: flex;align-items: center;">
+        <div class="container position-relative">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                    <div class="card mb-5" style="background: var(--bs-border-color-translucent);color: white;font-family: 'Fredericka the Great', serif;">
+                        <div class="card-body p-sm-5">
+                            <h2 class="text-center mb-4">Add College</h2>
+                            <form method="POST">
+                                {{ form.hidden_tag() }}
+                                <div class="mb-3">
+                                    {{ form.college(class="form-control", placeholder="College", style="background: var(--bs-border-color-translucent);color: white;") }}
+{#                                    <input id="name-1" class="form-control" type="text" name="College" placeholder="College" style="background: var(--bs-border-color-translucent);" />#}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.college_mail(class="form-control", placeholder="Email", style="background: var(--bs-border-color-translucent);color: white;") }}
+{#                                    <input id="email-2" class="form-control" type="email" name="email" placeholder="Email" style="background: var(--bs-border-color-translucent);" />#}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.name(class="form-control", placeholder="Admin Name", style="background: var(--bs-border-color-translucent);color: white;") }}
+{#                                    <input id="name-2" class="form-control" type="text" name="Name" placeholder="Admin Name" style="background: var(--bs-border-color-translucent);" />#}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.mobile(class="form-control", placeholder="Phone Number (with Region Code)", style="background: var(--bs-border-color-translucent);color: white;") }}
+{#                                    <input class="form-control" type="tel" style="background: var(--bs-border-color-translucent);" placeholder="Phone Number" />#}
+                                </div>
+                                <div>
+                                    {{ form.submit(class="btn btn-primary d-block w-100") }}
+{#                                    <button class="btn btn-primary d-block w-100" type="submit">Send </button>#}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{#    <form method="POST">#}
+{#        {{ form.hidden_tag() }}#}
+{#        {{ form.college.label() }}#}
+{#        {{ form.college() }}#}
+{#        <br>#}
+{#        {{ form.college_mail.label() }}#}
+{#        {{ form.college_mail() }}#}
+{#        <br>#}
+{#        {{ form.name.label() }}#}
+{#        {{ form.name() }}#}
+{#        <br>#}
+{#        {{ form.mobile.label() }} with Region code#}
+{#        {{ form.mobile() }}#}
+{#        <br>#}
+{#        {{ form.submit() }}#}
+{#    </form>#}
     <script>
         window.addEventListener('load', () => {
             const loader = document.getElementById("load-wrapper")

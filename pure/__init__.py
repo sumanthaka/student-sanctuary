@@ -22,7 +22,7 @@ engine = create_engine(app.config["MYSQL_DATABASE_URI"])
 cursor = sql_client.cursor()
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-login_manager.login_view = 'student.student_signin'
+# login_manager.login_view = 'student.student_signin'
 mail = Mail(app)
 socketio = SocketIO(app)
 

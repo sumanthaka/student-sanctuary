@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import EmailField, SubmitField, PasswordField, StringField
+from wtforms import EmailField, SubmitField, PasswordField, StringField, TelField
 from wtforms.validators import Email, DataRequired, Length
 
 
@@ -13,5 +13,5 @@ class Create_College(FlaskForm):
     college = StringField('College', validators=[DataRequired()])
     college_mail = EmailField('College Email', validators=[Email(), DataRequired()])
     name = StringField('Admin Name', validators=[Length(min=2, max=40), DataRequired()])
-    mobile = StringField('Phone Number', validators=[Length(min=10), DataRequired()])
+    mobile = TelField('Phone Number', validators=[Length(min=10), DataRequired()])
     submit = SubmitField('Create')

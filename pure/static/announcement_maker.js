@@ -13,6 +13,13 @@ if(faculty_checkbox === null) {
     faculty_checkbox.type = "checkbox"
 }
 
+let checkboxes = document.getElementsByName("target")
+for(let i=0;i<checkboxes.length;i++){
+    checkboxes[i].classList.add('form-check-input')
+    checkboxes[i].parentElement.classList.add('form-check')
+    checkboxes[i].nextSibling.nextSibling.classList.add("form-check-label")
+}
+
 everyone_checkbox.addEventListener("change", () => {
     let checkboxes = document.getElementsByName("target")
     if(everyone_checkbox.checked){
