@@ -216,10 +216,11 @@ class Faculty(User):
 
     def exam_sub_avg(self, exam_id):
         df = pandas.read_sql_table(exam_id, engine, index_col="index")
+        title = client[self.college]["exams"].find_one({'_id': ObjectId(exam_id)})["exam_name"]
         average = df.mean(numeric_only=True).round()
         x = list(average.index)
         y = list(average.values)
-        return x, y
+        return x, y, title
 
     def student_all_marks(self, student_id):
         stu_id = ObjectId(student_id)
@@ -238,10 +239,10 @@ class Faculty(User):
                 data.append(i)
             student_marks.append(tuple(data))
         df = pandas.DataFrame(student_marks, columns=columns)
-        df = df.dropna(axis=1)
         x = list(df.columns[2:])
         y = {}
         df['average'] = df.mean(axis=1, numeric_only=True).round()
+        df = df.fillna(0)
         y.update({'exam_names': list(df['exam_name'])})
         y.update({'avg': list(df['average'])})
         y.update({'marks': df.iloc[:, 1:-1].values.tolist()})

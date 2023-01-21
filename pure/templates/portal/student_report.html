@@ -1,6 +1,9 @@
-<select id="students" class="form-select form-select-lg mb-3">
-    {% for student in student_list %}
-        <option value="{{ student['_id'] }}">{{ student['name'] }}</option>
-    {% endfor %}
-</select>
-<div id="graph_container" class="container-fluid"></div>
+<link rel="stylesheet" href="{{ url_for('main.catch_all', path='style.css') }}">
+<div style="width: 15em;margin: 1.6em auto">
+    <select id="students" class="form-select form-select-lg" style="text-align: center;text-transform: capitalize;color: white;font-family: 'Fredericka the Great', serif;border-radius: 16px;background: transparent">
+        {% for student in student_list %}
+            <option value="{{ student['_id'] }}">{{ student['name'] }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div id="graph_container" style="height: 100vh;overflow-y: auto;display: flex;flex-wrap: wrap;gap: 2em;"></div>

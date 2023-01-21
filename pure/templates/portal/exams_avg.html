@@ -1,6 +1,9 @@
-<select id="exams" class="form-select form-select-lg mb-3">
-    {% for exam in exam_list %}
-        <option value="{{ exam['_id'] }}">{{ exam['exam_name'] }}</option>
-    {% endfor %}
-</select>
-<div id="graph_container" class="container-fluid"></div>
+<link rel="stylesheet" href="{{ url_for('main.catch_all', path='style.css') }}">
+<div style="width: 15em;margin: 1.6em auto">
+    <select id="exams" class="form-select form-select-lg" style="text-align: center;text-transform: capitalize;color: white;font-family: 'Fredericka the Great', serif;border-radius: 16px;background: transparent">
+        {% for exam in exam_list %}
+            <option value="{{ exam['_id'] }}">{{ exam['exam_name'] }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div id="graph_container" style="max-width: 60vw"></div>

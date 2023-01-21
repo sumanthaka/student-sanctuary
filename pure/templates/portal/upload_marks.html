@@ -1,33 +1,69 @@
 {% extends 'portal/faculty.html' %}
 
+{% block links %}
+    <link rel="stylesheet" href="{{ url_for('main.catch_all', path='style.css') }}">
+{% endblock %}
+
 {% block content %}
-    <style>
-        form {
-            padding: 10px;
-        }
-    </style>
-    <form method="POST" enctype="multipart/form-data">
-        <label for="exam_name">Exam Name</label>
-        <input type="text" required id="exam_name" name="exam_name">
-        <br>
-        <label for="marks_file">Marks File</label>
-        <input type="file"
-               accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
-               id="marks_file"
-               name="marks_file" required>
-        <br>
-        <h3>Max Marks</h3>
-        {% for subject in subjects_list %}
-            <label for="{{ subject }}">{{ subject }}</label>
-            <input type="number" name="{{ subject }}" id="{{ subject }}" required>
-            <br>
-        {% endfor %}
-        <button type="submit">Submit</button>
-    </form>
-    <div id="down_template">
-        <button onclick="subjects('{{ url_for('faculty.send_template') }}')" id="download">
-            Download Template
-        </button>
+    <div class="py-4 py-xl-5" style="background: url('../../static/board.webp') center / cover no-repeat;">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                    <div class="card mb-5" style="background: var(--bs-border-color-translucent);color: white;font-family: 'Fredericka the Great', serif;">
+                        <div class="card-body p-sm-5">
+                            <h2 class="text-center mb-4">Upload Marks</h2>
+                            <form method="POST" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <input id="exam_name" class="form-control" type="text" name="exam_name" placeholder="Exam Name" style="color: white;background: var(--bs-border-color-translucent);" required />
+                                </div>
+                                <div class="mb-3">
+                                    <input class="form-control"
+                                           id="marks_file"
+                                           type="file"
+                                           accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                                           style="color: white;background: var(--bs-border-color-translucent);" required />
+                                </div>
+                                <h5 class="text-center">Max Marks</h5>
+                                {% for subject in subjects_list %}
+                                    <div style="margin-bottom: 16px;">
+                                        <input class="form-control" type="number" style="color: white;background: var(--bs-border-color-translucent);" min="0" placeholder="{{ subject }}" name="{{ subject }}" required />
+                                    </div>
+                                {% endfor %}
+                                <div>
+                                    <button class="btn btn-primary d-block w-100" type="submit">Submit</button>
+                                </div>
+                                <div id="down_template" style="padding-top: 2em;">
+                                    <button id="download" class="btn btn-primary d-block w-100" type="button" onclick="subjects('{{ url_for('faculty.send_template') }}')">Download Template</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+{#    <form method="POST" enctype="multipart/form-data">#}
+{#        <label for="exam_name">Exam Name</label>#}
+{#        <input type="text" required id="exam_name" name="exam_name">#}
+{#        <br>#}
+{#        <label for="marks_file">Marks File</label>#}
+{#        <input type="file"#}
+{#               accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"#}
+{#               id="marks_file"#}
+{#               name="marks_file" required>#}
+{#        <br>#}
+{#        <h3>Max Marks</h3>#}
+{#        {% for subject in subjects_list %}#}
+{#            <label for="{{ subject }}">{{ subject }}</label>#}
+{#            <input type="number" name="{{ subject }}" id="{{ subject }}" required>#}
+{#            <br>#}
+{#        {% endfor %}#}
+{#        <button type="submit">Submit</button>#}
+{#    </form>#}
+{#    <div id="down_template">#}
+{#        <button onclick="subjects('{{ url_for('faculty.send_template') }}')" id="download">#}
+{#            Download Template#}
+{#        </button>#}
+{#    </div>#}
     <script type="application/javascript" src="{{ url_for('main.catch_all', path='upload_marks.js') }}" defer></script>
 {% endblock %}

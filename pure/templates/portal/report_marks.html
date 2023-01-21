@@ -4,11 +4,18 @@
     {% for cdns in js_cdn %}
         <script type="application/javascript" src="{{ cdns|safe }}"></script>
     {% endfor %}
-    <ul class="nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm">
-        <li class="nav-item"><button class="nav-link active rounded-5" onclick='get_report_req("exam_avg",{{ url_for('faculty.exams_avg')|tojson }})'>Exam-wise Average</button></li>
-        <li class="nav-item"><button class="nav-link active rounded-5" onclick='get_report_req("stu_avg",{{ url_for('faculty.student_report')|tojson }})'>Student-wise Report</button></li>
-    </ul>
-    <div id="report_container"></div>
-    <script src="{{ url_for('main.catch_all', path='report_marks.js') }}"></script>
-    <script>get_report_req("exam_avg",{{ url_for('faculty.exams_avg')|tojson }})</script>
+    <div style="background: url('../../static/board.webp') center no-repeat;background-size: cover;padding: 0.5em 0;">
+        <h2 class="text-center mb-4" style="color: white;font-family: 'Fredericka the Great', serif;">Mark Report</h2>
+        <div class="btn-group d-md-flex justify-content-md-center" role="group" style="font-family: 'Fredericka the Great', serif;background: transparent;margin: 0 1.6em">
+            <button class="btn btn-primary-outline" type="button"
+                    style="color: white;border-color: white;border-radius: 1.6em 0 0 1.6em;"
+                    onclick='get_report_req("exam_avg",{{ url_for('faculty.exams_avg')|tojson }})'>Exam Results Summary Report</button>
+            <button class="btn btn-primary-outline" type="button"
+                    style="color: white;border-color: white;border-radius: 0 1.6em 1.6em 0"
+                    onclick='get_report_req("stu_avg",{{ url_for('faculty.student_report')|tojson }})'>Individual Student Report</button>
+        </div>
+        <div id="report_container" style="margin: 0 2em;"></div>
+        <script src="{{ url_for('main.catch_all', path='report_marks.js') }}"></script>
+        <script>get_report_req("exam_avg",{{ url_for('faculty.exams_avg')|tojson }})</script>
+    </div>
 {% endblock %}

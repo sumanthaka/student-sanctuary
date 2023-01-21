@@ -2,6 +2,7 @@ import os.path
 import uuid
 
 import openpyxl as openpyxl
+from bokeh.io import curdoc
 from bokeh.embed import components
 from bokeh.models import CategoricalAxis
 from bokeh.plotting import figure
@@ -125,10 +126,16 @@ def exams_avg():
 @faculty.route('/exams_avg/<examid>', methods=['POST', 'GET'])
 @login_required
 def exam_avg_graph(examid):
-    x, y = current_user.exam_sub_avg(examid)
-    plot = figure(x_range=x, y_range=(0, max(y) + 10), tools='save', tooltips=[("(x,y)", "(@x, $y)")])
-    plot.vbar(x, top=y, width=0.5, color="#CAB2D6")
-    script, div = components(plot, wrap_script=False)
+    curdoc().theme = "night_sky"
+    x, y, title = current_user.exam_sub_avg(examid)
+    plot = figure(x_range=x, y_range=(0, max(y) + 10), tools='save', tooltips=[("(x,y)", "(@x, $y)")], title=title.capitalize())
+    plot.title.align = 'center'
+    plot.sizing_mode = "scale_width"
+    plot.background_fill_color = '#00000000'
+    plot.xaxis.axis_label = 'Subjects'
+    plot.yaxis.axis_label = 'Marks'
+    plot.vbar(x, top=y, width=0.5, color='#dedede')
+    script, div = components(plot, wrap_script=False, theme=curdoc().theme)
     return {'script': script, 'div': div}
 
 
@@ -145,6 +152,7 @@ def student_report():
 def student_report_graphs(studentid):
     if current_user.user != 'faculty':
         abort(403)
+    curdoc().theme = "night_sky"
     x, y = current_user.student_all_marks(studentid)
     average = y['avg']
     marks = y['marks']
@@ -152,18 +160,28 @@ def student_report_graphs(studentid):
     script, div = "", ""
     for i in range(len(marks)):
         exam_mark = marks[i][1:]
-        plot = figure(x_range=x, y_range=(0, max(exam_mark)+10), tools='save', tooltips=[("(x,y)", "(@x, $y)")])
-        plot.vbar(x, top=exam_mark, width=0.5, color="#CAB2D6")
-        gen_script, gen_div = components(plot,  wrap_script=False)
+        plot = figure(x_range=x, y_range=(0, max(exam_mark)+10), tools='save', tooltips=[("(x,y)", "(@x, $y)")], title=exam_names[i].capitalize())
+        plot.title.align = 'center'
+        # plot.sizing_mode = "scale_width"
+        plot.background_fill_color = '#00000000'
+        plot.xaxis.axis_label = 'Subjects'
+        plot.yaxis.axis_label = 'Marks'
+        plot.vbar(x, top=exam_mark, width=0.5, color='#dedede')
+        gen_script, gen_div = components(plot,  wrap_script=False, theme=curdoc().theme)
         script += gen_script
-        div += '<br>'+gen_div
-    plot = figure(x_range=exam_names, y_range=(0, max(average)+10), tools='save', tooltips=[("(x,y)", "(@x, $y)")])
+        div += gen_div
+    plot = figure(x_range=exam_names, y_range=(0, max(average)+10), tools='save', tooltips=[("(x,y)", "(@x, $y)")], title="Exam Average Trends over Time")
     plot.xaxis[0] = CategoricalAxis()
-    plot.line(x=exam_names, y=average, color="#000000")
-    plot.circle(average)
-    gen_script, gen_div = components(plot, wrap_script=False)
+    plot.line(x=exam_names, y=average, color='#dedede', line_width=4)
+    plot.circle(x=exam_names, y=average, size=10, color='#dedede')
+    plot.title.align = 'center'
+    # plot.sizing_mode = "scale_width"
+    plot.background_fill_color = '#00000000'
+    plot.xaxis.axis_label = 'Exams'
+    plot.yaxis.axis_label = 'Marks'
+    gen_script, gen_div = components(plot, wrap_script=False, theme=curdoc().theme)
     script += gen_script
-    div += '<br>' + gen_div
+    div += gen_div
     return {'script': script, 'div': div}
 
 
