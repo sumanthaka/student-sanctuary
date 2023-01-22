@@ -20,7 +20,6 @@ class Faculty_SignupForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     email = EmailField('Email', validators=[Email(), DataRequired()])
     college = SelectField('College', choices=Faculty.get_colleges())
-    qualification = StringField('Qualification', validators=[DataRequired()])
     password = PasswordField('Password', validators=[Length(min=8), DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[EqualTo('password'), DataRequired()])
     submit = SubmitField('Register')

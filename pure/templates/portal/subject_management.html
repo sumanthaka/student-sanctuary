@@ -1,9 +1,44 @@
-<label for="course_list">Select Course</label>
-<select id="course_list">
-    {% if courses %}
-        {% for course in courses%}
-            <option value="{{ course }}">{{ course }}</option>
-        {% endfor %}
-    {% endif %}
-</select>
-<div id="subject_container"></div>
+<div class="d-md-flex justify-content-md-center">
+    <select id="course_list" class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;width: 80%;text-align: center;font-size: 20px;">
+        {% if courses %}
+            {% for course in courses%}
+                <option value="{{ course }}">{{ course }}</option>
+            {% endfor %}
+        {% endif %}
+    </select>
+</div>
+{#<select id="course_list">#}
+{#    {% if courses %}#}
+{#        {% for course in courses%}#}
+{#            <option value="{{ course }}">{{ course }}</option>#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
+{#</select>#}
+<div>
+    <ul id="subject_list" class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em">
+    </ul>
+    <div>
+        <div class="d-md-flex justify-content-md-center">
+            <button id="subject_add" class="btn btn-primary" type="button" data-bs-target="#sub_modal" data-bs-toggle="modal" style="font-family: 'Fredericka the Great', serif;border-radius: 25px;width: 15em;margin-top: 1.6em">Add</button>
+        </div>
+        <div id="sub_modal" class="modal fade" role="dialog" tabindex="-1" style="border-style: none;background: var(--bs-modal-border-color);">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div style="background: url('../../static/board.webp') center / cover no-repeat;font-family: 'Fredericka the Great', serif;color: white;border-style: none;border-radius: 8px;">
+                        <div class="modal-header" style="border-style: none;">
+                            <h4 class="modal-title">Add Subject</h4>
+                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body d-md-flex justify-content-md-center" style="font-family: 'Fredericka the Great', serif;border-style: none;">
+                            <input id="subject_input" class="form-control" placeholder="Subject" type="text" style="border-radius: 17px;font-size: 20px;background: transparent;border-color: white;color: white;" />
+                        </div>
+                        <div class="modal-footer" style="border-style: none;">
+                            <button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
+                            <button id="ok_subject" class="btn btn-primary" type="button" data-bs-dismiss="modal">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

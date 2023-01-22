@@ -57,11 +57,6 @@
 {#                                        <option value="bc">abc</option>#}
 {#                                    </select>#}
                                 </div>
-                                {% if user=='faculty' %}
-                                    <div class="mb-3">
-                                        {{ form.qualification(placeholder="Qualification", class="form-control", style="background: var(--bs-card-cap-bg);color: white;") }}
-                                    </div>
-                                {% endif %}
                                 <div class="mb-3">
                                     {{ form.password(placeholder="Password", class="form-control", style="background: var(--bs-card-cap-bg);color: white;") }}
 {#                                    <input class="form-control" type="password" name="password" placeholder="Password" style="background: var(--bs-card-cap-bg);color: white;" />#}
@@ -73,7 +68,7 @@
                                 <div class="mb-3">
                                     <button class="btn btn-primary d-block w-100" type="submit">Register</button>
                                 </div>
-                                <p style="color: white;cursor: pointer" onclick="location.href='/{{ user }}/signin'">Already have an account? Login</p>
+                                <p style="color: cyan;cursor: pointer;text-decoration: underline;" onclick="location.href='/{{ user }}/signin'">Already have an account? Login</p>
                             </form>
                         </div>
                     </div>

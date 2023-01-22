@@ -46,10 +46,10 @@
                     </div>
                     <div class="row">
                         <div class="col d-xxl-flex justify-content-xxl-center">
-                            {% if current_user.user == "faculty" %}
-                                <p>Qualification: </p>
-                                <p>{{ current_user.qualification }}</p>
-                            {% elif current_user.user == "student" %}
+{#                            {% if current_user.user == "faculty" %}#}
+{#                                <p>Qualification: </p>#}
+{#                                <p>{{ current_user.qualification }}</p>#}
+                            {% if current_user.user == "student" %}
                                 <p>Course: </p>
                                 <p>BCA</p>
                             {% endif %}

@@ -34,7 +34,7 @@
                         <div class="row">
                             <div class="col d-md-flex d-xxl-flex justify-content-md-start justify-content-xxl-center">
                                 
-                                {% if current_user.user != 'admin' %}
+                                {% if current_user.user != 'admin' and current_user.user != 'faculty' %}
                                     <p>Course: </p>
                                     {% if current_user.course not in current_user.get_courses(current_user.college) %}
                                         <select style="border-radius: 15px;background: var(--bs-border-color-translucent);color: white;">

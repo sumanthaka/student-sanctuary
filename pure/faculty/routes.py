@@ -48,7 +48,6 @@ def faculty_signup():
         student_to_create.create_user(name=faculty_signup_form.name.data,
                                       email=faculty_signup_form.email.data,
                                       college=faculty_signup_form.college.data,
-                                      qualification=faculty_signup_form.qualification.data,
                                       password=faculty_signup_form.password.data)
         return redirect(url_for('main.home_page'))
     if faculty_signup_form.errors:

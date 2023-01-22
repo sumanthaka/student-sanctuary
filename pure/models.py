@@ -38,7 +38,6 @@ class User(UserMixin):
         self.user = ""
         self.role = ""
         self.course = ""
-        self.qualification = ""
         self.course_faculty = None
         self.approved = ""
 
@@ -64,7 +63,6 @@ class User(UserMixin):
             self.course = user["course"]
             self.role = user["role"]
         elif self.user == "faculty":
-            self.qualification = user["qualification"]
             self.course_faculty = user["course_faculty"]
             self.approved = user["approved"]
 
@@ -175,8 +173,8 @@ class Student(User):
 
 
 class Faculty(User):
-    def create_user(self, name, email, college, qualification, password):
-        User.create_user(self, name=name, email=email, college=college, qualification=qualification, password=password, course_faculty=None, user="faculty", approved=False)
+    def create_user(self, name, email, college, password):
+        User.create_user(self, name=name, email=email, college=college, password=password, course_faculty=None, user="faculty", approved=False)
 
     def get_course_student(self):
         student_list = client[self.college]["user"].find({'course': self.course_faculty, 'user': 'student'})

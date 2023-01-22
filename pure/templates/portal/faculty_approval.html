@@ -1,13 +1,31 @@
 {% if faculty_list %}
-    <ul>
-        {% for faculty in faculty_list %}
-            <li>
-                <pre>Name: {{ faculty.name }}           Email: {{ faculty.email }}</pre>
-                <button name="{{ faculty.email }}" onclick="approve_faculty(this.name, 'approve')">Tick</button>
-                <button name="{{ faculty.email }}" onclick="approve_faculty(this.name, 'reject')">Cross</button>
-            </li>
-        {% endfor %}
+    <ul class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 0 1.6em;">
+    {% for faculty in faculty_list %}
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="color: white;background: transparent">
+            <div>
+                <span style="font-size: 1.6rem">Name: {{ faculty.name }}</span><br>
+                <span style="font-size: 1.6rem">Email: {{ faculty.email }}</span>
+            </div>
+            <div class="d-md-flex">
+                <a id="{{ faculty.email }}" onclick="approve_faculty(this.id, 'approve')" style="padding-right: 0.5em;cursor: pointer">
+                    <img src="{{ url_for('main.catch_all', path='tick_icon.png') }}" width="40" height="40" />
+                </a>
+                <a id="{{ faculty.email }}" onclick="approve_faculty(this.id, 'reject')" style="padding-left: 0.5em;cursor: pointer">
+                    <img src="{{ url_for('main.catch_all', path='delete_icon.png') }}" width="40" height="40" />
+                </a>
+            </div>
+        </li>
+    {% endfor %}
     </ul>
+{#    <ul>#}
+{#        {% for faculty in faculty_list %}#}
+{#            <li>#}
+{#                <pre>Name: {{ faculty.name }}           Email: {{ faculty.email }}</pre>#}
+{#                <button name="{{ faculty.email }}" onclick="approve_faculty(this.name, 'approve')">Tick</button>#}
+{#                <button name="{{ faculty.email }}" onclick="approve_faculty(this.name, 'reject')">Cross</button>#}
+{#            </li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
 {% else %}
-    <h3>No one to approve at the moment</h3>
+    <h3 style="font-family: 'Fredericka the Great', serif;color: white;padding-left: 2em">No one to approve at the moment</h3>
 {% endif %}

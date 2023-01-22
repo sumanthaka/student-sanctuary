@@ -5,22 +5,24 @@ async function course_management(container) {
                 container.innerHTML = text
             })
 
-    const input_container = document.getElementById('input_container')
-    const add_button = document.getElementById('add')
+    // const input_container = document.getElementById('input_container')
+    // const add_button = document.getElementById('add')
 
-    add_button.addEventListener('click', () => add_course(input_container, add_button))
+    // add_button.addEventListener('click', () => add_course(input_container, add_button))
+    let ok_button = document.getElementById('ok')
+    ok_button.addEventListener('click', () => { add_course() })
 }
 
-function add_course(input_container, add_button) {
-    add_button.disabled = true
-    const input = document.createElement('input')
-    input.type = 'text'
-    input.placeholder = 'Course'
-    input_container.appendChild(input)
-    const ok = document.createElement('button')
-    ok.textContent = 'OK'
-    ok.addEventListener('click', async () => {
-        const course = input.value
+async function add_course() {
+    // add_button.disabled = true
+    // const input = document.createElement('input')
+    // input.type = 'text'
+    // input.placeholder = 'Course'
+    // input_container.appendChild(input)
+    // const ok = document.createElement('button')
+    // ok.textContent = 'OK'
+    // ok.addEventListener('click', async () => {
+        const course = document.getElementById('course_input').value
         if (course === "") {
             alert("Please enter a course")
         } else {
@@ -28,13 +30,13 @@ function add_course(input_container, add_button) {
                 'method': 'POST',
                 'body': [course, 'add']
             })
-            input_container.removeChild(input)
-            input_container.removeChild(ok)
-            add_button.disabled = false
+            // input_container.removeChild(input)
+            // input_container.removeChild(ok)
+            // add_button.disabled = false
             course_management(container)
         }
-    })
-    input_container.appendChild(ok)
+    // })
+    // input_container.appendChild(ok)
 }
 
 async function delete_course(button_id) {

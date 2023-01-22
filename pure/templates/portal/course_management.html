@@ -1,10 +1,44 @@
-<ul>
+<link rel="stylesheet" href="{{ url_for('main.catch_all', path='style.css') }}">
+<ul class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em">
     {% if courses %}
         {% for course in courses%}
-            <li>{{ course }} <button id="{{ course }}" onclick="delete_course(this.id)">-</button></li>
+            <li class="list-group-item d-flex justify-content-between align-items-center" style="color: white;background: transparent">
+                <span style="font-size: 1.6rem">{{ course}}</span>
+                <a id="{{ course }}" onclick="delete_course(this.id)" style="cursor:pointer;">
+                    <img src="{{ url_for('main.catch_all', path='delete_icon.png') }}" width="36" height="34" />
+                </a>
+            </li>
         {% endfor %}
     {% endif %}
 </ul>
-<button id="add">Add</button>
-<div id="input_container"></div>
+<div class="d-md-flex justify-content-md-center">
+    <button id="add" class="btn btn-primary" type="button" data-bs-target="#modal-1" data-bs-toggle="modal" style="font-family: 'Fredericka the Great', serif;border-radius: 25px;width: 15em;margin-top: 1.6em">Add</button>
+</div>
+{#<ul>#}
+{#    {% if courses %}#}
+{#        {% for course in courses%}#}
+{#            <li>{{ course }} <button id="{{ course }}" onclick="delete_course(this.id)">-</button></li>#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
+{#</ul>#}
+{#<button id="add">Add</button>#}
+{#<div id="input_container" class="d-md-flex justify-content-md-center"></div>#}
+<div id="modal-1" class="modal fade" role="dialog" tabindex="-1" style="border-style: none;background: var(--bs-modal-border-color);">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div style="background: url('../../static/board.webp') center / cover no-repeat;font-family: 'Fredericka the Great', serif;color: white;border-style: none;border-radius: 8px;">
+                <div class="modal-header" style="border-style: none;">
+                    <h4 class="modal-title">Add Course</h4>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-md-flex justify-content-md-center" style="font-family: 'Fredericka the Great', serif;border-style: none;">
+                    <input id="course_input" placeholder="Course" type="text" style="border-radius: 17px;font-size: 20px;background: transparent;border-color: white;color: white;" />
+                </div>
+                <div class="modal-footer" style="border-style: none;">
+                    <button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
+                    <button id="ok" class="btn btn-primary" type="button" data-bs-dismiss="modal">Save</button></div>
+            </div>
+        </div>
+    </div>
+</div>
 
