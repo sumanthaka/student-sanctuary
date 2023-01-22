@@ -132,10 +132,16 @@ function assign_role(role_value) {
 }
 
 async function display_cr(course) {
+    document.getElementById('cr_mail').disabled = false
+    document.getElementById('cr_ok').disabled = false
     const candidate_container = document.getElementById("cr_container")
     if(course === "") {
         candidate_container.innerHTML = ''
+        document.getElementById('cr_mail').disabled = true
+    document.getElementById('cr_ok').disabled = true
     } else {
+        let div = document.createElement('div')
+        div.className = "d-md-flex flex-column flex-grow-1 justify-content-md-start"
         const name = document.createElement("p")
         const email = document.createElement("p")
         let candidate = {}
@@ -149,28 +155,35 @@ async function display_cr(course) {
                 candidate = JSON.parse(text)
                 name.textContent = candidate["name"]
                 email.textContent = candidate["email"]
-                const assign_cr = document.createElement("input")
-                assign_cr.type = 'email'
-                assign_cr.id = "assign_cr_email"
-                const cr_ok = document.createElement("button")
-                cr_ok.textContent = 'OK'
-                cr_ok.addEventListener("click", () => {
-                    assign_rep(assign_cr.value, course)
-                })
+                // const assign_cr = document.createElement("input")
+                // assign_cr.type = 'email'
+                // assign_cr.id = "assign_cr_email"
+                // const cr_ok = document.createElement("button")
+                // cr_ok.textContent = 'OK'
+                // cr_ok.addEventListener("click", () => {
+                //     assign_rep(assign_cr.value, course)
+                // })
                 candidate_container.innerHTML = ''
-                candidate_container.appendChild(name)
-                candidate_container.appendChild(email)
+                div.appendChild(name)
+                div.appendChild(email)
                 if(name.textContent !== "") {
-                    const rem = document.createElement("button")
-                    rem.textContent = '-'
+                    const rem = document.createElement("a")
+                    let del_image = document.createElement('img')
+                    del_image.src = "../../static/delete_icon.png"
+                    del_image.width = 36
+                    del_image.height = 34
+                    rem.appendChild(del_image)
+                    // rem.textContent = '-'
                     rem.id = candidate["email"]
                     rem.addEventListener("click", () => {
                         remove_cr(rem.id, course)
                     })
+                    candidate_container.appendChild(div)
                     candidate_container.appendChild(rem)
                 }
-                candidate_container.appendChild(assign_cr)
-                candidate_container.appendChild(cr_ok)
+                // candidate_container.appendChild(assign_cr)
+                // candidate_container.appendChild(cr_ok)
+
             })
     }
 }
@@ -186,6 +199,12 @@ async function remove_cr(cr_mail, course) {
         "body": JSON.stringify(data)
     })
     await display_cr(course_dropdown.value)
+}
+
+function assign_cr_call(){
+    let cr_email = document.getElementById('cr_mail')
+    let course = document.getElementById("cr_course")
+    assign_rep(cr_email.value, course.value)
 }
 
 async function assign_rep(cr_email, course) {
