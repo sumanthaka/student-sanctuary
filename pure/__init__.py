@@ -9,8 +9,8 @@ import pymongo
 import mysql.connector
 from sqlalchemy import create_engine
 
-from pure.config import Config
-# from pure.configlocal import Config
+# from pure.config import Config
+from pure.configlocal import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
