@@ -1,5 +1,5 @@
 class Config:
-    SECRET_KEY = 'ca9ee202ff48592e921ffe51'
+    SECRET_KEY = 'random key'
     MONGODB_DATABASE_URI = "mongodb://localhost:27017"
     MYSQL_DATABASE_URI = "mysql+mysqlconnector://localhost:3307/student_sanctuary"
     MYSQL_DATABASE_HOST = "localhost"
@@ -8,5 +8,5 @@ class Config:
     MAIL_SERVER = 'smtp.googlemail.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
-    MAIL_USERNAME = 'campus.studentsanctuary@gmail.com'
-    MAIL_PASSWORD = 'skptkeyecucqadez'
+    MAIL_USERNAME = 'email'
+    MAIL_PASSWORD = 'password'
