@@ -8,7 +8,7 @@ from bokeh.models import CategoricalAxis
 from bokeh.plotting import figure
 from bokeh.resources import CDN
 
-from flask import Blueprint, flash, redirect, url_for, render_template, send_from_directory, abort, request, send_file
+from flask import Blueprint, flash, redirect, url_for, render_template, abort, request, send_file
 from flask_login import login_user, logout_user, login_required, current_user
 
 from pure.faculty.forms import Faculty_LoginForm, Faculty_SignupForm
@@ -161,7 +161,6 @@ def student_report_graphs(studentid):
         exam_mark = marks[i][1:]
         plot = figure(x_range=x, y_range=(0, max(exam_mark)+10), tools='save', tooltips=[("(x,y)", "(@x, $y)")], title=exam_names[i].capitalize())
         plot.title.align = 'center'
-        # plot.sizing_mode = "scale_width"
         plot.background_fill_color = '#00000000'
         plot.xaxis.axis_label = 'Subjects'
         plot.yaxis.axis_label = 'Marks'
@@ -174,7 +173,6 @@ def student_report_graphs(studentid):
     plot.line(x=exam_names, y=average, color='#dedede', line_width=4)
     plot.circle(x=exam_names, y=average, size=10, color='#dedede')
     plot.title.align = 'center'
-    # plot.sizing_mode = "scale_width"
     plot.background_fill_color = '#00000000'
     plot.xaxis.axis_label = 'Exams'
     plot.yaxis.axis_label = 'Marks'

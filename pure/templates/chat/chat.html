@@ -12,38 +12,6 @@
 
 {% block content %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"></script>
-{#    <h1>Chat</h1>#}
-{#    <select id="chat_room" onchange="changeRoom()">#}
-{#        {% if current_user.user == 'student' %}#}
-{#            <option value="Course" selected>{{ current_user.course }} Chat</option>#}
-{#            <option value="college">College Chat</option>#}
-{#            {% if 'student_council_chat' in current_user.get_permissions() %}#}
-{#                <option value="student_council">Student Council Chat</option>#}
-{#            {% endif %}#}
-{#        {% elif current_user.user == 'faculty' %}#}
-{#            <option value="faculty_chat" selected>Faculty Chat</option>#}
-{#        {% endif %}#}
-{#    </select>#}
-{#    <div id="messages">#}
-{#    </div>#}
-{#    <form id="message_input_form">#}
-{#        <input type="text" placeholder="Enter your message..." id="message_input">#}
-{#        <button type="submit">Send</button>#}
-{#    </form>#}
-{#    <div class="d-md-flex flex-column justify-content-md-center align-items-md-center" style="background: url('../../static/board.webp');">#}
-{#        <select class="border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;width: 80%;text-align: center;font-size: 20px;">#}
-{#            <optgroup label="This is a group">#}
-{#                <option value="12" selected>This is item 1</option>#}
-{#                <option value="13">This is item 2</option>#}
-{#                <option value="14">This is item 3</option>#}
-{#            </optgroup>#}
-{#        </select>#}
-{#        <div id="messages"></div>#}
-{#        <form class="d-md-flex flex-row justify-content-md-center align-items-md-center" style="width: 100%;">#}
-{#            <input class="form-control" type="text" style="border-radius: 0px;border-top-left-radius: 10px;border-bottom-left-radius: 10px;font-family: 'Fredericka the Great', serif;border-color: white;border-right-style: none;background: transparent;" />#}
-{#            <button class="btn btn-primary" type="submit" style="font-family: 'Fredericka the Great', serif;background: transparent;border-radius: 0px;border-top-right-radius: 10px;border-bottom-right-radius: 10px;border-color: white;border-left-style: none;">Send</button>#}
-{#        </form>#}
-{#    </div>#}
         <div style="background: url('../../static/board.webp');height: 100vh;">
             <div class="d-md-flex justify-content-md-center" style="padding-top: 1em;padding-bottom: 1em">
                 <select id="chat_room" onchange="changeRoom()" class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;width: 80%;text-align: center;font-size: 20px;">

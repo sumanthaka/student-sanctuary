@@ -48,19 +48,9 @@ async function subject_change(course_value, subject_list) {
                 subject_list.appendChild(subject_item)
             }
         })
-    // let add_button = document.createElement('button')
-    // add_button.textContent = 'Add'
-    // subject_container.appendChild(add_button)
 }
 
 async function add_subject(course_value, subject_list) {
-    // let input = document.createElement('input')
-    // input.type = 'text'
-    // input.placeholder = 'Subject'
-    // subject_container.appendChild(input)
-    // let ok = document.createElement('button')
-    // ok.textContent = 'OK'
-    // ok.addEventListener('click', async () => {
     let subject_input = document.getElementById('subject_input')
     let subject = subject_input.value
         // let subject = input.value
@@ -74,6 +64,4 @@ async function add_subject(course_value, subject_list) {
         subject_input.value = ""
         subject_change(course_value, subject_list)
     }
-    // })
-    // subject_container.appendChild(ok)
 }

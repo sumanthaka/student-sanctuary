@@ -56,28 +56,4 @@
         </div>
         <button type="submit" class="btn btn-primary" style="font-family: 'Fredericka the Great', serif;margin-top: 2em;font-size: 23px">Save</button>
     </div>
-{#    <form method="POST">#}
-{#        <label for="name">Name: </label>#}
-{#        <input id="name" name="username" type="text" value="{{ current_user.name }}">#}
-{#        <p>Email: </p>#}
-{#        <p>{{ current_user.email }}</p>#}
-{#        <p>College: </p>#}
-{#        <p>{{ current_user.college.replace('_',' ') }}</p>#}
-{#        {% if current_user.user == "faculty" %}#}
-{#            <p>Qualification: </p>#}
-{#            <p>{{ current_user.qualification }}</p>#}
-{#        {% elif current_user.user == "student" %}#}
-{#            <label for="course">Course: </label>#}
-{#            {% if current_user.course not in current_user.get_courses(current_user.college) %}#}
-{#                <select id="course" name="course">#}
-{#                    {% for course in current_user.get_courses(current_user.college) %}#}
-{#                        <option value={{ course }}>{{ course }}</option>#}
-{#                    {% endfor %}#}
-{#                </select>#}
-{#            {% else %}#}
-{#                <p>{{ current_user.course }}</p>#}
-{#            {% endif %}#}
-{#        {% endif %}#}
-{##}
-{#    </form>#}
 {% endblock %}

@@ -14,15 +14,6 @@
 <div class="d-md-flex justify-content-md-center">
     <button id="add" class="btn btn-primary" type="button" data-bs-target="#modal-1" data-bs-toggle="modal" style="font-family: 'Fredericka the Great', serif;border-radius: 25px;width: 15em;margin-top: 1.6em">Add</button>
 </div>
-{#<ul>#}
-{#    {% if courses %}#}
-{#        {% for course in courses%}#}
-{#            <li>{{ course }} <button id="{{ course }}" onclick="delete_course(this.id)">-</button></li>#}
-{#        {% endfor %}#}
-{#    {% endif %}#}
-{#</ul>#}
-{#<button id="add">Add</button>#}
-{#<div id="input_container" class="d-md-flex justify-content-md-center"></div>#}
 <div id="modal-1" class="modal fade" role="dialog" tabindex="-1" style="border-style: none;background: var(--bs-modal-border-color);">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

@@ -1,5 +1,3 @@
-import collections
-
 from flask import Blueprint, flash, redirect, url_for, render_template, request, abort, jsonify
 from flask_login import login_user, logout_user, current_user
 

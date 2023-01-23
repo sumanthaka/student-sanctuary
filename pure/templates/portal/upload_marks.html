@@ -42,28 +42,5 @@
             </div>
         </div>
     </div>
-{#    <form method="POST" enctype="multipart/form-data">#}
-{#        <label for="exam_name">Exam Name</label>#}
-{#        <input type="text" required id="exam_name" name="exam_name">#}
-{#        <br>#}
-{#        <label for="marks_file">Marks File</label>#}
-{#        <input type="file"#}
-{#               accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"#}
-{#               id="marks_file"#}
-{#               name="marks_file" required>#}
-{#        <br>#}
-{#        <h3>Max Marks</h3>#}
-{#        {% for subject in subjects_list %}#}
-{#            <label for="{{ subject }}">{{ subject }}</label>#}
-{#            <input type="number" name="{{ subject }}" id="{{ subject }}" required>#}
-{#            <br>#}
-{#        {% endfor %}#}
-{#        <button type="submit">Submit</button>#}
-{#    </form>#}
-{#    <div id="down_template">#}
-{#        <button onclick="subjects('{{ url_for('faculty.send_template') }}')" id="download">#}
-{#            Download Template#}
-{#        </button>#}
-{#    </div>#}
     <script type="application/javascript" src="{{ url_for('main.catch_all', path='upload_marks.js') }}" defer></script>
 {% endblock %}

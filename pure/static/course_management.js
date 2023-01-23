@@ -5,38 +5,21 @@ async function course_management(container) {
                 container.innerHTML = text
             })
 
-    // const input_container = document.getElementById('input_container')
-    // const add_button = document.getElementById('add')
-
-    // add_button.addEventListener('click', () => add_course(input_container, add_button))
     let ok_button = document.getElementById('ok')
     ok_button.addEventListener('click', () => { add_course() })
 }
 
 async function add_course() {
-    // add_button.disabled = true
-    // const input = document.createElement('input')
-    // input.type = 'text'
-    // input.placeholder = 'Course'
-    // input_container.appendChild(input)
-    // const ok = document.createElement('button')
-    // ok.textContent = 'OK'
-    // ok.addEventListener('click', async () => {
-        const course = document.getElementById('course_input').value
-        if (course === "") {
-            alert("Please enter a course")
-        } else {
-            await fetch(course_url, {
-                'method': 'POST',
-                'body': [course, 'add']
-            })
-            // input_container.removeChild(input)
-            // input_container.removeChild(ok)
-            // add_button.disabled = false
-            course_management(container)
-        }
-    // })
-    // input_container.appendChild(ok)
+    const course = document.getElementById('course_input').value
+    if (course === "") {
+        alert("Please enter a course")
+    } else {
+        await fetch(course_url, {
+            'method': 'POST',
+            'body': [course, 'add']
+        })
+        course_management(container)
+    }
 }
 
 async function delete_course(button_id) {

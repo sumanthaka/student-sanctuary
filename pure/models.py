@@ -321,7 +321,6 @@ class Admin(User):
             return crs
     
     def create_role(self, role_name, role_perm):
-        print(role_perm)
         role_name = role_name.lower().replace(' ', '_')
         check_role = client[self.college]["info"].find_one({f'roles.{role_name}': {'$exists': 'true'}}, {'roles': 1, '_id': 0})
         if check_role is None:

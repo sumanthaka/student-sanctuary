@@ -45,8 +45,6 @@ def reset_request():
             return render_template('auth/reset.html', form=reset_request_form)
         send_reset_mail(user)
         return redirect(url_for('main.home_page'))
-    else:
-        print(reset_request_form.errors)
     return render_template('auth/reset.html', form=reset_request_form)
 
 

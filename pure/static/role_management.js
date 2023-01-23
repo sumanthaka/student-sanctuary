@@ -9,36 +9,6 @@ async function role_management(container) {
 }
 
 async function create_role() {
-    // const add_button = document.getElementById(add_button_id)
-    // add_button.disabled = true
-    // const role_container = document.getElementById("role_container")
-    // let input_role = document.createElement("input")
-    // input_role.type = "text"
-    // input_role.placeholder = "Enter role name"
-    // role_container.appendChild(input_role)
-    // let announce_make_perm = document.createElement("input")
-    // announce_make_perm.id = "announce_make_perm"
-    // announce_make_perm.type = "checkbox"
-    // announce_make_perm.value = "announcement_maker"
-    // role_container.appendChild(announce_make_perm)
-    // let announce_make_perm_label = document.createElement("label")
-    // announce_make_perm_label.setAttribute("for", "announce_make_perm")
-    // announce_make_perm_label.textContent = "Announcement Maker"
-    // role_container.appendChild(announce_make_perm_label)
-    //
-    // let student_council_chat_perm = document.createElement("input")
-    // student_council_chat_perm.id = "student_council_chat_perm"
-    // student_council_chat_perm.type = "checkbox"
-    // student_council_chat_perm.value = "student_council_chat"
-    // role_container.appendChild(student_council_chat_perm)
-    // let student_council_chat_label = document.createElement("label")
-    // student_council_chat_label.setAttribute("for", "student_council_chat_perm")
-    // student_council_chat_label.textContent = "Student Council Chat"
-    // role_container.appendChild(student_council_chat_label)
-    //
-    // let ok_role = document.createElement("button")
-    // ok_role.textContent = "OK"
-    // ok_role.addEventListener("click", async () => {
     let input_role = document.getElementById('role_name_input')
     let announce_make_perm = document.getElementById('announce_make_perm')
     let student_council_chat_perm = document.getElementById('student_council_chat_perm')
@@ -70,8 +40,6 @@ async function create_role() {
                 container.innerHTML = text
             })
         }
-    // })
-    // role_container.appendChild(ok_role)
 }
 
 function delete_role(role_id) {
@@ -155,14 +123,6 @@ async function display_cr(course) {
                 candidate = JSON.parse(text)
                 name.textContent = candidate["name"]
                 email.textContent = candidate["email"]
-                // const assign_cr = document.createElement("input")
-                // assign_cr.type = 'email'
-                // assign_cr.id = "assign_cr_email"
-                // const cr_ok = document.createElement("button")
-                // cr_ok.textContent = 'OK'
-                // cr_ok.addEventListener("click", () => {
-                //     assign_rep(assign_cr.value, course)
-                // })
                 candidate_container.innerHTML = ''
                 div.appendChild(name)
                 div.appendChild(email)
@@ -181,8 +141,6 @@ async function display_cr(course) {
                     candidate_container.appendChild(div)
                     candidate_container.appendChild(rem)
                 }
-                // candidate_container.appendChild(assign_cr)
-                // candidate_container.appendChild(cr_ok)
 
             })
     }

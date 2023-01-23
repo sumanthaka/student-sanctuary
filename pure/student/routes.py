@@ -1,5 +1,5 @@
-from flask import Blueprint, flash, redirect, url_for, render_template, send_from_directory
-from flask_login import login_user, login_required, logout_user
+from flask import Blueprint, flash, redirect, url_for, render_template
+from flask_login import login_user, logout_user
 
 from pure.models import Student
 from pure.student.forms import Student_LoginForm, Student_SignupForm

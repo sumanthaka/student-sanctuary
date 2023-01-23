@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from flask_socketio import join_room, leave_room
 
 from pure import socketio
-from pure.models import Chat, User
+from pure.models import Chat
 
 chat = Blueprint('chat', __name__)
 
@@ -32,8 +32,6 @@ def handle_join_room(data):
     data.update({'room': room_id})
     messages = current_user.get_messages(room_id)
     data.update({'messages': messages})
-    # for i in range(len(messages)):
-    #     data.update({i: messages[i]})
     socketio.emit('join_room_announcement', data, to=session_id)
 
 
@@ -48,8 +46,6 @@ def handle_change_room(data):
         data.update({'room': room_id})
         messages = current_user.get_messages(room_id)
         data.update({'messages': messages})
-        # for i in range(len(messages)):
-        #     data.update({i: messages[i]})
         socketio.emit('join_room_announcement', data, to=session_id)
 
     elif data['room_choice'] == 'Course':
@@ -60,8 +56,6 @@ def handle_change_room(data):
         data.update({'room': room_id})
         messages = current_user.get_messages(room_id)
         data.update({'messages': messages})
-        # for i in range(len(messages)):
-        #     data.update({i: messages[i]})
         socketio.emit('join_room_announcement', data, to=session_id)
 
     elif data['room_choice'] == 'student_council':
@@ -72,8 +66,6 @@ def handle_change_room(data):
         data.update({'room': room_id})
         messages = current_user.get_messages(room_id)
         data.update({'messages': messages})
-        # for i in range(len(messages)):
-        #     data.update({i: messages[i]})
         socketio.emit('join_room_announcement', data, to=session_id)
 
 

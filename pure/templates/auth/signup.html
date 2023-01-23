@@ -2,8 +2,6 @@
 
 {% block links %}
     <link rel="stylesheet" href="../../static/style.css">
-{#    <link rel="stylesheet" href="../../static/signup.css">#}
-{#    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">#}
 {% endblock %}
 
 {% block content %}
@@ -36,34 +34,24 @@
                                 {{ form.hidden_tag() }}
                                 <div class="mb-3">
                                      {{ form.name(placeholder="Name", class="form-control", style="color: white;background: var(--bs-card-cap-bg);") }}
-{#                                    <input class="form-control" type="text" style="color: white;background: var(--bs-card-cap-bg);" placeholder="Name" name="Name" />#}
                                 </div>
                                 <div class="mb-3">
                                     {{ form.email(placeholder="Email", class="form-control", style="background: var(--bs-card-cap-bg);color: white;") }}
-{#                                    <input class="form-control" type="email" name="email" placeholder="Email" style="background: var(--bs-card-cap-bg);color: white;" />#}
                                 </div>
                                 <div class="text-start mb-3">
                                     {{ form.college(class="form-select", style="color: white;background: var(--bs-card-cap-bg);") }}
-{#                                    <select class="form-select" style="color: white;background: var(--bs-card-cap-bg);">#}
-{#                                        <option value="bc">abc</option>#}
-{#                                    </select>#}
                                 </div>
                                 <div class="text-start mb-3">
                                     {% if user!='faculty' %}
                                         {{ form.course(class="form-select", style="color: white;background: var(--bs-card-cap-bg);") }}
                                         <script src="{{ url_for('main.catch_all', path='signup.js') }}" type="application/javascript" defer></script>
                                     {% endif %}
-{#                                    <select class="form-select" style="color: white;background: var(--bs-card-cap-bg);">#}
-{#                                        <option value="bc">abc</option>#}
-{#                                    </select>#}
                                 </div>
                                 <div class="mb-3">
                                     {{ form.password(placeholder="Password", class="form-control", style="background: var(--bs-card-cap-bg);color: white;") }}
-{#                                    <input class="form-control" type="password" name="password" placeholder="Password" style="background: var(--bs-card-cap-bg);color: white;" />#}
                                 </div>
                                 <div class="mb-3">
                                     {{ form.confirm_password(placeholder="Confirm Password", class="form-control", style="background: var(--bs-card-cap-bg);color: white;") }}
-{#                                    <input class="form-control" type="password" name="password" placeholder="Confirm Password" style="background: var(--bs-card-cap-bg);color: white;" />#}
                                 </div>
                                 <div class="mb-3">
                                     <button class="btn btn-primary d-block w-100" type="submit">Register</button>
@@ -76,39 +64,4 @@
             </div>
         </div>
     </div>
-{#    <div class="container">#}
-{#        <form method="POST">#}
-{#            {{ form.hidden_tag() }}#}
-{#            <h1>{{ user }} Register</h1>#}
-{#            <br />#}
-{#            {{ form.name.label() }}#}
-{#            {{ form.name(placeholder="Name") }}#}
-{#            {{ form.email.label() }}#}
-{#            {{ form.email(placeholder="Email") }}#}
-{#            <br>#}
-{#            {{ form.college.label() }}#}
-{#            {{ form.college(class="dropdown-college") }}#}
-{#            {% if user!='faculty' %}#}
-{#                {{ form.course.label() }}#}
-{#                {{ form.course(class="dropdown-course") }}#}
-{#                <script src="{{ url_for('main.catch_all', path='signup.js') }}" type="application/javascript" defer></script>#}
-{#            {% endif %}#}
-{#            {% if user=='faculty' %}#}
-{#                {{ form.qualification.label() }}#}
-{#                {{ form.qualification() }}#}
-{#            {% endif %}#}
-{#            <br>#}
-{#            {{ form.password.label() }}#}
-{#            {{ form.password(placeholder="Enter Password") }}#}
-{#            {{ form.confirm_password.label() }}#}
-{#            {{ form.confirm_password(placeholder="Confirm Password") }}#}
-{#            <hr>#}
-{#            <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>#}
-{#            {{ form.submit() }}#}
-{##}
-{#            <div class="signin">#}
-{#              <p>Already have an account? <a href="/{{ user }}/signin">Sign in</a>.</p>#}
-{#            </div>#}
-{#      </form>#}
-{#    </div>#}
 {% endblock %}
