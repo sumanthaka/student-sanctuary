@@ -1,5 +1,5 @@
 from flask import Blueprint, flash, redirect, url_for, render_template, request, abort, jsonify
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user, current_user, login_required
 
 from pure.admin.forms import Admin_LoginForm
 from pure.models import Admin
@@ -27,16 +27,22 @@ def admin_signin():
 
 
 @admin.route('/college_management', methods=['POST', 'GET'])
+@login_required
 def college_management():
     try:
         current_user.user
+        if current_user.user != 'admin':
+            abort(403)
         return render_template('portal/management.html')
     except AttributeError:
         abort(403)
 
 
 @admin.route('/course_management', methods=['POST', 'GET'])
+@login_required
 def course_management():
+    if current_user.user != 'admin':
+        abort(403)
     if request.method == 'POST':
         data = str(request.data, 'utf-8').split(',')
         if data[1] == 'add':
@@ -49,7 +55,10 @@ def course_management():
 
 
 @admin.route('/subject_management', methods=['POST', 'GET'])
+@login_required
 def subject_management():
+    if current_user.user != 'admin':
+        abort(403)
     if request.method == 'POST':
         data = str(request.data, 'utf-8').split(',')
         if data[-1] == 'get':
@@ -66,7 +75,10 @@ def subject_management():
 
 
 @admin.route('/faculty_approval', methods=['POST', 'GET'])
+@login_required
 def faculty_approval():
+    if current_user.user != 'admin':
+        abort(403)
     if request.method == 'POST':
         data = str(request.data, 'utf-8').split(',')
         if data[1] == 'approve':
@@ -78,7 +90,10 @@ def faculty_approval():
 
 
 @admin.route('/faculty_management', methods=['POST', 'GET'])
+@login_required
 def faculty_management():
+    if current_user.user != 'admin':
+        abort(403)
     if request.method == 'POST':
         data = str(request.data, 'utf-8').split(',')
         current_user.update_course_teacher(data[0], data[1])
@@ -86,7 +101,10 @@ def faculty_management():
 
 
 @admin.route('/role_management', methods=['POST', 'GET'])
+@login_required
 def role_management():
+    if current_user.user != 'admin':
+        abort(403)
     if request.method == 'POST':
         data = request.json
         if 'add_role' in data.keys():
@@ -113,7 +131,10 @@ def role_management():
 
 
 @admin.route('/role_management/candidates/<course>', methods=['POST', 'GET'])
+@login_required
 def handle_crs(course):
+    if current_user.user != 'admin':
+        abort(403)
     if request.method == 'POST':
         data = request.json
         if 'delete_cr' in data.keys():

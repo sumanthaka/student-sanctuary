@@ -78,6 +78,8 @@ def upload_marks():
 @faculty.route('/download_template', methods=['POST', 'GET'])
 @login_required
 def send_template():
+    if current_user.user != 'faculty':
+        abort(403)
     if request.method == 'POST':
         data = str(request.data, 'utf-8').split(',')
         if data[0] == 'add':
@@ -125,6 +127,8 @@ def exams_avg():
 @faculty.route('/exams_avg/<examid>', methods=['POST', 'GET'])
 @login_required
 def exam_avg_graph(examid):
+    if current_user.user != 'faculty':
+        abort(403)
     curdoc().theme = "night_sky"
     x, y, title = current_user.exam_sub_avg(examid)
     plot = figure(x_range=x, y_range=(0, max(y) + 10), tools='save', tooltips=[("(x,y)", "(@x, $y)")], title=title.capitalize())
