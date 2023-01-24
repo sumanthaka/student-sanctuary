@@ -19,7 +19,6 @@ def admin_signin():
         else:
             if attempted_admin.check_password(super_admin_login_form.password.data):
                 login_user(attempted_admin)
-                flash(f"Logged in!! as {attempted_admin.name}")
                 return redirect(url_for('profile.super_admin_profile_page'))
             else:
                 flash("Username password are not matching")

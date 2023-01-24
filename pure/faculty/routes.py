@@ -28,7 +28,6 @@ def faculty_signin():
                 if attempted_faculty.user == "faculty":
                     if attempted_faculty.approved:
                         login_user(attempted_faculty)
-                        flash(f"Logged in!! as {attempted_faculty.name}")
                         return redirect(url_for('profile.profile_page'))
                     else:
                         flash("Admin has not approved yet")

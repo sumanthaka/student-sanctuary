@@ -17,7 +17,6 @@ def student_signin():
                 attempted_student.set_object(student_login_form.email.data)
                 if attempted_student.user == "student":
                     login_user(attempted_student)
-                    flash(f"Logged in!! as {attempted_student.name}")
                     return redirect(url_for('profile.profile_page'))
         else:
             flash("Username password are not matching")

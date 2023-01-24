@@ -49,7 +49,10 @@
     <main>
         {% with messages = get_flashed_messages() %}
             {% for message in messages %}
-                <p>{{ message }}</p>
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';" style="cursor: pointer">&times;</span>
+                </div>
             {% endfor %}
         {% endwith %}
         {% block content %}

@@ -35,7 +35,7 @@ from pure.student.routes import student
 from pure.profile.routes import profile
 from pure.announcements.routes import announcement
 from pure.chat.routes import chat
-
+from pure.errors.routes import page_not_found, page_forbidden
 
 app.register_blueprint(main)
 app.register_blueprint(super_admin)
@@ -45,4 +45,5 @@ app.register_blueprint(student)
 app.register_blueprint(profile)
 app.register_blueprint(announcement)
 app.register_blueprint(chat)
-
+app.register_error_handler(404, page_not_found)
+app.register_error_handler(403, page_forbidden)
