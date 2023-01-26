@@ -171,7 +171,7 @@ class User(UserMixin):
 
 class Student(User):
     def create_user(self, name, email, college, course, password):
-        college = college.replace(' ','_')
+        college = college.replace(' ', '_')
         User.create_user(self, name=name, email=email, college=college, password=password, course=course, user="student", role="regular", verified=False)
         student = client[college]["user"].find_one({'email': email})
         return student
