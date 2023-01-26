@@ -3,7 +3,7 @@
     {% for faculty in faculty_list %}
         <li class="list-group-item d-flex justify-content-between align-items-center" style="color: white;background: transparent">
             <span style="font-size: 1.6rem">{{ faculty.name }}</span>
-            <select class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;width: 80%;text-align: center;font-size: 20px;">
+            <select id="{{ faculty._id }}" class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;width: 80%;text-align: center;font-size: 20px;">
                 {% if faculty.course_faculty == None %}
                     <option value="None" selected>None</option>
                 {% else %}

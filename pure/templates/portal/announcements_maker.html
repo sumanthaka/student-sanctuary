@@ -17,14 +17,14 @@
             <div class="row d-flex justify-content-center">
                 <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
                     <div class="card mb-5" style="background: var(--bs-border-color-translucent);">
-                        <div class="card-body p-sm-5">
+                        <div class="card-body p-sm-5" style="">
                             <form method="POST">
                                 {{ form.hidden_tag() }}
                                 <div class="mb-3">
-                                    {{ form.title(class="form-control", placeholder="Title", style="background: var(--bs-border-color-translucent);") }}
+                                    {{ form.title(class="form-control", placeholder="Title", style="background: var(--bs-border-color-translucent);color: white") }}
                                 </div>
                                 <div class="mb-3">
-                                    {{ form.subject(class="form-control", placeholder="Subject", style="background: var(--bs-border-color-translucent);") }}
+                                    {{ form.subject(class="form-control", placeholder="Subject", style="background: var(--bs-border-color-translucent);color: white") }}
                                 </div>
                                 <div class="mb-3">
                                     {% if current_user.role != 'cr' %}
@@ -52,7 +52,7 @@
                                     {{ form.target(class="list-unstyled", style="padding-left: 2em;") }}
                                 </div>
                                 <div class="mb-3">
-                                    {{ form.desc(class="form-control", placeholder="Description", style="background: var(--bs-border-color-translucent);") }}
+                                    {{ form.desc(class="form-control", placeholder="Description", style="background: var(--bs-border-color-translucent);color: white") }}
                                 </div>
                                 <div>
                                     {{ form.submit(class="btn btn-primary d-block w-100") }}

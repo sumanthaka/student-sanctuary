@@ -48,7 +48,7 @@ def faculty_signup():
                                       email=faculty_signup_form.email.data,
                                       college=faculty_signup_form.college.data,
                                       password=faculty_signup_form.password.data)
-        return redirect(url_for('main.home_page'))
+        return redirect(url_for('faculty.faculty_signin'))
     if faculty_signup_form.errors:
         for error in faculty_signup_form.errors.values():
             flash(error)

@@ -40,6 +40,7 @@ class User(UserMixin):
         self.course = ""
         self.course_faculty = None
         self.approved = ""
+        self.verified = ""
 
     def create_user(self, **kwargs):
         kwargs["password"] = bcrypt.generate_password_hash(kwargs["password"]).decode('utf8')
@@ -62,6 +63,7 @@ class User(UserMixin):
         if self.user == "student":
             self.course = user["course"]
             self.role = user["role"]
+            self.verified = user["verified"]
         elif self.user == "faculty":
             self.course_faculty = user["course_faculty"]
             self.approved = user["approved"]
@@ -169,11 +171,20 @@ class User(UserMixin):
 
 class Student(User):
     def create_user(self, name, email, college, course, password):
-        User.create_user(self, name=name, email=email, college=college, password=password, course=course, user="student", role="regular")
+        college = college.replace(' ','_')
+        User.create_user(self, name=name, email=email, college=college, password=password, course=course, user="student", role="regular", verified=False)
+        student = client[college]["user"].find_one({'email': email})
+        return student
+
+    @staticmethod
+    def verify_student(user):
+        client[user.college]["user"].update_one({'email': user.email}, {'$set': {'verified': True}})
+        user.verified = True
 
 
 class Faculty(User):
     def create_user(self, name, email, college, password):
+        college.replace(' ', '_')
         User.create_user(self, name=name, email=email, college=college, password=password, course_faculty=None, user="faculty", approved=False)
 
     def get_course_student(self):
@@ -229,6 +240,7 @@ class Faculty(User):
         columns = ['exam_id', 'exam_name'] + course_subjects
         for exam in exams:
             exam_id, exam_name = exam['_id'], exam['exam_name']
+            sql_client.commit()
             cursor = sql_client.cursor()
             cursor.execute(f'SELECT * FROM {exam_id} WHERE EMAIL LIKE "{student_email}"')
             mark = cursor.fetchall()[0][3:]
