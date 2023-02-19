@@ -236,10 +236,11 @@ class Faculty(User):
         student_email = client[self.college]["user"].find_one({'_id': stu_id})["email"]
         exams = self.get_exams()
         student_marks = []
+        max_marks_list = []
         course_subjects = self.get_subjects(self.course_faculty)
         columns = ['exam_id', 'exam_name'] + course_subjects
         for exam in exams:
-            exam_id, exam_name = exam['_id'], exam['exam_name']
+            exam_id, exam_name, max_marks = exam['_id'], exam['exam_name'], exam['max_marks']
             sql_client.commit()
             cursor = sql_client.cursor()
             cursor.execute(f'SELECT * FROM {exam_id} WHERE EMAIL LIKE "{student_email}"')
@@ -247,14 +248,21 @@ class Faculty(User):
             data = [exam_id, exam_name]
             for i in mark:
                 data.append(i)
+            max_marks = [max_marks.get(i) for i in max_marks.keys()]
+            max_marks = sum(max_marks) / len(max_marks)
+            max_marks_list.append(max_marks)
             student_marks.append(tuple(data))
         df = pandas.DataFrame(student_marks, columns=columns)
+        print(df)
         x = list(df.columns[2:])
         y = {}
         df['average'] = df.mean(axis=1, numeric_only=True).round()
         df = df.fillna(0)
+        average_list = list(df['average'])
+        for i in range(len(average_list)):
+            average_list[i] = average_list[i] / max_marks_list[i] * 100
         y.update({'exam_names': list(df['exam_name'])})
-        y.update({'avg': list(df['average'])})
+        y.update({'avg': average_list})
         y.update({'marks': df.iloc[:, 1:-1].values.tolist()})
         return x, y
 

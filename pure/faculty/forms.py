@@ -16,7 +16,7 @@ class Faculty_SignupForm(FlaskForm):
         if Faculty.check_existence(email.data):
             raise ValidationError('Email already exists. Please try another email.')
 
-    name = StringField('Name', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired(), Regexp('[A-Za-z]', message="Please give a valid name")])
     email = EmailField('Email', validators=[Email(), DataRequired()])
     college = SelectField('College', choices=Faculty.get_colleges())
     password = PasswordField('Password', validators=[Length(min=8), DataRequired()])
