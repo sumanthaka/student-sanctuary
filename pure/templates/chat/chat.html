@@ -22,6 +22,7 @@
                             <option value="student_council">Student Council Chat</option>
                         {% endif %}
                     {% elif current_user.user == 'faculty' %}
+                        <option value="Course" selected>{{ current_user.course_faculty }} Chat</option>
                         <option value="faculty_chat" selected>Faculty Chat</option>
                     {% endif %}
                 </select>
@@ -43,8 +44,8 @@
         message_input.scrollIntoView()
         message_input.focus()
         {#console.log('http://' + document.domain + ':' + location.port)#}
-        const socket = io.connect('https://' + document.domain + ':' + location.port)
-        {#const socket = io.connect('http://127.0.0.1:5000')#}
+        {#const socket = io.connect('https://' + document.domain + ':' + location.port)#}
+        const socket = io.connect('http://127.0.0.1:5000')
         let room_id = ""
 
         socket.on('connect', () => {

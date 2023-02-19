@@ -477,6 +477,12 @@ class Chat:
         return str(room_id)
 
     @staticmethod
+    def get_room_id_course_faculty(college, email):
+        course = client[college]["user"].find_one({'email': email})['course_faculty']
+        room_id = client[college]["info"].find_one({f'room_ids.{course}': {'$exists': 'true'}}, {'room_ids': 1, '_id': 0})['room_ids'][course]
+        return str(room_id)
+
+    @staticmethod
     def get_room_id_college(college):
         room_id = client[college]["info"].find_one({'room_ids': {'$exists': 'true'}})['_id']
         return str(room_id)

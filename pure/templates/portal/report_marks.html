@@ -4,7 +4,7 @@
     {% for cdns in js_cdn %}
         <script type="application/javascript" src="{{ cdns|safe }}"></script>
     {% endfor %}
-    <div style="background: url('../../static/board.webp') center no-repeat;background-size: cover;padding: 0.5em 0;">
+    <div style="background: url('../../static/board.webp') center no-repeat;background-size: cover;padding: 0.5em 0;min-height: 100vh;">
         <h2 class="text-center mb-4" style="color: white;font-family: 'Fredericka the Great', serif;">Mark Report</h2>
         <div class="btn-group d-md-flex justify-content-md-center" role="group" style="font-family: 'Fredericka the Great', serif;background: transparent;margin: 0 1.6em">
             <button class="btn btn-primary-outline" type="button"

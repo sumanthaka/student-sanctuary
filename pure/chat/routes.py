@@ -49,7 +49,10 @@ def handle_change_room(data):
         socketio.emit('join_room_announcement', data, to=session_id)
 
     elif data['room_choice'] == 'Course':
-        room_id = Chat.get_room_id_course(current_user.college, data['email'])
+        if current_user.user == "student":
+            room_id = Chat.get_room_id_course(current_user.college, data['email'])
+        else:
+            room_id = Chat.get_room_id_course_faculty(current_user.college, data['email'])
         join_room(room_id)
         session_id = request.sid
         data = {}
