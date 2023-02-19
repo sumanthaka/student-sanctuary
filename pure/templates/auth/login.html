@@ -6,14 +6,6 @@
 {% endblock %}
 
 {% block content %}
-    {% with messages = get_flashed_messages() %}
-        {% for message in messages %}
-            <div class="alert alert-danger" role="alert">
-                {{ message }}
-                <span class="closebtn" onclick="this.parentElement.style.display='none';" style="cursor: pointer">&times;</span>
-            </div>
-        {% endfor %}
-    {% endwith %}
     <div class="position-relative py-4 py-xl-5" style="background: url('../../static/background.webp') center / cover no-repeat;height: 100vh">
         <div class="container">
             <div class="row mb-5">
