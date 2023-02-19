@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import EmailField, StringField, SubmitField, ValidationError, SelectField, PasswordField, FileField
-from wtforms.validators import Email, DataRequired, Length, EqualTo, InputRequired
+from wtforms import EmailField, StringField, SubmitField, ValidationError, SelectField, PasswordField
+from wtforms.validators import Email, DataRequired, Length, EqualTo, Regexp
 
 from pure.models import Faculty
 
