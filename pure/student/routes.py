@@ -13,7 +13,7 @@ def student_signin():
     student_login_form = Student_LoginForm()
     if student_login_form.validate_on_submit():
         attempted_student = Student()
-        if attempted_student.check_existence(student_login_form.email.data):
+        if attempted_student.check_existence(student_login_form.email.data, specific=True):
             if attempted_student.check_password(student_login_form.email.data, student_login_form.password.data):
                 attempted_student.set_object(student_login_form.email.data)
                 if attempted_student.user == "student":

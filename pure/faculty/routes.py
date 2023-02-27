@@ -22,7 +22,7 @@ def faculty_signin():
     faculty_login_form = Faculty_LoginForm()
     if faculty_login_form.validate_on_submit():
         attempted_faculty = Faculty()
-        if attempted_faculty.check_existence(faculty_login_form.email.data):
+        if attempted_faculty.check_existence(faculty_login_form.email.data, specific=True):
             if attempted_faculty.check_password(faculty_login_form.email.data, faculty_login_form.password.data):
                 attempted_faculty.set_object(faculty_login_form.email.data)
                 if attempted_faculty.user == "faculty":

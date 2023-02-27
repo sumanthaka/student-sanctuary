@@ -12,7 +12,7 @@ def admin_signin():
     admin_login_form = Admin_LoginForm()
     if admin_login_form.validate_on_submit():
         attempted_admin = Admin()
-        if attempted_admin.check_existence(admin_login_form.email.data):
+        if attempted_admin.check_existence(admin_login_form.email.data, specific=True):
             if attempted_admin.check_password(admin_login_form.email.data, admin_login_form.password.data):
                 attempted_admin.set_object(admin_login_form.email.data)
                 if attempted_admin.user == "admin":

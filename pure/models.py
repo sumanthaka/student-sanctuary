@@ -76,8 +76,11 @@ class User(UserMixin):
         client[self.college]["user"].update_one({'_id': self.id}, {'$set': update_values})
 
     @staticmethod
-    def check_existence(email):
-        for college in client.list_database_names():
+    def check_existence(email, specific=False):
+        databases = client.list_database_names()
+        if specific:
+            databases.remove("super_admin")
+        for college in databases:
             if client[college]["user"].find_one({'email': email}):
                 return True
         return False
