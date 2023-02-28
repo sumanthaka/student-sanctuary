@@ -22,6 +22,8 @@ def student_signin():
                         return redirect(url_for('profile.profile_page'))
                     else:
                         flash("Please verify email to continue to login")
+                else:
+                    flash("Please login through the specific page")
         else:
             flash("Username password are not matching")
     return render_template('auth/login.html', form=student_login_form, user="student")

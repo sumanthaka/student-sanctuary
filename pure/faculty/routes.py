@@ -32,7 +32,7 @@ def faculty_signin():
                     else:
                         flash("Admin has not approved yet")
                 else:
-                    flash("Username password are not matching")
+                    flash("Please login through the specific page")
         else:
             flash("Username password are not matching")
     return render_template('auth/login.html', form=faculty_login_form, user="faculty")

@@ -19,7 +19,7 @@ def admin_signin():
                     login_user(attempted_admin)
                     return redirect(url_for('profile.profile_page'))
                 else:
-                    flash("Username password are not matching")
+                    flash("Please login through the specific page")
         else:
             flash("Username password are not matching")
     return render_template('auth/login.html', form=admin_login_form, user="admin")
