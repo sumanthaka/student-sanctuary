@@ -7,7 +7,7 @@
                     <div class="d-md-flex justify-content-md-start">
                         <h2 class="flex-grow-1" style="text-align: center;padding-left: 1em;">{{ role_value.replace('_', ' ').capitalize() }}</h2>
                         <a id="{{ role_value }}" onclick="delete_role(this.id)" style="border-radius: 50%;border-style: solid;border-color: white;cursor: pointer">
-                            <img src="{{ url_for('main.catch_all', path='delete_icon.png') }}" width="40" height="36" style="padding-left: 0.3em;" />
+                            <img src="{{ url_for('main.catch_all', path='delete_icon.png') }}" width="40" height="36" style="padding-left: 0.3em;" alt="Delete"/>
                         </a>
                     </div>
                     <div>
@@ -28,7 +28,7 @@
                                         <p>{{ candidate["email"] }}</p>
                                     </div>
                                     <a id="{{ candidate["email"] }}" onclick="delete_candidate(this.id)" style="cursor: pointer;">
-                                        <img src="{{ url_for('main.catch_all', path='delete_icon.png') }}" width="36" height="34" />
+                                        <img src="{{ url_for('main.catch_all', path='delete_icon.png') }}" width="36" height="34" alt="Delete"/>
                                     </a>
                                 </div>
 
@@ -46,7 +46,7 @@
     {% endfor %}
     <div class="d-md-flex justify-content-md-center align-items-md-center" style="padding-top: 10em;">
         <a data-bs-target="#add_role_modal" data-bs-toggle="modal" style="border-radius: 50%;border: 4.4px dashed white;margin-left: 10em;cursor: pointer">
-            <img src="{{ url_for('main.catch_all', path='plus_icon.png') }}" width="36" height="34" style="margin-bottom: 0.2em;padding-right: 0.1em;" />
+            <img src="{{ url_for('main.catch_all', path='plus_icon.png') }}" width="36" height="34" style="margin-bottom: 0.2em;padding-right: 0.1em;" alt="Add"/>
         </a>
     </div>
 </div>

@@ -8,10 +8,10 @@
             </div>
             <div class="d-md-flex">
                 <a id="{{ faculty.email }}" onclick="approve_faculty(this.id, 'approve')" style="padding-right: 0.5em;cursor: pointer">
-                    <img src="{{ url_for('main.catch_all', path='tick_icon.png') }}" width="40" height="40" />
+                    <img src="{{ url_for('main.catch_all', path='tick_icon.png') }}" width="40" height="40" alt="Approve"/>
                 </a>
                 <a id="{{ faculty.email }}" onclick="approve_faculty(this.id, 'reject')" style="padding-left: 0.5em;cursor: pointer">
-                    <img src="{{ url_for('main.catch_all', path='delete_icon.png') }}" width="40" height="40" />
+                    <img src="{{ url_for('main.catch_all', path='delete_icon.png') }}" width="40" height="40" alt="Delete"/>
                 </a>
             </div>
         </li>
