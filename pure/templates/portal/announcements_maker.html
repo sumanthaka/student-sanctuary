@@ -66,7 +66,9 @@
     </div>
     <div style="background: url('../../static/board.webp') center / cover no-repeat;height: 100vh;overflow-y: auto">
          <h2 class="text-center mb-4" style="background: transparent;color: white;font-family: 'Fredericka the Great', serif;">Your Announcements</h2>
+        {% set count = namespace(value=0) %}
         {% for announcement in announcements %}
+            {% set count.value = count.value + 1 %}
             <div class="d-md-flex flex-grow-1 align-items-md-start" style="background: var(--bs-border-color-translucent);">
                 <div class="card flex-grow-1" style="background: transparent;color: white;font-family: 'Fredericka the Great', serif;">
                     <div class="card-body">
@@ -74,14 +76,14 @@
                         <h6>{{ announcement["subject"] }}</h6>
                         <h6>{{ announcement["author"][1] }}</h6>
                         <h6>{{ announcement["date"].time().strftime("%H:%M:%S") }}</h6>
-                        <button class="btn btn-primary" type="button" data-bs-target="#modal-1" data-bs-toggle="modal">Show</button>
+                        <button class="btn btn-primary" type="button" data-bs-target="#modal-{{ count.value }}" data-bs-toggle="modal">Show</button>
                     </div>
                 </div>
                 <a id="{{ announcement["_id"] }}" onclick="del_announcement(this.id)" style="cursor: pointer">
                     <img src="{{ url_for('main.catch_all', path='delete_icon.png') }}" width="36" height="34" alt="Delete" />
                 </a>
                 <hr style="background: white;border-radius: 3px;border-width: 3px;border-color: white;margin: 0" />
-                <div id="modal-1" class="modal fade" role="dialog" tabindex="-1" style="font-family: 'Fredericka the Great', serif;">
+                <div id="modal-{{ count.value }}" class="modal fade" role="dialog" tabindex="-1" style="font-family: 'Fredericka the Great', serif;">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div style="background: url('board.webp')">
