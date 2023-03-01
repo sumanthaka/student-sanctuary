@@ -256,7 +256,6 @@ class Faculty(User):
             max_marks_list.append(max_marks)
             student_marks.append(tuple(data))
         df = pandas.DataFrame(student_marks, columns=columns)
-        print(df)
         x = list(df.columns[2:])
         y = {}
         df['average'] = df.mean(axis=1, numeric_only=True).round()
