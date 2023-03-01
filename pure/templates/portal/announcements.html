@@ -8,18 +8,20 @@
 
 {% block content %}
     <div style="background: url('../../static/board.webp');height: 100vh;overflow-y: auto">
+        {% set count = namespace(value=0) %}
         {% for announcement in announcements %}
+                {% set count.value = count.value + 1 %}
                 <div class="card" style="background: var(--bs-border-color-translucent);color: white;font-family: 'Fredericka the Great', serif;">
                     <div class="card-body">
                         <h2 class="card-title text-capitalize">{{ announcement["title"] }}</h2>
                         <h6>{{ announcement["subject"] }}</h6>
                         <h6>{{ announcement["author"][1] }}</h6>
                         <h6>{{ announcement["date"].time().strftime("%H:%M:%S") }}</h6>
-                        <button class="btn btn-primary" type="button" data-bs-target="#modal-1" data-bs-toggle="modal">Show</button>
+                        <button class="btn btn-primary" type="button" data-bs-target="#modal-{{ count.value }}" data-bs-toggle="modal">Show</button>
                     </div>
                 </div>
                 <hr style="background: white;border-radius: 3px;border-width: 3px;border-color: white;margin: 0" />
-                <div id="modal-1" class="modal fade" role="dialog" tabindex="-1" style="font-family: 'Fredericka the Great', serif;">
+                <div id="modal-{{ count.value }}" class="modal fade" role="dialog" tabindex="-1" style="font-family: 'Fredericka the Great', serif;">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div style="background: url('board.webp')">
