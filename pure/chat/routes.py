@@ -71,6 +71,16 @@ def handle_change_room(data):
         data.update({'messages': messages})
         socketio.emit('join_room_announcement', data, to=session_id)
 
+    elif data['room_choice'] == 'faculty_chat':
+        room_id = Chat.get_room_id_faculty(current_user.college)
+        join_room(room_id)
+        session_id = request.sid
+        data = {}
+        data.update({'room': room_id})
+        messages = current_user.get_messages(room_id)
+        data.update({'messages': messages})
+        socketio.emit('join_room_announcement', data, to=session_id)
+
 
 @socketio.on('send_message')
 def handle_send_message(data):
