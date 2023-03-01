@@ -7,16 +7,16 @@
 {% endif %}
 
 {% block content %}
-    <div class="d-md-flex d-xxl-flex flex-column align-items-md-center align-items-xxl-center" style="background: url('../../static/board.webp') repeat;height: 100vh;width: 100%;background-size: auto;">
+    <form method="POST" class="d-md-flex d-xxl-flex flex-column align-items-md-center align-items-xxl-center" style="background: url('../../static/board.webp') repeat;height: 100vh;width: 100%;background-size: auto;">
         <h1 style="color: white;font-family: 'Fredericka the Great', serif;padding-top: 1em">Edit Profile</h1>
         <div class="container d-md-flex justify-content-md-center" style="margin-right: 0px;margin-left: 0px;margin-top: 1em">
             <div class="row" style="background: var(--bs-border-color-translucent);">
-                <form method="POST">
+                <div>
                     <div class="col-md-9 d-xxl-flex flex-column justify-content-xxl-center align-items-xxl-start" style="color: white;font-size: 23px;font-family: 'Fredericka the Great', serif;width: 100%;padding: 2em;">
                         <div class="row" style="color: white;font-size: 23px;font-family: 'Fredericka the Great', serif;">
                             <div class="col-xxl-12 d-md-flex d-xxl-flex flex-row justify-content-md-start align-items-md-center justify-content-xxl-center">
                                 <p>Name: </p>
-                                <input type="text" style="color: white;background: var(--bs-border-color-translucent);border-radius: 15px;border-style: solid;" placeholder="Name" value="{{ current_user.name }}" />
+                                <input type="text" style="color: white;background: var(--bs-border-color-translucent);border-radius: 15px;border-style: solid;" name="username" placeholder="Name" value="{{ current_user.name }}" />
                             </div>
                         </div>
                         <div class="row" style="font-family: 'Fredericka the Great', serif;color: white;">
@@ -37,7 +37,7 @@
                                 {% if current_user.user != 'admin' and current_user.user != 'faculty' %}
                                     <p>Course: </p>
                                     {% if current_user.course not in current_user.get_courses(current_user.college) %}
-                                        <select style="border-radius: 15px;background: var(--bs-border-color-translucent);color: white;">
+                                        <select name="course" style="border-radius: 15px;background: var(--bs-border-color-translucent);color: white;">
                                             <optgroup label="Courses">
                                                 {% for course in current_user.get_courses(current_user.college) %}
                                                         <option value={{ course }}>{{ course }}</option>
@@ -51,9 +51,9 @@
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
         <button type="submit" class="btn btn-primary" style="font-family: 'Fredericka the Great', serif;margin-top: 2em;font-size: 23px">Save</button>
-    </div>
+    </form>
 {% endblock %}
