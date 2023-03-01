@@ -23,7 +23,6 @@ def edit_profile():
     try:
         current_user.user
         if request.method == 'POST':
-            print(request.form)
             current_user.name = request.form['username']
             if 'course' in request.form.keys():
                 current_user.course = request.form['course']
