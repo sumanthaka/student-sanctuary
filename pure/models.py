@@ -130,7 +130,9 @@ class User(UserMixin):
     @staticmethod
     def get_courses(college):
         college = college.replace(' ', '_')
-        courses = client[college]["info"].find_one({'courses': {'$exists': 'true'}}, {'courses': 1, '_id': 0})["courses"]
+        # courses = client[college]["info"].find_one({'courses': {'$exists': 'true'}}, {'courses': 1, '_id': 0})["courses"]
+        courses = client[college]["courses"].find({}, {'course': 1, '_id': 0})
+        courses = [course['course'] for course in courses]
         return courses
 
     def get_subjects(self, requested_course):
@@ -158,8 +160,11 @@ class User(UserMixin):
         colleges.remove('super_admin')
         courses = []
         for college in colleges:
-            courses.extend(
-                client[college]["info"].find_one({'courses': {'$exists': 'true'}}, {'courses': 1, '_id': 0})["courses"])
+            # courses.extend(
+            #     client[college]["info"].find_one({'courses': {'$exists': 'true'}}, {'courses': 1, '_id': 0})["courses"])
+            courses_query = client[college]["courses"].find({}, {'course': 1, '_id': 0})
+            course = [course['course'] for course in courses_query]
+            courses.extend(course)
         return courses
 
     def get_permissions(self):
@@ -274,18 +279,24 @@ class Admin(User):
         return client[self.college]["user"].find_one({'email': email})
 
     def get_courses(self):
-        courses = client[self.college]["info"].find_one({'courses': {'$exists': 'true'}}, {'courses': 1, '_id': 0})["courses"]
+        # courses = client[self.college]["info"].find_one({'courses': {'$exists': 'true'}}, {'courses': 1, '_id': 0})["courses"]
+        courses = client[self.college]["courses"].find({}, {'course': 1, '_id': 0})
+        courses = [course['course'] for course in courses]
         return courses
 
-    def add_course(self, course):
+    def add_course(self, course_info):
+        course = course_info[0] + course_info[1]
+        course = course.upper()
         if course in self.get_courses():
             return False
-        client[self.college]["info"].update_one({'courses': {'$exists': 'true'}}, {'$push': {'courses': course}})
+        # client[self.college]["info"].update_one({'courses': {'$exists': 'true'}}, {'$push': {'courses': course}})
+        client[self.college]["courses"].insert_one({'course': course, 'year': int(course_info[1]), 'duration': int(course_info[2]), 'subjects': []})
         client[self.college]["info"].update_one({'room_ids': {'$exists': 'true'}}, {'$set': {f'room_ids.{course}': ObjectId()}})
         return True
 
     def delete_course(self, course):
-        client[self.college]["info"].update_one({'courses': {'$exists': 'true'}}, {'$pull': {'courses': course}})
+        # client[self.college]["info"].update_one({'courses': {'$exists': 'true'}}, {'$pull': {'courses': course}})
+        client[self.college]["courses"].delete_one({'course': course})
         client[self.college]["info"].update_one({'room_ids': {'$exists': 'true'}},
                                                 {'$unset': {f'room_ids.{course}': {'$exists': 'true'}}})
 

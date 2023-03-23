@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Fredericka+the+Great&display=swap');
 
-.form-control::placeholder{
+.form-control::placeholder, input::placeholder{
   color: white;
 }
 

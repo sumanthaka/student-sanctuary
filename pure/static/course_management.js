@@ -11,12 +11,14 @@ async function course_management(container) {
 
 async function add_course() {
     const course = document.getElementById('course_input').value
+    const batch_year = document.getElementById('batch_year').value
+    const duration = document.getElementById("duration").value
     if (course === "") {
         alert("Please enter a course")
     } else {
         await fetch(course_url, {
             'method': 'POST',
-            'body': [course, 'add']
+            'body': [course,batch_year,duration, 'add']
         })
         course_management(container)
     }
