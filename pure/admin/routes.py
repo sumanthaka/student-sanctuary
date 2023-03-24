@@ -61,14 +61,18 @@ def subject_management():
     if request.method == 'POST':
         data = str(request.data, 'utf-8').split(',')
         if data[-1] == 'get':
-            requested_course = data[0]
-            subjects_list = current_user.get_subjects(requested_course)
+            requested_semester = data[0]
+            requested_course = data[1]
+            subjects_list = current_user.get_subjects(requested_semester, requested_course)
             return jsonify({'subjects': subjects_list})
+        elif data[-1] == 'get_duration':
+            course_duration = current_user.get_duration(data[0])
+            return str(course_duration)
         elif data[-1] == 'add':
-            if not current_user.add_subject(data[1], data[0]):
+            if not current_user.add_subject(data[0], data[1], data[2]):
                 flash('Subject already exists')
         elif data[-1] == 'delete':
-            current_user.delete_subject(data[1], data[0])
+            current_user.delete_subject(data[0], data[1], data[2])
 
     return render_template('portal/subject_management.html', courses=current_user.get_courses())
 

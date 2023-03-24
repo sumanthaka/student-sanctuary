@@ -135,12 +135,22 @@ class User(UserMixin):
         courses = [course['course'] for course in courses]
         return courses
 
-    def get_subjects(self, requested_course):
-        college_id = str(client[self.college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id'])
-        cursor.execute(f'SELECT * FROM {college_id}_subjects WHERE COURSE="{requested_course}";')
-        subjects = cursor.fetchall()
-        subjects = [subject[0] for subject in subjects]
+    def get_subjects(self, requested_semester, requested_course):
+        # college_id = str(client[self.college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id'])
+        # cursor.execute(f'SELECT * FROM {college_id}_subjects WHERE COURSE="{requested_course}";')
+        # subjects = cursor.fetchall()
+        # subjects = [subject[0] for subject in subjects]
+        subjects = client[self.college]["subjects"].find({'semester': int(requested_semester), 'course': requested_course}, {'subject': 1, '_id': 0})
+        subjects = [subject["subject"] for subject in subjects]
         return subjects
+
+    def get_duration(self, course):
+        course_duration = client[self.college]["courses"].find_one({'course': course}, {'semesters': 1, '_id': 0})['semesters']
+        return course_duration
+
+    def get_current_sem(self, requested_course):
+        current_sem = client[self.college]["courses"].find_one({'course': requested_course}, {'current_sem': 1, '_id': 0})["current_sem"]
+        return current_sem
 
     @staticmethod
     def get_colleges():
@@ -203,7 +213,8 @@ class Faculty(User):
     def upload_exam(self, exam_info, marks_file):
         exam_info.update({'course': self.course_faculty})
         exam_info.update({'date': datetime.now()})
-        exist = client[self.college]["exams"].find_one({'exam_name': exam_info['exam_name'], 'course': exam_info['course']})
+        exam_info.update({'semester': self.get_current_sem(self.course_faculty)})
+        exist = client[self.college]["exams"].find_one({'exam_name': exam_info['exam_name'], 'course': exam_info['course'], 'semester': exam_info['semester']})
         if exist:
             return [False, "Exam already exists"]
         marks_dataframe = pandas.read_excel(marks_file)
@@ -212,7 +223,7 @@ class Faculty(User):
             return [False,
                     "Please check format(including CAPITAL LETTERS in headers!!) Please download template for correct format"]
         subjects = list(headers[2:])
-        course_subjects = self.get_subjects(self.course_faculty)
+        course_subjects = self.get_subjects(self.get_current_sem(self.course_faculty), self.course_faculty)
         subjects.sort()
         course_subjects.sort()
         if not subjects == course_subjects:
@@ -226,8 +237,8 @@ class Faculty(User):
         marks_dataframe.to_sql(name=exam_id, con=engine)
         return [True, "Successfully uploaded"]
 
-    def get_exams(self):
-        raw_exams = client[self.college]["exams"].find({})
+    def get_exams(self, semester):
+        raw_exams = client[self.college]["exams"].find({'semester': int(semester)})
         exam_list = [exam for exam in raw_exams]
         return exam_list
 
@@ -239,13 +250,13 @@ class Faculty(User):
         y = list(average.values)
         return x, y, title
 
-    def student_all_marks(self, student_id):
+    def student_all_marks(self, student_id, sem_val):
         stu_id = ObjectId(student_id)
         student_email = client[self.college]["user"].find_one({'_id': stu_id})["email"]
-        exams = self.get_exams()
+        exams = self.get_exams(sem_val)
         student_marks = []
         max_marks_list = []
-        course_subjects = self.get_subjects(self.course_faculty)
+        course_subjects = self.get_subjects(self.get_current_sem(self.course_faculty), self.course_faculty)
         columns = ['exam_id', 'exam_name'] + course_subjects
         for exam in exams:
             exam_id, exam_name, max_marks = exam['_id'], exam['exam_name'], exam['max_marks']
@@ -278,7 +289,7 @@ class Admin(User):
     def get_student(self, email):
         return client[self.college]["user"].find_one({'email': email})
 
-    def get_courses(self):
+    def get_courses(self, duration=False):
         # courses = client[self.college]["info"].find_one({'courses': {'$exists': 'true'}}, {'courses': 1, '_id': 0})["courses"]
         courses = client[self.college]["courses"].find({}, {'course': 1, '_id': 0})
         courses = [course['course'] for course in courses]
@@ -290,29 +301,31 @@ class Admin(User):
         if course in self.get_courses():
             return False
         # client[self.college]["info"].update_one({'courses': {'$exists': 'true'}}, {'$push': {'courses': course}})
-        client[self.college]["courses"].insert_one({'course': course, 'year': int(course_info[1]), 'duration': int(course_info[2]), 'subjects': []})
+        client[self.college]["courses"].insert_one({'course': course, 'year': int(course_info[1]), 'semesters': int(course_info[2])*2, 'current_sem': 1})
         client[self.college]["info"].update_one({'room_ids': {'$exists': 'true'}}, {'$set': {f'room_ids.{course}': ObjectId()}})
         return True
 
-    def delete_course(self, course):
+    def delete_course(self, semester, course):
         # client[self.college]["info"].update_one({'courses': {'$exists': 'true'}}, {'$pull': {'courses': course}})
-        client[self.college]["courses"].delete_one({'course': course})
+        client[self.college]["courses"].delete_one({'semester': semester, 'course': course})
         client[self.college]["info"].update_one({'room_ids': {'$exists': 'true'}},
                                                 {'$unset': {f'room_ids.{course}': {'$exists': 'true'}}})
 
-    def add_subject(self, subject, course):
+    def add_subject(self, subject, semester, course):
         subject = subject.upper()
-        college_id = str(client[self.college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id'])
-        if subject in self.get_subjects(course):
+        # college_id = str(client[self.college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id'])
+        if subject in self.get_subjects(semester, course):
             return False
-        cursor.execute(f'INSERT INTO {college_id}_subjects VALUES("{subject}", "{course}");')
-        sql_client.commit()
+        # cursor.execute(f'INSERT INTO {college_id}_subjects VALUES("{subject}", "{course}");')
+        # sql_client.commit()
+        client[self.college]["subjects"].insert_one({'subject': subject, 'semester': int(semester), 'course': course})
         return True
 
-    def delete_subject(self, subject, course):
-        college_id = str(client[self.college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id'])
-        cursor.execute(f'DELETE FROM {college_id}_subjects WHERE SUBJECT="{subject}" AND COURSE="{course}";')
-        sql_client.commit()
+    def delete_subject(self, semester, course, subject):
+        # college_id = str(client[self.college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id'])
+        # cursor.execute(f'DELETE FROM {college_id}_subjects WHERE SUBJECT="{subject}" AND COURSE="{course}";')
+        # sql_client.commit()
+        value = client[self.college]["subjects"].delete_one({'semester': int(semester), 'course': course, 'subject': subject})
 
     def get_unapproved_faculty_list(self):
         faculty_list = client[self.college]["user"].find({'user': 'faculty', 'approved': False})

@@ -71,7 +71,7 @@ def upload_marks():
         upload_done = current_user.upload_exam(exam_info, request.files['marks_file'])
         if not upload_done[0]:
             flash(upload_done[1])
-    return render_template('portal/upload_marks.html', subjects_list=current_user.get_subjects(current_user.course_faculty))
+    return render_template('portal/upload_marks.html', subjects_list=current_user.get_subjects(current_user.get_current_sem(current_user.course_faculty), current_user.course_faculty))
 
 
 @faculty.route('/download_template', methods=['POST', 'GET'])
@@ -88,7 +88,7 @@ def send_template():
             book = openpyxl.Workbook()
             worksheet = book.active
             headers = ['Name', 'Email']
-            subjects = current_user.get_subjects(current_user.course_faculty)
+            subjects = current_user.get_subjects(current_user.get_current_sem(current_user.course_faculty), current_user.course_faculty)
             headers += subjects
             worksheet.append(headers)
             student_list = current_user.get_course_student()
@@ -115,12 +115,13 @@ def view_report():
     return render_template('portal/report_marks.html', js_cdn=cdn_js)
 
 
-@faculty.route('/exams_avg')
+@faculty.route('/exams_avg', methods=['POST'])
 @login_required
 def exams_avg():
     if current_user.user != 'faculty':
         abort(403)
-    return render_template('portal/exams_avg.html', exam_list=current_user.get_exams())
+    semester = int(request.data)
+    return render_template('portal/exams_avg.html', exam_list=current_user.get_exams(semester))
 
 
 @faculty.route('/exams_avg/<examid>', methods=['POST', 'GET'])
@@ -149,14 +150,16 @@ def student_report():
     return render_template('portal/student_report.html', student_list=current_user.get_course_student())
 
 
-@faculty.route('/student_report/<studentid>', methods=['POST', 'GET'])
+@faculty.route('/student_report/<studentid>/<semval>', methods=['POST', 'GET'])
 @login_required
-def student_report_graphs(studentid):
+def student_report_graphs(studentid, semval):
     if current_user.user != 'faculty':
         abort(403)
     curdoc().theme = "night_sky"
-    x, y = current_user.student_all_marks(studentid)
+    x, y = current_user.student_all_marks(studentid, semval)
     average = y['avg']
+    if not average:
+        return {'script': '', 'div': ''}
     marks = y['marks']
     exam_names = y['exam_names']
     script, div = "", ""
