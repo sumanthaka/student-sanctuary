@@ -1,25 +1,77 @@
 <link rel="stylesheet" href="{{ url_for('main.catch_all', path='style.css') }}">
-<ul class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em">
-    {% for faculty in faculty_list %}
-        <li class="list-group-item d-flex justify-content-between align-items-center" style="color: white;background: transparent">
-            <span style="font-size: 1.6rem">{{ faculty.name }}</span>
-            <select id="{{ faculty._id }}" class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;width: 80%;text-align: center;font-size: 20px;">
-                {% if faculty.course_faculty == None %}
-                    <option value="None" selected>None</option>
-                {% else %}
-                    <option value="None">None</option>
-                {% endif %}
-                {% for course in course_list %}
-                    {% if course == faculty.course_faculty %}
-                        <option value="{{ course }}" selected>{{ course }}</option>
-                    {% else %}
-                        <option value="{{ course }}">{{ course }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-            <a onclick="faculty_class_update('{{ faculty._id }}')">
-                <img src="{{ url_for('main.catch_all', path='save_icon.png') }}" width="36" height="34" alt="Save"/>
-            </a>
-        </li>
-    {% endfor %}
+{#<ul class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em">#}
+{#    {% for faculty in faculty_list %}#}
+{#        <li class="list-group-item d-flex justify-content-between align-items-center" style="color: white;background: transparent">#}
+{#            <span style="font-size: 1.6rem">{{ faculty.name }}</span>#}
+{#            <select id="{{ faculty._id }}" class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;width: 80%;text-align: center;font-size: 20px;">#}
+{#                {% if faculty.course_faculty == None %}#}
+{#                    <option value="None" selected>None</option>#}
+{#                {% else %}#}
+{#                    <option value="None">None</option>#}
+{#                {% endif %}#}
+{#                {% for course in course_list %}#}
+{#                    {% if course == faculty.course_faculty %}#}
+{#                        <option value="{{ course }}" selected>{{ course }}</option>#}
+{#                    {% else %}#}
+{#                        <option value="{{ course }}">{{ course }}</option>#}
+{#                    {% endif %}#}
+{#                {% endfor %}#}
+{#            </select>#}
+{#            <a onclick="faculty_class_update('{{ faculty._id }}')">#}
+{#                <img src="{{ url_for('main.catch_all', path='save_icon.png') }}" width="36" height="34" alt="Save"/>#}
+{#            </a>#}
+{#        </li>#}
+{#    {% endfor %}#}
+{#</ul>#}
+<div class="d-md-flex justify-content-md-center" style="margin-top: 1em">
+    <select id="faculty" class="form-select border rounded-pill border-2" onchange="manage_faculty_dropdown(this.value)" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;width: 80%;text-align: center;font-size: 20px;">
+        {% for faculty in faculty_list %}
+            <option value="{{ faculty._id }}">{{ faculty.name }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="d-md-flex justify-content-md-center" style="margin-top: 2em">
+    <label for="courses" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin-right: 1rem;padding-top: 0.5em;font-size: 1.2em">Course Class Teacher</label>
+    <select id="courses" class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;width: 80%;text-align: center;font-size: 20px;">
+        <option value="None" selected>None</option>
+        {% for course in course_list %}
+            <option value="{{ course }}">{{ course }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="d-md-flex justify-content-md-center" style="margin-top: 2em">
+    <h2 style="color: white;font-family: 'Fredericka the Great', serif">Subjects</h2>
+</div>
+<ul id="subjects" class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em">
 </ul>
+<div class="d-md-flex justify-content-md-center">
+    <button id="add" class="btn btn-primary" type="button" data-bs-target="#modal-1" data-bs-toggle="modal" style="font-family: 'Fredericka the Great', serif;border-radius: 25px;width: 15em;margin-top: 1.6em">Add</button>
+</div>
+<div id="modal-1" class="modal fade" role="dialog" tabindex="-1" style="border-style: none;background: var(--bs-modal-border-color);">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div style="background: url('../../static/board.webp') center / cover no-repeat;font-family: 'Fredericka the Great', serif;color: white;border-style: none;border-radius: 8px;">
+                <div class="modal-header" style="border-style: none;">
+                    <h4 class="modal-title">Add Subject</h4>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-md-flex justify-content-md-center" style="font-family: 'Fredericka the Great', serif;border-style: none;">
+                    <form>
+                        <select id="add_subject" class="form-select border rounded-pill border-2" style="color: white">
+                            {% for subject in subject_list %}
+                                <option value="{{ subject['_id'] }}">{{ subject['subject'] }} ({{ subject['course'] }})</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </div>
+                <div class="modal-footer" style="border-style: none;">
+                    <button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
+                    <button id="ok_subject" class="btn btn-primary" type="button" data-bs-dismiss="modal" onclick="add_faculty_subject()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-md-flex justify-content-md-center">
+    <button id="Save" class="btn btn-primary" onclick="faculty_update()" style="font-family: 'Fredericka the Great', serif;border-radius: 25px;width: 15em;margin-top: 1.6em">Save</button>
+</div>

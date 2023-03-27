@@ -1,3 +1,5 @@
+import json
+
 import pandas
 
 from pure import client, cursor, bcrypt, login_manager, app, sql_client, engine
@@ -337,8 +339,25 @@ class Admin(User):
         faculty_list = [faculty for faculty in faculty_list]
         return faculty_list
 
-    def update_course_teacher(self, faculty_id, course):
-        client[self.college]["user"].update_one({'_id': ObjectId(faculty_id)}, {'$set': {'course_faculty': course}})
+    def get_faculty_details(self, faculty_id):
+        faculty = client[self.college]["user"].find_one({'_id': ObjectId(faculty_id)}, {'course_faculty': 1, 'subjects': 1, '_id': 0})
+        subjects = []
+        for subject_id in faculty['subjects']:
+            subject = client[self.college]["subjects"].find_one({'_id': subject_id}, {'subject': 1, 'course': 1, '_id': 0})
+            subjects.append([subject['subject'], subject['course'], str(subject_id)])
+        faculty['subjects'] = subjects
+        return faculty
+
+    def get_all_subjects(self):
+        subjects = client[self.college]["subjects"].find({})
+        subjects = [subject for subject in subjects]
+        return subjects
+
+    def update_teacher(self, faculty_id, course, subjects):
+        print(subjects)
+        subjects = [ObjectId(subject) for subject in subjects]
+        client[self.college]["user"].update_one({'_id': ObjectId(faculty_id)}, {'$set': {'course_faculty': course, 'subjects': subjects}})
+        return True
 
     def approve_faculty(self, email):
         client[self.college]["user"].update_one({'user': 'faculty', 'email': email}, {'$set': {'approved': True}})
@@ -515,10 +534,10 @@ class Chat:
 
     @staticmethod
     def get_room_id_faculty(college):
-        room_id = client[college]["info"].find_one({'faculty_room': {'$exists': 'true'}}, {'_id': 0, 'faculty_room': 1})
+        room_id = client[college]["info"].find_one({'faculty_room': {'$exists': 'true'}}, {'_id': 0, 'faculty_room': 1})['faculty_room']
         return str(room_id)
 
     @staticmethod
     def get_room_id_council(college):
-        room_id = client[college]["info"].find_one({'student_council_room': {'$exists': 'true'}}, {'_id': 0, 'student_council_room': 1})
+        room_id = client[college]["info"].find_one({'student_council_room': {'$exists': 'true'}}, {'_id': 0, 'student_council_room': 1})['student_council_room']
         return str(room_id)

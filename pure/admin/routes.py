@@ -98,9 +98,12 @@ def faculty_management():
     if current_user.user != 'admin':
         abort(403)
     if request.method == 'POST':
-        data = str(request.data, 'utf-8').split(',')
-        current_user.update_course_teacher(data[0], data[1])
-    return render_template('portal/faculty_management.html', faculty_list=current_user.get_faculty_list(), course_list=current_user.get_courses())
+        data = request.json
+        if 'update' in data.keys():
+            return jsonify({'status': current_user.update_teacher(data['faculty_id'], data['course'], data['subjects'])})
+        elif 'get_details' in data.keys():
+            return jsonify(current_user.get_faculty_details(data['faculty_id']))
+    return render_template('portal/faculty_management.html', faculty_list=current_user.get_faculty_list(), course_list=current_user.get_courses(), subject_list=current_user.get_all_subjects())
 
 
 @admin.route('/role_management', methods=['POST', 'GET'])
