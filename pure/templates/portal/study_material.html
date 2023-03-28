@@ -1,0 +1,66 @@
+{% extends 'portal/faculty.html' %}
+
+{% block links %}
+    <link rel="stylesheet" href="{{ url_for('main.catch_all', path='style.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="py-4 py-xl-5" style="background: url('../../static/board.webp') center / cover no-repeat;font-family: 'Fredericka the Great', serif;min-height: 65.1vh">
+        <div class="container">
+            <form id="notes_form" method="POST" enctype="multipart/form-data">
+                <div style="width: 15em;margin: 1.6em auto">
+                    <select id="subject" name="subject" class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;width: 80%;text-align: center;font-size: 1.5em;">
+                        {% for subject in subjects %}
+                            <option value="{{ subject[1] }}">{{ subject[0] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <ul id="notes_list" class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em">
+                </ul>
+                <div class="d-md-flex justify-content-md-center" style="margin: auto;width: 20vw">
+                    <input class="form-control"
+                           id="notes_file"
+                           name="notes_file"
+                           type="file"
+                           style="color: white;background: var(--bs-border-color-translucent);" required multiple />
+                </div>
+                <div class="d-md-flex justify-content-md-center" style="margin: auto;width: 20vw;padding-top: 0.4em">
+                    <p style="color:#8686e3;font-family: 'Fredericka the Great', serif;">Choose multiple files by pressing Ctrl</p>
+                </div>
+                <div class="d-md-flex justify-content-md-center" style="">
+                    <a id="upload" class="btn btn-primary" style="font-family: 'Fredericka the Great', serif;border-radius: 25px;width: 15em;margin-top: 1.6em">Upload</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="application/javascript" src="{{ url_for('main.catch_all', path='study_material.js') }}"
+            notes_url="{{ url_for('study_material.study_material_list') }}"
+            download_icon = "{{ url_for('main.catch_all', path='download_icon.png') }}"
+            delete_icon = "{{ url_for('main.catch_all', path='delete_icon.png') }}"
+            defer></script>
+{#    <form method="POST" enctype="multipart/form-data">#}
+{#        {{ form.hidden_tag() }}#}
+{#        <div class="mb-3">#}
+{#            <select id="subject" name="subject" class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;width: 80%;text-align: center;font-size: 20px;">#}
+{#                {% for subject in subjects %}#}
+{#                    <option value="{{ subject[1] }}">{{ subject[0] }}</option>#}
+{#                {% endfor %}#}
+{#            </select>#}
+{#        </div>#}
+{#        <div class="mb-3">#}
+{#            <ul id="notes">#}
+{#            </ul>#}
+{#        </div>#}
+{#        <div class="mb-3">#}
+{#            <input class="form-control"#}
+{#                   id="marks_file"#}
+{#                   name="marks_file"#}
+{#                   type="file"#}
+{#                   accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"#}
+{#                   style="color: white;background: var(--bs-border-color-translucent);" required />#}
+{#        </div>#}
+{#        <div class="mb-3">#}
+{#            <button class="btn btn-primary" type="submit">Submit</button>#}
+{#        </div>#}
+{#    </form>#}
+{% endblock %}

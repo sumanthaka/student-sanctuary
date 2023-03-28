@@ -1,5 +1,3 @@
-import json
-
 import pandas
 
 from pure import client, cursor, bcrypt, login_manager, app, sql_client, engine
@@ -286,6 +284,37 @@ class Faculty(User):
         y.update({'marks': df.iloc[:, 1:-1].values.tolist()})
         return x, y
 
+    def get_faculty_subjects(self):
+        subject_ids = client[self.college]["user"].find_one({'email': self.email}, {'subjects': 1, '_id': 0})['subjects']
+        subjects = []
+        for subject_id in subject_ids:
+            subject = client[self.college]["subjects"].find_one({'_id': ObjectId(subject_id)}, {'subject': 1, '_id': 0})['subject']
+            subjects.append([subject, subject_id])
+        return subjects
+
+    def upload_notes(self, file_info):
+        file_info['subject_id'] = ObjectId(file_info['subject_id'])
+        file_info.update({'date': datetime.now()})
+        client[self.college]["notes"].insert_one(file_info)
+
+    def get_notes(self, subject):
+        notes = client[self.college]["notes"].find({'subject_id': ObjectId(subject)})
+        new_notes = []
+        for note in notes:
+            note['_id'] = str(note['_id'])
+            del note['subject_id']
+            new_notes.append(note)
+        return new_notes
+
+    def get_notes_path(self, note_id):
+        path = client[self.college]["notes"].find_one({'_id': ObjectId(note_id)}, {'path': 1, '_id': 0})['path']
+        return path
+
+    def delete_notes(self, note_id):
+        path = client[self.college]["notes"].find_one({'_id': ObjectId(note_id)}, {'path': 1, '_id': 0})['path']
+        client[self.college]["notes"].delete_one({'_id': ObjectId(note_id)})
+        return path
+
 
 class Admin(User):
     def get_student(self, email):
@@ -541,3 +570,7 @@ class Chat:
     def get_room_id_council(college):
         room_id = client[college]["info"].find_one({'student_council_room': {'$exists': 'true'}}, {'_id': 0, 'student_council_room': 1})['student_council_room']
         return str(room_id)
+
+
+class Study_material:
+    pass
