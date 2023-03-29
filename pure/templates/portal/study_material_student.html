@@ -1,0 +1,24 @@
+{% extends 'portal/student.html' %}
+
+{% block links %}
+    <link rel="stylesheet" href="{{ url_for('main.catch_all', path='style.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="py-4 py-xl-5" style="background: url('../../static/board.webp') center / cover no-repeat;font-family: 'Fredericka the Great', serif;min-height: 65.1vh">
+        <div class="container">
+            <div style="width: 100%;margin: 1.6em auto">
+                <select id="subject" name="subject" class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;text-align: center;font-size: 1.5em;">
+                    {% for subject in subjects %}
+                        <option value="{{ subject['_id'] }}">{{ subject['subject'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <ul id="notes_list" class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em">
+            </ul>
+        </div>
+    </div>
+    <script src="{{ url_for('main.catch_all', path='study_material_student.js') }}"
+            notes_list="{{ url_for('study_material.study_material_list') }}"
+            download_icon = "{{ url_for('main.catch_all', path='download_icon.png') }}" defer></script>
+{% endblock %}

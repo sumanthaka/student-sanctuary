@@ -135,11 +135,18 @@ class User(UserMixin):
         courses = [course['course'] for course in courses]
         return courses
 
-    def get_subjects(self, requested_semester, requested_course):
+    def get_subjects(self, requested_semester, requested_course, req_id=False):
         # college_id = str(client[self.college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id'])
         # cursor.execute(f'SELECT * FROM {college_id}_subjects WHERE COURSE="{requested_course}";')
         # subjects = cursor.fetchall()
         # subjects = [subject[0] for subject in subjects]
+        if req_id:
+            subjects_query = client[self.college]["subjects"].find({'semester': int(requested_semester), 'course': requested_course}, {'subject': 1, '_id': 1})
+            subjects = []
+            for subject in subjects_query:
+                subject['_id'] = str(subject['_id'])
+                subjects.append(subject)
+            return subjects
         subjects = client[self.college]["subjects"].find({'semester': int(requested_semester), 'course': requested_course}, {'subject': 1, '_id': 0})
         subjects = [subject["subject"] for subject in subjects]
         return subjects
@@ -291,29 +298,6 @@ class Faculty(User):
             subject = client[self.college]["subjects"].find_one({'_id': ObjectId(subject_id)}, {'subject': 1, '_id': 0})['subject']
             subjects.append([subject, subject_id])
         return subjects
-
-    def upload_notes(self, file_info):
-        file_info['subject_id'] = ObjectId(file_info['subject_id'])
-        file_info.update({'date': datetime.now()})
-        client[self.college]["notes"].insert_one(file_info)
-
-    def get_notes(self, subject):
-        notes = client[self.college]["notes"].find({'subject_id': ObjectId(subject)})
-        new_notes = []
-        for note in notes:
-            note['_id'] = str(note['_id'])
-            del note['subject_id']
-            new_notes.append(note)
-        return new_notes
-
-    def get_notes_path(self, note_id):
-        path = client[self.college]["notes"].find_one({'_id': ObjectId(note_id)}, {'path': 1, '_id': 0})['path']
-        return path
-
-    def delete_notes(self, note_id):
-        path = client[self.college]["notes"].find_one({'_id': ObjectId(note_id)}, {'path': 1, '_id': 0})['path']
-        client[self.college]["notes"].delete_one({'_id': ObjectId(note_id)})
-        return path
 
 
 class Admin(User):
@@ -573,4 +557,29 @@ class Chat:
 
 
 class Study_material:
-    pass
+    @staticmethod
+    def upload_notes(college, file_info):
+        file_info['subject_id'] = ObjectId(file_info['subject_id'])
+        file_info.update({'date': datetime.now()})
+        client[college]["notes"].insert_one(file_info)
+
+    @staticmethod
+    def get_notes(college, subject):
+        notes = client[college]["notes"].find({'subject_id': ObjectId(subject)})
+        new_notes = []
+        for note in notes:
+            note['_id'] = str(note['_id'])
+            del note['subject_id']
+            new_notes.append(note)
+        return new_notes
+
+    @staticmethod
+    def get_notes_path(college, note_id):
+        path = client[college]["notes"].find_one({'_id': ObjectId(note_id)}, {'path': 1, '_id': 0})['path']
+        return path
+
+    @staticmethod
+    def delete_notes(college, note_id):
+        path = client[college]["notes"].find_one({'_id': ObjectId(note_id)}, {'path': 1, '_id': 0})['path']
+        client[college]["notes"].delete_one({'_id': ObjectId(note_id)})
+        return path

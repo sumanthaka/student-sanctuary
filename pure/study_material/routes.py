@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request,
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 
-from pure.study_material.forms import Study_Material_Form
+from pure.models import Study_material
 
 study_material = Blueprint('study_material', __name__)
 
@@ -32,20 +32,30 @@ def study_material_upload():
     return render_template('portal/study_material.html', subjects=current_user.get_faculty_subjects())
 
 
+@study_material.route('/study_material', methods=['POST', 'GET'])
+@login_required
+def study_material_student():
+    if current_user.user != "student":
+        abort(403)
+    return render_template('portal/study_material_student.html', subjects=current_user.get_subjects(current_user.get_current_sem(current_user.course), current_user.course, req_id=True))
+
+
 @study_material.route('/study_material_list', methods=['POST', 'GET'])
 @login_required
 def study_material_list():
     if request.method == 'POST':
         data = str(request.data, 'utf-8').split(',')
         if data[-1] == 'get':
-            notes_list = current_user.get_notes(data[0])
+            notes_list = Study_material.get_notes(current_user.college, data[0])
             return jsonify({'notes': notes_list})
         elif data[-1] == 'delete':
-            path = current_user.delete_notes(data[0])
+            if current_user.user != "faculty":
+                abort(403)
+            path = Study_material.delete_notes(current_user.college, data[0])
             os.remove(path)
             return jsonify({'status': 'success'})
         elif data[-1] == 'download':
-            path = current_user.get_notes_path(data[0])
+            path = Study_material.get_notes_path(current_user.college, data[0])
             return send_file(path)
     return jsonify({'notes': []})
 
