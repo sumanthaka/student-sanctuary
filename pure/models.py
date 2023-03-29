@@ -210,7 +210,7 @@ class Student(User):
 class Faculty(User):
     def create_user(self, name, email, college, password):
         college.replace(' ', '_')
-        User.create_user(self, name=name, email=email, college=college, password=password, course_faculty=None, user="faculty", approved=False)
+        User.create_user(self, name=name, email=email, college=college, password=password, course_faculty=None, subjects=[],user="faculty", approved=False)
 
     def get_course_student(self):
         student_list = client[self.college]["user"].find({'course': self.course_faculty, 'user': 'student'})
