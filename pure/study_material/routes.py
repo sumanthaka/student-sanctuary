@@ -26,7 +26,7 @@ def study_material_upload():
                 continue
             file.save(path)
             file_info = {'filename': file.filename, 'subject_id': data['subject'], 'path': path}
-            current_user.upload_notes(file_info)
+            Study_material.upload_notes(current_user.college, file_info)
         if rep_file:
             flash(f'File(s) already exists: {rep_file}')
     return render_template('portal/study_material.html', subjects=current_user.get_faculty_subjects())
