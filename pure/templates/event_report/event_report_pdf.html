@@ -19,8 +19,10 @@
         <div class="card-body" style="padding: 0;">
             <div class="d-flex media">
                 <div class="media-body">
-{#                    <div class="float-end d-sm-flex d-md-flex flex-grow-1 align-items-start align-content-start justify-content-sm-start justify-content-md-start align-items-md-center">#}
-                    <h1 style="text-align: center;">{{ current_user.college.replace('_',' ') }}</h1>
+                    <div>
+                        <img src="{{ url_for('main.catch_all', path="college_logos/" + logo, _external=True) }}">
+                        <h1 style="text-align: center;">{{ current_user.college.replace('_',' ').capitalize() }}</h1>
+                    </div>
                 </div>
             </div>
         </div>

@@ -254,7 +254,7 @@ def generate_event_report():
             name_list.append(student['name'])
         participants[participant] = name_list
         participants_count += len(name_list)
-    rendered = render_template('event_report/event_report_pdf.html', event=event_info, participants=participants, participants_count=participants_count)
+    rendered = render_template('event_report/event_report_pdf.html', event=event_info, participants=participants, participants_count=participants_count, logo=current_user.get_logo())
     # return rendered
     config = pdfkit.configuration(wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe')
     css = [os.path.join(os.path.abspath(os.curdir), 'pure', 'static', 'style.css'), os.path.join(os.path.abspath(os.curdir), 'pure', 'static', 'bootstrap', 'css', 'bootstrap.min.css')]

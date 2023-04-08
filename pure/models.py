@@ -193,6 +193,9 @@ class User(UserMixin):
     def get_messages(self, room_id):
         return list(client[self.college]["chat"].find({'room_id': room_id}, {'_id': 0, 'room_id': 0}))
 
+    def get_logo(self):
+        return client[self.college]["info"].find_one({'logo': {'$exists': 'true'}}, {'logo': 1, '_id': 0})['logo']
+
 
 class Student(User):
     def create_user(self, name, email, college, course, password):
