@@ -299,6 +299,10 @@ class Faculty(User):
             subjects.append([subject, subject_id])
         return subjects
 
+    def get_course_students(self, course):
+        students = client[self.college]["user"].find({'course': course, 'user': 'student'})
+        students = [student for student in students]
+        return students
 
 class Admin(User):
     def get_student(self, email):
@@ -583,3 +587,44 @@ class Study_material:
         path = client[college]["notes"].find_one({'_id': ObjectId(note_id)}, {'path': 1, '_id': 0})['path']
         client[college]["notes"].delete_one({'_id': ObjectId(note_id)})
         return path
+
+
+class Event:
+    def __init__(self, title, desc, date, participants, paths, author):
+        self.title = title
+        self.desc = desc
+        self.date = datetime.combine(date, datetime.min.time())
+        self.participants = participants
+        self.paths = paths
+        self.author = author
+
+    def create_event(self, college):
+        client[college]["events"].insert_one({'title': self.title,
+                                              'desc': self.desc,
+                                              'date': self.date,
+                                              'participants': self.participants,
+                                              'paths': self.paths,
+                                              'author': self.author})
+
+    @staticmethod
+    def get_events(college, author):
+        events = client[college]["events"].find({'author': author}).sort("date", -1)
+        events_temp = []
+        for event in events:
+            event['date'] = datetime.date(event['date'])
+            events_temp.append(event)
+        return events_temp
+
+    @staticmethod
+    def get_event(college, event_id):
+        event = client[college]["events"].find_one({'_id': ObjectId(event_id)})
+        event['date'] = datetime.date(event['date'])
+        return event
+
+    @staticmethod
+    def delete_event(college, event_id):
+        print(event_id)
+        images = client[college]["events"].find_one({'_id': ObjectId(event_id)}, {'paths': 1, '_id': 0})['paths']
+        print(images)
+        client[college]["events"].delete_one({'_id': ObjectId(event_id)})
+        return images

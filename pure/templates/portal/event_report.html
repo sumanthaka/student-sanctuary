@@ -1,0 +1,122 @@
+{% extends 'portal/faculty.html' %}
+
+{% block links %}
+    <link rel="stylesheet" href="{{ url_for('main.catch_all', path='style.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div style="background: url('../../static/board.webp') center / cover no-repeat;height: 90vh;overflow-y: auto">
+         <h2 class="text-center mb-4" style="background: transparent;color: white;font-family: 'Fredericka the Great', serif;">Your Announcements</h2>
+        {% set count = namespace(value=0) %}
+        {% for event in events %}
+            {% set count.value = count.value + 1 %}
+            <div class="d-md-flex flex-grow-1 align-items-md-start" style="background: var(--bs-border-color-translucent);">
+                <div class="card flex-grow-1" style="background: transparent;color: white;font-family: 'Fredericka the Great', serif;">
+                    <div class="card-body">
+                        <h2 class="card-title text-capitalize">{{ event['title'] }}</h2>
+                        <h6>{{ event['date'] }}</h6>
+                        <button class="btn btn-primary" type="button" data-bs-target="#modal-{{ count.value }}" data-bs-toggle="modal">Show</button>
+                    </div>
+                </div>
+                <a id="{{ event['_id'] }}" onclick="delete_event(this.id)" style="cursor: pointer">
+                    <img src="{{ url_for('main.catch_all', path='delete_icon.png') }}" width="36" height="34" alt="Delete" />
+                </a>
+                <hr style="background: white;border-radius: 3px;border-width: 3px;border-color: white;margin: 0" />
+                <div id="modal-{{ count.value }}" class="modal fade" role="dialog" tabindex="-1" style="font-family: 'Fredericka the Great', serif;">
+                    <div class="modal-dialog" role="document" style="min-width: 60vw">
+                        <div class="modal-content">
+                            <div style="background: url('board.webp');">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" style="color: white;">{{ event['title'] }}</h4>
+                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p style="color: white;overflow-wrap: break-word">{{ event['desc'] }}</p>
+                                    <h5 style="color: white">Participating Courses</h5>
+                                    <ul style="color: white;">
+                                        {% for course in event['participants'] %}
+                                            <li>{{ course }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    <div class="row gx-2 gy-2 row-cols-1 row-cols-md-2 row-cols-xl-3" data-bss-baguettebox>
+                                        {% for image in event['paths'] %}
+                                            <div class="col">
+                                                <img class="img-fluid" src="{{ url_for('main.catch_all', path="events_images/" + image) }}" alt="image" />
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div id="down_report"></div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-light" type="button" data-bs-dismiss="modal" style="background: var(--bs-blue);color: var(--bs-modal-bg);border-style: none;">Close</button>
+                                    <div id="loading" style="display: none;color: white">Generating...</div>
+                                    <button id="generate_{{ event['_id'] }}" onclick="generate_report(this.id)" class="btn btn-light" type="button" style="background: white;color: black;border-style: none;">Generate Report</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="position-relative py-4 py-xl-5" style="font-family: 'Fredericka the Great', serif;background: url('board.webp') center / cover no-repeat;color: white;">
+        <h2 class="text-center mb-4">Announcement Maker</h2>
+        <div class="container position-relative">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                    <div class="card mb-5" style="background: var(--bs-border-color-translucent);">
+                        <div class="card-body p-sm-5" style="">
+                            <form method="POST" enctype="multipart/form-data">
+                                {{ form.hidden_tag() }}
+                                <div class="mb-3">
+                                    {{ form.title(class="form-control", placeholder="Event Name", style="background: var(--bs-border-color-translucent);color: white") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.date(class="form-control", placeholder="Subject", style="background: var(--bs-border-color-translucent);color: white") }}
+                                </div>
+                                <div class="mb-3">
+    {#                                {% if current_user.role != 'cr' %}#}
+    {#                                    {% if current_user.user == 'admin' %}#}
+    {#                                        <div class="form-check">#}
+    {#                                            {{ form.target_everyone(id="target_everyone", class="form-check-input") }}#}
+    {#                                            {{ form.target_everyone.label(class="form-check-label") }}#}
+    {#                                        </div>#}
+    {#                                        <div class="form-check">#}
+    {#                                            {{ form.target_faculty(id="target_faculty", class="form-check-input") }}#}
+    {#                                            {{ form.target_faculty.label(class="form-check-label") }}#}
+    {#                                        </div>#}
+    {#                                    {% endif %}#}
+    {#                                    {% if current_user.user == 'faculty' %}#}
+    {#                                        <div class="form-check">#}
+    {#                                            {{ form.target_faculty(id="target_faculty", class="form-check-input") }}#}
+    {#                                            {{ form.target_faculty.label(class="form-check-label") }}#}
+    {#                                        </div>#}
+    {#                                    {% endif %}#}
+    {#                                    <div class="form-check">#}
+    {#                                        {{ form.target_students(id="target_students", class="form-check-input") }}#}
+    {#                                        {{ form.target_students.label(class="form-check-label") }}#}
+    {#                                    </div>#}
+    {#                                {% endif %}#}
+                                    {{ form.participants(class="list-unstyled", style="padding-left: 2em;") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.desc(class="form-control", placeholder="Description", style="background: var(--bs-border-color-translucent);color: white") }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form.images(class="form-control", accept="image/gif, image/jpeg, image/png", style="background: var(--bs-border-color-translucent);color: white") }}
+                                    <p style="color: #8686e3;text-align: center">Upload event images here</p>
+                                </div>
+                                <div>
+                                    {{ form.submit(class="btn btn-primary d-block w-100") }}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('main.catch_all', path="event_report.js") }}"
+            delete_event_url={{ url_for('faculty.delete_event') }}
+            generate_report_url={{ url_for('faculty.generate_event_report') }} defer></script>
+{% endblock %}

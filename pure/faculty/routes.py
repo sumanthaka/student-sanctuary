@@ -2,17 +2,19 @@ import os.path
 import uuid
 
 import openpyxl as openpyxl
+import pdfkit as pdfkit
 from bokeh.io import curdoc
 from bokeh.embed import components
 from bokeh.models import CategoricalAxis
 from bokeh.plotting import figure
 from bokeh.resources import CDN
 
-from flask import Blueprint, flash, redirect, url_for, render_template, abort, request, send_file
+from flask import Blueprint, flash, redirect, url_for, render_template, abort, request, send_file, make_response
 from flask_login import login_user, logout_user, login_required, current_user
+from werkzeug.utils import secure_filename
 
-from pure.faculty.forms import Faculty_LoginForm, Faculty_SignupForm
-from pure.models import Faculty
+from pure.faculty.forms import Faculty_LoginForm, Faculty_SignupForm, EventForm
+from pure.models import Faculty, Event
 
 faculty = Blueprint('faculty', __name__)
 
@@ -186,6 +188,81 @@ def student_report_graphs(studentid, semval):
     script += gen_script
     div += gen_div
     return {'script': script, 'div': div}
+
+
+@faculty.route('/event_report', methods=['POST', 'GET'])
+@login_required
+def event_report():
+    if current_user.user != 'faculty':
+        abort(403)
+    event_form = EventForm()
+    event_form.participants.choices = current_user.get_courses(current_user.college)
+
+    if event_form.validate_on_submit():
+        paths = []
+        if event_form.images.data:
+            images = event_form.images.data
+            rep_file = []
+            for image in images:
+                sec_filename = secure_filename(image.filename)
+                path = os.path.join(os.path.abspath(os.curdir), 'pure', 'static', 'events_images', sec_filename)
+                if os.path.exists(path):
+                    rep_file.append(image)
+                    continue
+                paths.append(sec_filename)
+                image.save(os.path.join(os.path.abspath(os.curdir), 'pure', 'static', 'events_images', sec_filename))
+            if rep_file:
+                flash(f'Following files are already present in the server and are not uploaded again: {rep_file}')
+
+        event = Event(title=event_form.title.data,
+                      desc=event_form.desc.data,
+                      date=event_form.date.data,
+                      participants=event_form.participants.data,
+                      paths=paths,
+                      author=current_user.email)
+        event.create_event(current_user.college)
+        return redirect(url_for('faculty.event_report'))
+    return render_template('portal/event_report.html', form=event_form, events=Event.get_events(current_user.college, current_user.email))
+
+
+@faculty.route('/delete_event', methods=['POST'])
+@login_required
+def delete_event():
+    if current_user.user != 'faculty':
+        abort(403)
+    data = request.data.decode('utf-8')
+    print(data)
+    images = Event.delete_event(current_user.college, data)
+    for image in images:
+        os.remove(os.path.join(os.path.abspath(os.curdir), 'pure', 'static', 'events_images', image))
+    return redirect(url_for('faculty.event_report'))
+
+
+@faculty.route('/generate_event_report', methods=['POST', 'GET'])
+@login_required
+def generate_event_report():
+    if current_user.user != 'faculty':
+        abort(403)
+    event_id = request.data.decode('utf-8')
+    event_info = Event.get_event(current_user.college, event_id)
+    participants = {}
+    participants_count = 0
+    for participant in event_info['participants']:
+        students_info = current_user.get_course_students(participant)
+        name_list = []
+        for student in students_info:
+            name_list.append(student['name'])
+        participants[participant] = name_list
+        participants_count += len(name_list)
+    rendered = render_template('event_report/event_report_pdf.html', event=event_info, participants=participants, participants_count=participants_count)
+    # return rendered
+    config = pdfkit.configuration(wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe')
+    css = [os.path.join(os.path.abspath(os.curdir), 'pure', 'static', 'style.css'), os.path.join(os.path.abspath(os.curdir), 'pure', 'static', 'bootstrap', 'css', 'bootstrap.min.css')]
+    pdf = pdfkit.from_string(rendered, False, configuration=config, options={"enable-local-file-access": ""}, css=css)
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'inline; filename=event_report.pdf'
+    return response
 
 
 @faculty.route('/logout', methods=['POST', 'GET'])

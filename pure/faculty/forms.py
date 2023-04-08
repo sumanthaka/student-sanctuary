@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import EmailField, StringField, SubmitField, ValidationError, SelectField, PasswordField
+from wtforms import EmailField, StringField, SubmitField, ValidationError, SelectField, PasswordField, DateField, \
+    MultipleFileField, TextAreaField, SelectMultipleField, widgets
 from wtforms.validators import Email, DataRequired, Length, EqualTo, Regexp
 
 from pure.models import Faculty
@@ -22,3 +23,17 @@ class Faculty_SignupForm(FlaskForm):
     password = PasswordField('Password', validators=[Length(min=8), DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[EqualTo('password'), DataRequired()])
     submit = SubmitField('Register')
+
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+
+class EventForm(FlaskForm):
+    title = StringField('Name', validators=[DataRequired()])
+    date = DateField('Date', validators=[DataRequired()])
+    participants = MultiCheckboxField('Participants', choices=[])
+    desc = TextAreaField('Description', validators=[DataRequired()])
+    images = MultipleFileField('Images')
+    submit = SubmitField('Submit')
