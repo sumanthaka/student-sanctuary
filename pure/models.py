@@ -444,7 +444,7 @@ class Super_Admin(UserMixin):
         return bcrypt.check_password_hash(hash_password, password)
 
     @staticmethod
-    def create_college(college, email, name, mobile, password):
+    def create_college(college, email, name, mobile, password, path):
         college = college.lower().replace(' ', '_')
         if User.check_existence(email):
             return False
@@ -453,7 +453,7 @@ class Super_Admin(UserMixin):
         else:
             db = client[college]
             collection = db["info"]
-            collection.insert_one({'email': email, 'name': name, 'mobile': mobile})
+            collection.insert_one({'email': email, 'name': name, 'mobile': mobile, 'logo': path})
             college_id = collection.find_one({'email': email})['_id']
             collection.insert_one({'roles': [{'cr': ['announcement_maker']}, {'regular': []}]})
             collection.insert_one({'courses': []})

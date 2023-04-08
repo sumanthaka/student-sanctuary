@@ -1,6 +1,9 @@
+import os
+
 import phonenumbers as phonenumbers
 from flask import Blueprint, flash, redirect, url_for, render_template, request, abort
 from flask_login import login_user, logout_user, login_required, current_user
+from werkzeug.utils import secure_filename
 
 from pure.models import Super_Admin
 from pure.super_admin.forms import Super_Admin_LoginForm, Create_College
@@ -37,9 +40,17 @@ def create_college():
             number = create_college_form.mobile.data
             phone_number = phonenumbers.parse(number)
             if phonenumbers.is_valid_number(phone_number):
+                logo = create_college_form.logo.data
+                print(logo.filename)
+                sec_filename = secure_filename(logo.filename)
+                path = os.path.join(os.path.abspath(os.curdir), 'pure', 'static', 'college_logos', sec_filename)
+                if os.path.exists(path):
+                    flash("Logo already exists")
+                    return redirect(url_for('super_admin.create_college'))
+                logo.save(path)
                 admin = Super_Admin.create_college(create_college_form.college.data, create_college_form.college_mail.data,
                                                    create_college_form.name.data, create_college_form.mobile.data,
-                                                   generate_random_password())
+                                                   generate_random_password(), sec_filename)
                 if admin:
                     send_reset_mail(admin)
                 else:
