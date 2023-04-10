@@ -631,3 +631,7 @@ class Event:
         print(images)
         client[college]["events"].delete_one({'_id': ObjectId(event_id)})
         return images
+
+
+class Feedback:
+    pass

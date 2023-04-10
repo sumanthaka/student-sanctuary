@@ -12,6 +12,7 @@ from sqlalchemy import create_engine
 # from pure.config import Config
 from pure.configlocal import Config
 
+
 app = Flask(__name__)
 app.config.from_object(Config)
 client = pymongo.MongoClient(app.config["MONGODB_DATABASE_URI"])
@@ -36,6 +37,7 @@ from pure.profile.routes import profile
 from pure.announcements.routes import announcement
 from pure.chat.routes import chat
 from pure.study_material.routes import study_material
+from pure.feedback.routes import feedback
 from pure.errors.routes import page_not_found, page_forbidden
 
 app.register_blueprint(main)
@@ -47,5 +49,6 @@ app.register_blueprint(profile)
 app.register_blueprint(announcement)
 app.register_blueprint(chat)
 app.register_blueprint(study_material)
+app.register_blueprint(feedback)
 app.register_error_handler(404, page_not_found)
 app.register_error_handler(403, page_forbidden)

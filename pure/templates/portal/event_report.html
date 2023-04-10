@@ -6,7 +6,7 @@
 
 {% block content %}
     <div style="background: url('../../static/board.webp') center / cover no-repeat;height: 90vh;overflow-y: auto">
-         <h2 class="text-center mb-4" style="background: transparent;color: white;font-family: 'Fredericka the Great', serif;">Your Announcements</h2>
+         <h2 class="text-center mb-4" style="background: transparent;color: white;font-family: 'Fredericka the Great', serif;">Your Events</h2>
         {% set count = namespace(value=0) %}
         {% for event in events %}
             {% set count.value = count.value + 1 %}
@@ -60,7 +60,7 @@
         {% endfor %}
     </div>
     <div class="position-relative py-4 py-xl-5" style="font-family: 'Fredericka the Great', serif;background: url('board.webp') center / cover no-repeat;color: white;">
-        <h2 class="text-center mb-4">Announcement Maker</h2>
+        <h2 class="text-center mb-4">Create Event</h2>
         <div class="container position-relative">
             <div class="row d-flex justify-content-center">
                 <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
