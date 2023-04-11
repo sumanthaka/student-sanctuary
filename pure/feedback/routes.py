@@ -17,7 +17,7 @@ def admin_feedback():
 @feedback.route('/feedback_questions', methods=['GET', 'POST'])
 @login_required
 def feedback_questions():
-    if current_user.user != 'admin':
+    if current_user.user != 'admin' and current_user.user != 'student':
         abort(403)
     if request.method == 'POST':
         form_id = request.data.decode('utf-8')
@@ -59,7 +59,27 @@ def open_feedback():
     if current_user.user != 'admin':
         abort(403)
     published_forms = Feedback.get_published_forms(current_user.college)
+
     return render_template('feedback/open_feedback.html', forms=published_forms)
+
+
+@feedback.route('/student_feedback', methods=['GET', 'POST'])
+@login_required
+def student_feedback():
+    if current_user.user != 'student':
+        abort(403)
+    if request.method == 'POST':
+        if request.json['type'] == 'get_faculty':
+            form_id = request.json['form_id']
+            faculty = Feedback.get_faculty_list(form_id, current_user)
+            return jsonify({'faculty': faculty})
+        if request.json['type'] == 'submit':
+            form_id = request.json['form_id']
+            faculty = request.json['faculty_id']
+            answers = request.json['answers']
+            Feedback.submit_form(form_id, faculty, current_user.id, answers, current_user.college)
+    forms = Feedback.get_published_forms(current_user.college, current_user.course)
+    return render_template('feedback/student_feedback.html', forms=forms)
 
 
 @feedback.route('/result_feedback', methods=['GET', 'POST'])

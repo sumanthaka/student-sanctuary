@@ -209,6 +209,13 @@ class Student(User):
         client[user.college]["user"].update_one({'email': user.email}, {'$set': {'verified': True}})
         user.verified = True
 
+    def get_subjects_faculty(self):
+        subjects = client[self.college]["subjects"].find({'semester': self.get_current_sem(self.course), 'course': self.course}, {'_id': 1})
+        subjects = [subject['_id'] for subject in subjects]
+        faculty = client[self.college]["user"].find({'subjects': {'$elemMatch': {'$in': subjects}}, 'user': 'faculty'}, {'_id': 1, 'name': 1})
+        faculty = [fac for fac in faculty]
+        return faculty
+
 
 class Faculty(User):
     def create_user(self, name, email, college, password):
@@ -662,9 +669,27 @@ class Feedback:
         client[college]["feedback"].update_one({'_id': ObjectId(form_id)}, {'$set': {'status': 'published', 'target': target}})
 
     @staticmethod
-    def get_published_forms(college):
-        forms = client[college]["feedback"].find({'status': 'published'}, {'_id': 1, 'title': 1, 'target': 1})
+    def get_published_forms(college, course=None):
+        if course:
+            forms = client[college]["feedback"].find({'status': 'published', 'target': course}, {'_id': 1, 'title': 1, 'target': 1})
+        else:
+            forms = client[college]["feedback"].find({'status': 'published'}, {'_id': 1, 'title': 1, 'target': 1})
         forms = [form for form in forms]
         return forms
 
+    @staticmethod
+    def submit_form(form_id, faculty_id, user_id, answers, college):
+        print(form_id, faculty_id, user_id, answers, college)
+        client[college]["responses"].insert_one({'form_id': ObjectId(form_id), 'faculty_id': ObjectId(faculty_id), 'user_id': ObjectId(user_id), 'answers': answers})
 
+    @staticmethod
+    def get_faculty_list(form_id, user: Student):
+        faculty = user.get_subjects_faculty()
+        faculty_final = []
+        responses = client[user.college]["responses"].find({'form_id': ObjectId(form_id), 'user_id': user.id}, {'faculty_id': 1, '_id': 0})
+        responses = [response['faculty_id'] for response in responses]
+        for fac in faculty:
+            if fac['_id'] not in responses:
+                fac['_id'] = str(fac['_id'])
+                faculty_final.append(fac)
+        return faculty_final

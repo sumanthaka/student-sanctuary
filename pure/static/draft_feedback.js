@@ -4,7 +4,7 @@ async function feedback_draft(container) {
         .then((text) => {
             container.innerHTML = text
             const script = document.createElement('script')
-            script.src = '/target.js'
+            script.src = '/target_student.js'
             document.body.appendChild(script)
         })
     let form_dropdown = document.getElementById('form_list')
@@ -49,6 +49,7 @@ async function feedback_draft(container) {
         a.appendChild(img)
         question_item.appendChild(a)
         question_list.appendChild(question_item)
+        question.value = ""
     })
 
     let save_form = document.getElementById('save_form')
@@ -108,19 +109,10 @@ async function feedback_draft(container) {
     ok_publish_form.addEventListener('click', async (event) => {
         let form_dropdown = document.getElementById('form_list')
         let target = []
-        let target_everyone = document.getElementById('target_everyone')
-        if(target_everyone.checked) {
-            target.push('Everyone')
-        }
-        else if (document.getElementById('target_faculty').checked) {
-            target.push('All Faculty')
-        }
-        else {
-            let targeted_students = document.getElementsByName('target')
-            for (let i = 0; i < targeted_students.length; i++) {
-                if (targeted_students[i].checked) {
-                    target.push(targeted_students[i].id.split('_')[1])
-                }
+        let targeted_students = document.getElementsByName('target')
+        for (let i = 0; i < targeted_students.length; i++) {
+            if (targeted_students[i].checked) {
+                target.push(targeted_students[i].id.split('_')[1])
             }
         }
         fetch(draft_feedback_url, {

@@ -39,15 +39,11 @@
                     </div>
                     <div class="modal-body d-md-flex justify-content-md-center" style="font-family: 'Fredericka the Great', serif;border-style: none;">
                         <form>
-                            <input id="target_everyone" type="checkbox" class="form-check-input">
-                            <label for="target_everyone" class="form-check-label">Everyone</label><br>
-                            <input id="target_faculty" type="checkbox" class="form-check-input">
-                            <label for="target_faculty" class="form-check-label">Only Faculty</label><br>
                             <input id="target_students" type="checkbox" class="form-check-input">
                             <label for="target_students" class="form-check-label">All Students</label><br>
                             {% for course in courses %}
-                                <input id="target_{{ course }}" type="checkbox" name="target">
-                                <label for="target_{{ course }}">{{ course }}</label><br>
+                                <input id="target_{{ course }}" type="checkbox" name="target" class="form-check-input">
+                                <label for="target_{{ course }}" class="form-check-label">{{ course }}</label><br>
                             {% endfor %}
                         </form>
                     </div>
@@ -60,25 +56,27 @@
     </div>
 </div>
 <ul id="questions_list" class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em"></ul>
-<button id="add_question" class="btn btn-primary" type="button" data-bs-target="#modal-2" data-bs-toggle="modal" style="font-family: 'Fredericka the Great', serif;border-radius: 25px;width: 15em;margin-top: 1.6em">Add Question</button>
-<div id="modal-2" class="modal fade" role="dialog" tabindex="-1" style="border-style: none;background: var(--bs-modal-border-color);">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div style="background: url('../../static/board.webp') center / cover no-repeat;font-family: 'Fredericka the Great', serif;color: white;border-style: none;border-radius: 8px;">
-                <div class="modal-header" style="border-style: none;">
-                    <h4 class="modal-title">Add Question</h4>
-                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="d-md-flex justify-content-md-center align-items-md-center" style="padding-top: 1em;padding-bottom: 1em">
+    <button id="add_question" class="btn btn-primary" type="button" data-bs-target="#modal-2" data-bs-toggle="modal" style="font-family: 'Fredericka the Great', serif;border-radius: 25px;width: 15em;margin-top: 1.6em">Add Question</button>
+    <div id="modal-2" class="modal fade" role="dialog" tabindex="-1" style="border-style: none;background: var(--bs-modal-border-color);">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div style="background: url('../../static/board.webp') center / cover no-repeat;font-family: 'Fredericka the Great', serif;color: white;border-style: none;border-radius: 8px;">
+                    <div class="modal-header" style="border-style: none;">
+                        <h4 class="modal-title">Add Question</h4>
+                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-md-flex justify-content-md-center" style="font-family: 'Fredericka the Great', serif;border-style: none;width: 30em">
+                        <form>
+                            <input id="question" placeholder="Question" type="text" style="border-radius: 17px;font-size: 20px;background: transparent;border-color: white;color: white;width: 20em" /><br>
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="border-style: none;">
+                        <button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
+                        <button id="ok_question" class="btn btn-primary" type="button" data-bs-dismiss="modal">OK</button></div>
                 </div>
-                <div class="modal-body d-md-flex justify-content-md-center" style="font-family: 'Fredericka the Great', serif;border-style: none;width: 30em">
-                    <form>
-                        <input id="question" placeholder="Question" type="text" style="border-radius: 17px;font-size: 20px;background: transparent;border-color: white;color: white;width: 20em" /><br>
-                    </form>
-                </div>
-                <div class="modal-footer" style="border-style: none;">
-                    <button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button>
-                    <button id="ok_question" class="btn btn-primary" type="button" data-bs-dismiss="modal">OK</button></div>
             </div>
         </div>
     </div>
+    <button id="save_form" class="btn btn-primary" style="font-family: 'Fredericka the Great', serif;border-radius: 25px;width: 15em;margin-top: 1.6em">Save Form</button>
 </div>
-<button id="save_form" class="btn btn-primary" style="font-family: 'Fredericka the Great', serif;border-radius: 25px;width: 15em;margin-top: 1.6em">Save Form</button>
