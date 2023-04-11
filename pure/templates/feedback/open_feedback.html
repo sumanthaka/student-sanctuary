@@ -1,0 +1,8 @@
+<div class="d-md-flex justify-content-md-start align-items-md-center" style="padding-top: 1em;padding-bottom: 1em">
+    <select id="form_list" class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;text-align: center;font-size: 1.3em;">
+        {% for form in forms %}
+            <option value="{{ form['_id'] }}">{{ form['title'] }}</option>
+        {% endfor %}
+    </select>
+</div>
+<ul id="questions_list" class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em"></ul>

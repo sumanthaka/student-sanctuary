@@ -307,6 +307,7 @@ class Faculty(User):
         students = [student for student in students]
         return students
 
+
 class Admin(User):
     def get_student(self, email):
         return client[self.college]["user"].find_one({'email': email})
@@ -626,12 +627,44 @@ class Event:
 
     @staticmethod
     def delete_event(college, event_id):
-        print(event_id)
         images = client[college]["events"].find_one({'_id': ObjectId(event_id)}, {'paths': 1, '_id': 0})['paths']
-        print(images)
         client[college]["events"].delete_one({'_id': ObjectId(event_id)})
         return images
 
 
 class Feedback:
-    pass
+    @staticmethod
+    def create_form(form_title, college):
+        form_info = {'title': form_title, 'status': 'draft', 'questions': []}
+        client[college]["feedback"].insert_one(form_info)
+
+    @staticmethod
+    def delete_form(form_id, college):
+        client[college]["feedback"].delete_one({'_id': ObjectId(form_id)})
+
+    @staticmethod
+    def get_questions(form_id, college):
+        questions = client[college]["feedback"].find_one({'_id': ObjectId(form_id)}, {'questions': 1, '_id': 0})['questions']
+        return questions
+
+    @staticmethod
+    def get_draft_forms(college):
+        forms = client[college]["feedback"].find({'status': 'draft'}, {'_id': 1, 'title': 1})
+        forms = [form for form in forms]
+        return forms
+
+    @staticmethod
+    def update_form(form_id, questions, college):
+        client[college]["feedback"].update_one({'_id': ObjectId(form_id)}, {'$set': {'questions': questions}})
+
+    @staticmethod
+    def publish_form(form_id, target, college):
+        client[college]["feedback"].update_one({'_id': ObjectId(form_id)}, {'$set': {'status': 'published', 'target': target}})
+
+    @staticmethod
+    def get_published_forms(college):
+        forms = client[college]["feedback"].find({'status': 'published'}, {'_id': 1, 'title': 1, 'target': 1})
+        forms = [form for form in forms]
+        return forms
+
+

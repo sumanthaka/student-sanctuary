@@ -1,0 +1,29 @@
+{% extends 'portal/admin.html' %}
+
+{% block links %}
+    <link rel="stylesheet" href="{{ url_for('main.catch_all', path='style.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div style="background: url('../../static/board.webp') center / cover no-repeat;min-height: 100%;font-family: 'Fredericka the Great', serif;color: white;">
+        <div style="margin-left: 1em;margin-right: 1em">
+            <h1 class="text-center mb-4" >Forms</h1>
+            <div class="btn-group" role="group">
+                <button id="draft" class="btn btn-primary" type="button">Draft</button>
+                <button id="open" class="btn btn-primary" type="button">Published</button>
+                <button id="result" class="btn btn-primary" type="button">Results</button>
+            </div>
+            <div id="form_container" style="height: 76vh"></div>
+        </div>
+    </div>
+    <script src="{{ url_for('main.catch_all', path="draft_feedback.js") }}"  type="application/javascript"></script>
+    <script src="{{ url_for('main.catch_all', path="open_feedback.js") }}" type="application/javascript"></script>
+    <script src="{{ url_for('main.catch_all', path="result_feedback.js") }}" type="application/javascript"></script>
+    <script src="{{ url_for('main.catch_all', path='admin_feedback.js') }}"
+            type="application/javascript"
+            draft_feedback_url={{ url_for('feedback.draft_feedback')|tojson }}
+            open_feedback_url={{ url_for('feedback.open_feedback')|tojson }}
+            result_feedback_url={{ url_for('feedback.result_feedback')|tojson }}
+            get_questions_url={{ url_for('feedback.feedback_questions')|tojson }}
+            delete_icon={{ url_for('main.catch_all', path='delete_icon.png')|tojson }} defer></script>
+{% endblock %}
