@@ -642,7 +642,7 @@ class Event:
 class Feedback:
     @staticmethod
     def create_form(form_title, college):
-        form_info = {'title': form_title, 'status': 'draft', 'questions': []}
+        form_info = {'title': form_title, 'status': 'draft', 'questions': [], 'date': datetime.now()}
         client[college]["feedback"].insert_one(form_info)
 
     @staticmethod
@@ -693,3 +693,60 @@ class Feedback:
                 fac['_id'] = str(fac['_id'])
                 faculty_final.append(fac)
         return faculty_final
+
+    @staticmethod
+    def close_form(form_id, college):
+        client[college]["feedback"].update_one({'_id': ObjectId(form_id)}, {'$set': {'status': 'closed'}})
+
+    @staticmethod
+    def summarize_form(form_id, college):
+        pipeline = [
+            # Match responses for the feedback form
+            {'$match': {'form_id': ObjectId(form_id)}},
+
+            # Lookup feedback form document to get the questions list
+            {"$lookup": {
+                "from": "feedback",
+                "localField": "form_id",
+                "foreignField": "_id",
+                "as": "feedback_form"
+            }},
+
+            # Unwind the feedback form document
+            {'$unwind': '$feedback_form'},
+
+            # Group responses by target (i.e. course), faculty, and question
+            {'$group': {
+                '_id': {
+                    'faculty_id': '$faculty_id',
+                    'question_index': {'$range': [0, {'$size': '$answers'}]}
+                },
+                'response_values': {'$push': '$answers'},
+                'questions': {'$first': '$feedback_form.questions'}
+            }},
+
+            {'$addFields': {
+                'index_response': {'$map': {
+                    'input': '$_id.question_index', 'as': 'i',
+                    'in': {'$map': {
+                        'input': '$response_values', 'as': 'response_values',
+                        'in': {'$arrayElemAt': ['$$response_values', '$$i']}
+                    }}
+                }}
+            }},
+
+            # Calculate the average response for each group
+            {'$project': {
+                'form_id': form_id,
+                'faculty_id': '$_id.faculty_id',
+                'response': {'$map': {
+                    'input': '$index_response', 'as': 'response',
+                    'in': {'$avg': '$$response'}
+                }}
+            }},
+        ]
+        result = client[college]["responses"].aggregate(pipeline)
+        for res in result:
+            res.pop('_id')
+            res['form_id'] = ObjectId(res['form_id'])
+            client[college]["summary"].insert_one(res)

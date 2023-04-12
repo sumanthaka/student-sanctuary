@@ -6,28 +6,31 @@
 
 {% block content %}
     <div style="background: url('../../static/board.webp') center / cover no-repeat;min-height: 89vh;font-family: 'Fredericka the Great', serif;color: white;">
-        <div style="margin-left: 1em;margin-right: 1em">
-            <h1 class="text-center mb-4" >Feedback Forms</h1>
-            <div class="d-md-flex justify-content-md-start align-items-md-center" style="padding-top: 1em;padding-bottom: 1em">
-                {% if forms == [] %}
-                    <h3>No forms available!</h3>
-                {% else %}
-                    <select id="form_list" class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;text-align: center;font-size: 1.3em;">
-                        {% for form in forms %}
-                            <option value="{{ form['_id'] }}">{{ form['title'] }}</option>
-                        {% endfor %}
-                    </select>
-                {% endif %}
+        <form>
+            <div style="margin-left: 1em;margin-right: 1em">
+                <h1 class="text-center mb-4" >Feedback Forms</h1>
+                <div class="d-md-flex justify-content-md-start align-items-md-center" style="padding-top: 1em;padding-bottom: 1em">
+
+                    {% if forms == [] %}
+                        <h3>No forms available!</h3>
+                    {% else %}
+                        <select id="form_list" class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;text-align: center;font-size: 1.3em;">
+                            {% for form in forms %}
+                                <option value="{{ form['_id'] }}">{{ form['title'] }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endif %}
+                </div>
+                <div id="faculty_list_container" class="d-md-flex justify-content-md-end align-items-md-center" style="padding-top: 1em;padding-bottom: 1em">
+                    <label id="faculty_list_label" for="faculty_list" style="font-size: 1.5em;min-width: 14rem;">Choose Faculty:</label>
+                    <select id="faculty_list" class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;text-align: center;font-size: 1.3em;"></select>
+                </div>
+                <ul id="questions_list" class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em"></ul>
             </div>
-            <div id="faculty_list_container" class="d-md-flex justify-content-md-end align-items-md-center" style="padding-top: 1em;padding-bottom: 1em">
-                <label id="faculty_list_label" for="faculty_list" style="font-size: 1.5em;min-width: 14rem;">Choose Faculty:</label>
-                <select id="faculty_list" class="form-select border rounded-pill border-2" style="color: white;background: transparent;font-family: 'Fredericka the Great', serif;text-align: center;font-size: 1.3em;"></select>
+            <div id="submit_container" class="d-md-flex justify-content-md-center align-items-md-center" style="padding-top: 1em;padding-bottom: 1em">
+                <button id="submit" type="submit" class="btn btn-primary" style="font-family: 'Fredericka the Great', serif;border-radius: 25px;width: 15em;margin-top: 1.6em">Submit</button>
             </div>
-            <ul id="questions_list" class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em"></ul>
-        </div>
-    <div id="submit_container" class="d-md-flex justify-content-md-center align-items-md-center" style="padding-top: 1em;padding-bottom: 1em">
-        <button id="submit" class="btn btn-primary" style="font-family: 'Fredericka the Great', serif;border-radius: 25px;width: 15em;margin-top: 1.6em">Submit</button>
-    </div>
+        </form>
     </div>
     <script src="{{ url_for('main.catch_all', path='student_feedback.js') }}"
             student_feedback_url={{ url_for('feedback.student_feedback')|tojson }}

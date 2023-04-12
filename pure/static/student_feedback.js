@@ -45,6 +45,7 @@ async function get_questions(form_id) {
                 input.value = j + 1
                 input.className = "form-check-input"
                 input.style = "margin-right: 1em"
+                input.required = true
                 radio_group.appendChild(input)
             }
             question_item.appendChild(span)

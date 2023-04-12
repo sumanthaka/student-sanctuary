@@ -58,8 +58,11 @@ def draft_feedback():
 def open_feedback():
     if current_user.user != 'admin':
         abort(403)
+    if request.method == 'POST':
+        form_id = request.data.decode('utf-8')
+        Feedback.close_form(form_id, current_user.college)
+        Feedback.summarize_form(form_id, current_user.college)
     published_forms = Feedback.get_published_forms(current_user.college)
-
     return render_template('feedback/open_feedback.html', forms=published_forms)
 
 

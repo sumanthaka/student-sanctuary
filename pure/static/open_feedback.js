@@ -7,6 +7,9 @@ async function feedback_open(container) {
     let form_dropdown = document.getElementById('form_list')
     get_published_questions(form_dropdown.value)
     form_dropdown.addEventListener('change', async (event) => { await get_published_questions(form_dropdown.value) })
+
+    let close_response = document.getElementById('close_form')
+    close_response.addEventListener('click', async (event) => { await feedback_close(form_dropdown.value) })
 }
 
 async function get_published_questions(form_id) {
@@ -30,5 +33,16 @@ async function get_published_questions(form_id) {
                 question_item.appendChild(span)
                 question_list.appendChild(question_item)
             }
+        })
+}
+
+async function feedback_close(form_id) {
+    await fetch(open_feedback_url, {
+        method: 'POST',
+        'body': form_id
+    })
+        .then(() => {
+            alert("Response for form closed successfully")
+            location.reload()
         })
 }
