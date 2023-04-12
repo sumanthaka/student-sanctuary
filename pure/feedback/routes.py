@@ -90,4 +90,15 @@ def student_feedback():
 def result_feedback():
     if current_user.user != 'admin':
         abort(403)
-    return render_template('feedback/result_feedback.html')
+    if request.method == 'POST':
+        if request.json['type'] == 'get_faculty':
+            form_id = request.json['form_id']
+            faculty = Feedback.get_form_faculty(form_id, current_user.college)
+            return jsonify({'faculty': faculty})
+        if request.json['type'] == 'get_result':
+            form_id = request.json['form_id']
+            faculty_id = request.json['faculty_id']
+            result = Feedback.get_form_result(form_id, faculty_id, current_user.college)
+            return jsonify({'result': result})
+    forms = Feedback.get_closed_forms(current_user.college)
+    return render_template('feedback/result_feedback.html', forms=forms)

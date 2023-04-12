@@ -679,7 +679,6 @@ class Feedback:
 
     @staticmethod
     def submit_form(form_id, faculty_id, user_id, answers, college):
-        print(form_id, faculty_id, user_id, answers, college)
         client[college]["responses"].insert_one({'form_id': ObjectId(form_id), 'faculty_id': ObjectId(faculty_id), 'user_id': ObjectId(user_id), 'answers': answers})
 
     @staticmethod
@@ -750,3 +749,24 @@ class Feedback:
             res.pop('_id')
             res['form_id'] = ObjectId(res['form_id'])
             client[college]["summary"].insert_one(res)
+
+    @staticmethod
+    def get_closed_forms(college):
+        forms = client[college]["feedback"].find({'status': 'closed'}, {'_id': 1, 'title': 1})
+        forms = [form for form in forms]
+        return forms
+
+    @staticmethod
+    def get_form_faculty(form_id, college):
+        faculty_ids = client[college]["summary"].distinct('faculty_id', {'form_id': ObjectId(form_id)})
+        faculty = []
+        for fac_id in faculty_ids:
+            fac = client[college]["user"].find_one({'_id': ObjectId(fac_id)}, {'_id': 1, 'name': 1})
+            fac['_id'] = str(fac['_id'])
+            faculty.append(fac)
+        return faculty
+
+    @staticmethod
+    def get_form_result(form_id, faculty_id, college):
+        result = client[college]["summary"].find_one({'form_id': ObjectId(form_id), 'faculty_id': ObjectId(faculty_id)}, {'_id': 0, 'response': 1})['response']
+        return result
