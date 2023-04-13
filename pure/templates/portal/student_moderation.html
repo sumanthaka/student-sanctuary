@@ -1,0 +1,28 @@
+{% extends 'portal/faculty.html' %}
+
+{% block links %}
+    <link rel="stylesheet" href="{{ url_for('main.catch_all', path='style.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="py-4 py-xl-5" style="background: url('../../static/board.webp') center / cover no-repeat;font-family: 'Fredericka the Great', serif;color: white;height: 88vh">
+        <div class="container">
+            <h2 class="text-center mb-4">Student Moderation</h2>
+            <ul class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em">
+                {% for student in students %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center" style="color: white;background: transparent">
+                        <div>
+                            <p style="font-size: 1.6rem;margin-bottom: 0">{{ student['name'] }}</p>
+                            <p style="font-size: 1.6rem;margin-bottom: 0">{{ student['email'] }}</p>
+                        </div>
+                        <a id="{{ student['email'] }}" onclick="suspend_user(this.id)" style="cursor: pointer">
+                            <img src="{{ url_for('main.catch_all', path='ban_icon.png') }}" alt="Ban" width="36" height="34">
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <script src="{{ url_for('main.catch_all', path='student_moderation.js') }}"
+            student_moderation_url="{{ url_for('faculty.student_moderation') }}" defer></script>
+{% endblock %}

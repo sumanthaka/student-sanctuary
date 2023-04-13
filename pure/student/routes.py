@@ -25,7 +25,12 @@ def student_signin():
                 else:
                     flash("Please login through the specific page")
         else:
-            flash("Username password are not matching")
+            if attempted_student.check_suspended(student_login_form.email.data):
+                flash("Your account has been suspended. Please contact admin")
+            if attempted_student.check_ban(student_login_form.email.data):
+                flash("Your account has been banned. Please contact admin")
+            else:
+                flash("Email and password are not matching")
     return render_template('auth/login.html', form=student_login_form, user="student")
 
 
@@ -43,6 +48,8 @@ def student_signup():
                                                         password=student_signup_form.password.data)
         if created_student:
             send_verify_mail(created_student)
+        else:
+            flash("You have been banned/suspended from this site by the admin. Please contact admin for more details")
         return redirect(url_for('student.student_signin'))
     if student_signup_form.errors:
         for error in student_signup_form.errors.values():

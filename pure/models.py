@@ -199,6 +199,10 @@ class User(UserMixin):
 
 class Student(User):
     def create_user(self, name, email, college, course, password):
+        if self.check_ban(email):
+            return False
+        if self.check_suspended(email):
+            return False
         college = college.replace(' ', '_')
         User.create_user(self, name=name, email=email, college=college, password=password, course=course, user="student", role="regular", verified=False)
         student = client[college]["user"].find_one({'email': email})
@@ -215,6 +219,24 @@ class Student(User):
         faculty = client[self.college]["user"].find({'subjects': {'$elemMatch': {'$in': subjects}}, 'user': 'faculty'}, {'_id': 1, 'name': 1})
         faculty = [fac for fac in faculty]
         return faculty
+
+    @staticmethod
+    def check_suspended(email):
+        databases = client.list_database_names()
+        databases.remove("super_admin")
+        for college in databases:
+            if client[college]["suspended"].find_one({'email': email}):
+                return True
+        return False
+
+    @staticmethod
+    def check_ban(email):
+        databases = client.list_database_names()
+        databases.remove("super_admin")
+        for college in databases:
+            if client[college]["banned"].find_one({'email': email}):
+                return True
+        return False
 
 
 class Faculty(User):
@@ -313,6 +335,11 @@ class Faculty(User):
         students = client[self.college]["user"].find({'course': course, 'user': 'student'})
         students = [student for student in students]
         return students
+
+    def suspend_student(self, student_email):
+        student = client[self.college]["user"].find_one({'email': student_email})
+        client[self.college]["user"].delete_one({'email': student_email})
+        client[self.college]["suspended"].insert_one(student)
 
 
 class Admin(User):
@@ -436,6 +463,24 @@ class Admin(User):
             return False
         else:
             client[self.college]["user"].update_one({'email': email}, {'$set': {'role': role}})
+
+    def get_suspended_students(self):
+        students = client[self.college]["suspended"].find({})
+        students = [student for student in students]
+        return students
+
+    def unsuspend_student(self, student_email):
+        student = client[self.college]["suspended"].find_one({'email': student_email})
+        client[self.college]["suspended"].delete_one({'email': student_email})
+        client[self.college]["user"].insert_one(student)
+
+    def delete_student(self, student_email):
+        client[self.college]["suspended"].delete_one({'email': student_email})
+
+    def ban_student(self, student_email):
+        student = client[self.college]["suspended"].find_one({'email': student_email})
+        client[self.college]["suspended"].delete_one({'email': student_email})
+        client[self.college]["banned"].insert_one(student)
 
 
 class Super_Admin(UserMixin):

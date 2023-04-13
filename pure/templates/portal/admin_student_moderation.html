@@ -1,0 +1,26 @@
+{% if students %}
+    <h3 class="text-center mb-4" style="color: white;font-family: 'Fredericka the Great', serif;">Suspended Students</h3>
+    <ul class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 0 1.6em;">
+    {% for student in students %}
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="color: white;background: transparent">
+            <div>
+                <span style="font-size: 1.6rem">Name: {{ student.name }}</span><br>
+                <span style="font-size: 1.6rem">Email: {{ student.email }}</span>
+            </div>
+            <div class="d-md-flex">
+                <a id="{{ student.email }}" onclick="unsuspend_student(this.id)" style="padding-right: 0.5em;cursor: pointer">
+                    <img src="{{ url_for('main.catch_all', path='tick_icon.png') }}" width="40" height="40" alt="Unban"/>
+                </a>
+                <a id="{{ student.email }}" onclick="delete_student(this.id)" style="padding-left: 0.5em;cursor: pointer">
+                    <img src="{{ url_for('main.catch_all', path='delete_icon.png') }}" width="40" height="40" alt="Delete"/>
+                </a>
+                <a id="{{ student.email }}" onclick="ban_student(this.id)" style="padding-left: 0.5em;cursor: pointer">
+                    <img src="{{ url_for('main.catch_all', path='ban_icon.png') }}" width="40" height="40" alt="Ban"/>
+                </a>
+            </div>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <h3 style="font-family: 'Fredericka the Great', serif;color: white;padding-left: 2em">No Suspended students at the moment</h3>
+{% endif %}

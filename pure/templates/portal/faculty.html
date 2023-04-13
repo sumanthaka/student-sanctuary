@@ -20,6 +20,11 @@
     <li class="nav-item">
         <a class="nav-link" href="{{ url_for('announcement.announcement_maker') }}">Announcement Maker</a>
     </li>
+    {% if current_user.course_faculty %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('faculty.student_moderation') }}">Student Moderation</a>
+        </li>
+    {% endif %}
     <li class="nav-item">
         <a class="nav-link" href={{ url_for('profile.profile_page') }}>{{ current_user.name }}</a>
     </li>

@@ -265,6 +265,17 @@ def generate_event_report():
     return response
 
 
+@faculty.route('/student_moderation', methods=['POST', 'GET'])
+@login_required
+def student_moderation():
+    if current_user.user != 'faculty':
+        abort(403)
+    if request.method == 'POST':
+        student_email = request.data.decode('utf-8')
+        current_user.suspend_student(student_email)
+    return render_template('portal/student_moderation.html', students=current_user.get_course_students(current_user.course_faculty))
+
+
 @faculty.route('/logout', methods=['POST', 'GET'])
 def logout_page():
     logout_user()

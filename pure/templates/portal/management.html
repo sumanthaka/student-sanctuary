@@ -13,6 +13,7 @@
                 <option value="Approval">Faculty Login Approval</option>
                 <option value="Faculty_manage">Faculty Management</option>
                 <option value="Role">Role Management</option>
+                <option value="Student_mod">Student Moderation</option>
             </select>
         </div>
         <div id="container" style="min-height: 100vh;max-height: 200vh;overflow-y: auto">
@@ -22,13 +23,15 @@
         <script src="{{ url_for('main.catch_all', path="faculty_management.js") }}" type="application/javascript"></script>
         <script src="{{ url_for('main.catch_all', path="course_management.js") }}" type="application/javascript"></script>
         <script src="{{ url_for('main.catch_all', path="subject_management.js") }}" type="application/javascript"></script>
+        <script src="{{ url_for('main.catch_all', path="admin_student_moderation.js") }}" type="application/javascript"></script>
         <script src="{{ url_for('main.catch_all', path="management.js") }}"
                 type="application/javascript"
                 course_url={{ url_for('admin.course_management')|tojson }}
                 approval_url={{ url_for('admin.faculty_approval')|tojson }}
                 role_url={{ url_for('admin.role_management')|tojson }}
                 faculty_manage_url={{ url_for('admin.faculty_management')|tojson }}
-                subject_url={{ url_for('admin.subject_management')|tojson }} defer>
+                subject_url={{ url_for('admin.subject_management')|tojson }}"
+                student_mod_url={{ url_for('admin.student_moderation') }} defer>
         </script>
     </div>
 {% endblock %}

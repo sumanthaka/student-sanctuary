@@ -161,6 +161,23 @@ def handle_crs(course):
     return current_user.get_crs(course)
 
 
+@admin.route('/student_moderation', methods=['POST', 'GET'])
+@login_required
+def student_moderation():
+    if current_user.user != 'admin':
+        abort(403)
+    if request.method == 'POST':
+        data = request.json
+        action = data['action']
+        if action == 'unsuspend':
+            current_user.unsuspend_student(data['student_email'])
+        elif action == 'delete':
+            current_user.delete_student(data['student_email'])
+        elif action == 'ban':
+            current_user.ban_student(data['student_email'])
+    return render_template('portal/admin_student_moderation.html', students=current_user.get_suspended_students())
+
+
 @admin.route('/logout', methods=['POST', 'GET'])
 def logout_page():
     logout_user()
