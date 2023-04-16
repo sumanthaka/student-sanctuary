@@ -368,6 +368,9 @@ class Admin(User):
         client[self.college]["info"].update_one({'room_ids': {'$exists': 'true'}},
                                                 {'$unset': {f'room_ids.{course}': {'$exists': 'true'}}})
 
+    def next_semester(self):
+        client[self.college]["courses"].update_many({}, {'$inc': {'current_sem': 1}})
+
     def add_subject(self, subject, semester, course):
         subject = subject.upper()
         # college_id = str(client[self.college]["info"].find_one({'email': {'$exists': 'true'}}, {'_id': 1})['_id'])

@@ -44,9 +44,12 @@ def course_management():
         abort(403)
     if request.method == 'POST':
         data = str(request.data, 'utf-8').split(',')
+        print(data)
         if data[-1] == 'add':
             if not current_user.add_course(data[:-1]):
                 flash('Course already exists')
+        elif data[-1] == 'proceed':
+            current_user.next_semester()
         else:
             current_user.delete_course(data[0])
 

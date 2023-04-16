@@ -7,6 +7,9 @@ async function course_management(container) {
 
     let ok_button = document.getElementById('ok')
     ok_button.addEventListener('click', () => { add_course() })
+
+    let proceed_button = document.getElementById('proceed')
+    proceed_button.addEventListener('click', () => { proceed() })
 }
 
 async function add_course() {
@@ -29,5 +32,14 @@ async function delete_course(button_id) {
         'method': 'POST',
         'body': [button_id, 'delete']
     })
+    course_management(container)
+}
+
+async function proceed() {
+    await fetch(course_url, {
+        'method': 'POST',
+        'body': ['proceed']
+    })
+        .then(alert("Semester successfully proceeded"))
     course_management(container)
 }
