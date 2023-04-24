@@ -164,9 +164,9 @@ def handle_crs(course):
     return current_user.get_crs(course)
 
 
-@admin.route('/student_moderation', methods=['POST', 'GET'])
+@admin.route('/admin_student_moderation', methods=['POST', 'GET'])
 @login_required
-def student_moderation():
+def admin_student_moderation():
     if current_user.user != 'admin':
         abort(403)
     if request.method == 'POST':

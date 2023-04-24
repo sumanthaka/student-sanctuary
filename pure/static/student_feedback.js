@@ -70,6 +70,9 @@ async function get_faculty(form_id) {
     .then((json) => {
         let faculties = json.faculty
         if (faculties.length === 0) {
+            try {
+                document.getElementById('all_responses_submitted').remove()
+            } catch (error) {}
             faculty_dropdown.style.display = 'none'
             document.getElementById('faculty_list_label').style.display = 'none'
             let h2 = document.createElement('h2')
