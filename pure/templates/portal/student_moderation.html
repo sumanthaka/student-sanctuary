@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block content %}
-    <div class="py-4 py-xl-5" style="background: url('../../static/board.webp') center / cover no-repeat;font-family: 'Fredericka the Great', serif;color: white;height: 88vh">
+    <div class="py-4 py-xl-5" style="background: url('../../static/board.webp') center / cover no-repeat;font-family: 'Fredericka the Great', serif;color: white;min-height: 88vh">
         <div class="container">
             <h2 class="text-center mb-4">Student Moderation</h2>
-            <ul class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em;;overflow-y: auto;height: 70vh">
+            <ul class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em;;overflow-y: auto;">
                 {% for student in students %}
                     <li class="list-group-item d-flex justify-content-between align-items-center" style="color: white;background: transparent">
                         <div>
