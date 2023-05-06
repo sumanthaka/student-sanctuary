@@ -10,7 +10,7 @@
             <h2 class="text-center mb-4">Student Moderation</h2>
             <ul class="list-group" style="color: white;font-family: 'Fredericka the Great', serif;background: transparent;margin: 1.2em 1.6em">
                 {% for student in students %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center" style="color: white;background: transparent">
+                    <li class="list-group-item d-flex justify-content-between align-items-center" style="color: white;background: transparent;overflow-y: auto;height: 70vh">
                         <div>
                             <p style="font-size: 1.6rem;margin-bottom: 0">{{ student['name'] }}</p>
                             <p style="font-size: 1.6rem;margin-bottom: 0">{{ student['email'] }}</p>
