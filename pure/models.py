@@ -331,6 +331,18 @@ class Faculty(User):
             subjects.append([subject, subject_id])
         return subjects
 
+    def get_unique_sub_course(self):
+        subject_ids = client[self.college]["user"].find_one({'email': self.email}, {'subjects': 1, '_id': 0})['subjects']
+        subjects = []
+        for subject_id in subject_ids:
+            subject = client[self.college]["subjects"].find_one({'_id': ObjectId(subject_id)}, {'course': 1, '_id': 0})['course']
+            subjects.append(subject)
+        unique_subjects = list(set(subjects))
+        if self.course_faculty in unique_subjects:
+            unique_subjects.remove(self.course_faculty)
+        return unique_subjects
+
+
     def get_course_students(self, course):
         students = client[self.college]["user"].find({'course': course, 'user': 'student'})
         students = [student for student in students]
@@ -340,6 +352,7 @@ class Faculty(User):
         student = client[self.college]["user"].find_one({'email': student_email})
         client[self.college]["user"].delete_one({'email': student_email})
         client[self.college]["suspended"].insert_one(student)
+
 
 
 class Admin(User):
@@ -592,7 +605,7 @@ class Announcement:
 
 class Chat:
     @staticmethod
-    def get_room_id_course(college, email):
+    def get_room_id_course_student(college, email):
         course = client[college]["user"].find_one({'email': email})['course']
         room_id = client[college]["info"].find_one({f'room_ids.{course}': {'$exists': 'true'}}, {'room_ids': 1, '_id': 0})['room_ids'][course]
         return str(room_id)
@@ -616,6 +629,12 @@ class Chat:
     @staticmethod
     def get_room_id_council(college):
         room_id = client[college]["info"].find_one({'student_council_room': {'$exists': 'true'}}, {'_id': 0, 'student_council_room': 1})['student_council_room']
+        return str(room_id)
+
+    @staticmethod
+    def get_room_id_course(college, course):
+        print(course)
+        room_id = client[college]["info"].find_one({f'room_ids.{course}': {'$exists': 'true'}}, {'room_ids': 1, '_id': 0})['room_ids'][course]
         return str(room_id)
 
 

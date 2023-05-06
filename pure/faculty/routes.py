@@ -60,7 +60,7 @@ def faculty_signup():
 @faculty.route('/upload_marks', methods=['POST', 'GET'])
 @login_required
 def upload_marks():
-    if current_user.user != 'faculty':
+    if current_user.user != 'faculty' or current_user.course_faculty is None:
         abort(403)
     if request.method == 'POST':
         data = request.form

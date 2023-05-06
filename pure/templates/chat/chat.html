@@ -22,8 +22,14 @@
                             <option value="student_council">Student Council Chat</option>
                         {% endif %}
                     {% elif current_user.user == 'faculty' %}
-                        <option value="Course" selected>{{ current_user.course_faculty }} Chat</option>
+                        {% if current_user.course_faculty is not none %}
+                            <option value="Course" selected>{{ current_user.course_faculty }} Chat</option>
+                        {% endif %}
                         <option value="faculty_chat" selected>Faculty Chat</option>
+                        {% set courses = current_user.get_unique_sub_course() %}
+                        {% if courses != []  %}
+                            <option value="Course_{{ courses[0] }}">{{ courses[0] }} Chat</option>
+                        {% endif %}
                     {% endif %}
                 </select>
             </div>

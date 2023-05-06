@@ -23,7 +23,7 @@ def chat_page():
 @socketio.on('join_room')
 def handle_join_room(data):
     if current_user.user == 'student':
-        room_id = Chat.get_room_id_course(current_user.college, data['email'])
+        room_id = Chat.get_room_id_course_student(current_user.college, data['email'])
     else:
         room_id = Chat.get_room_id_faculty(current_user.college)
     join_room(room_id)
@@ -50,7 +50,7 @@ def handle_change_room(data):
 
     elif data['room_choice'] == 'Course':
         if current_user.user == "student":
-            room_id = Chat.get_room_id_course(current_user.college, data['email'])
+            room_id = Chat.get_room_id_course_student(current_user.college, data['email'])
         else:
             room_id = Chat.get_room_id_course_faculty(current_user.college, data['email'])
         join_room(room_id)
@@ -73,6 +73,16 @@ def handle_change_room(data):
 
     elif data['room_choice'] == 'faculty_chat':
         room_id = Chat.get_room_id_faculty(current_user.college)
+        join_room(room_id)
+        session_id = request.sid
+        data = {}
+        data.update({'room': room_id})
+        messages = current_user.get_messages(room_id)
+        data.update({'messages': messages})
+        socketio.emit('join_room_announcement', data, to=session_id)
+
+    elif 'Course_' in data['room_choice']:
+        room_id = Chat.get_room_id_course(current_user.college, data['room_choice'][7:])
         join_room(room_id)
         session_id = request.sid
         data = {}

@@ -5,12 +5,14 @@
 {% endblock %}
 
 {% block navbar %}
-    <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('faculty.upload_marks') }}">Upload Marks</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ url_for('faculty.view_report') }}">View Report</a>
-    </li>
+    {% if current_user.course_faculty %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('faculty.upload_marks') }}">Upload Marks</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('faculty.view_report') }}">View Report</a>
+        </li>
+    {% endif %}
     <li class="nav-item">
         <a class="nav-link" href="{{ url_for('study_material.study_material_upload') }}">Upload Study Material</a>
     </li>
