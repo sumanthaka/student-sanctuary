@@ -25,9 +25,18 @@
             <div id="navcol-5" class="collapse navbar-collapse">
                 <a class="btn btn-primary ms-md-2" id="apply_now_nav" role="button" href="{{ url_for('main.apply_now') }}">Apply Now!</a>
                 <ul class="navbar-nav d-xxl-flex justify-content-center align-items-stretch ms-auto" style="color: white;">
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('student.student_signin') }}">Student</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('faculty.faculty_signin') }}">Faculty</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.admin_signin') }}">Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('ads.ads_page') }}">Advertisement</a></li>
+                    <div class="nav-item dropdown">
+                        <a class="dropdown nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="{{ url_for('student.student_signin') }}" style="color: rgb(255,255,255,0.55);">Login</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{{ url_for('student.student_signin') }}">Student</a>
+                            <a class="dropdown-item" href="{{ url_for('faculty.faculty_signin') }}">Faculty</a>
+                            <a class="dropdown-item" href="{{ url_for('admin.admin_signin') }}">Admin</a>
+                        </div>
+                    </div>
+{#                    <li class="nav-item"><a class="nav-link" href="{{ url_for('faculty.faculty_signin') }}">Faculty</a></li>#}
+{#                    <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.admin_signin') }}">Admin</a></li>#}
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('main.contact_us') }}">Contact Us</a></li>
                 </ul>
             </div>

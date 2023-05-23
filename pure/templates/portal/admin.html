@@ -18,6 +18,9 @@
         <a class="nav-link" href="{{ url_for('feedback.admin_feedback') }}">Feedback Form</a>
     </li>
     <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('ads.admin_ads_page') }}">Upload Advertisements</a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href={{ url_for('profile.profile_page') }}>{{ current_user.name }}</a>
     </li>
 {% endblock %}

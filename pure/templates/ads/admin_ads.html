@@ -1,0 +1,45 @@
+{% extends 'portal/admin.html' %}
+
+{% block links %}
+    <link rel="stylesheet" href="{{ url_for('main.catch_all', path='style.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="position-relative py-4 py-xl-5" style="font-family: 'Fredericka the Great', serif;background: url('board.webp') center / cover no-repeat;color: white;min-height: 65.2vh">
+        <h2 class="text-center mb-4">Upload Advertisement</h2>
+        <div class="container position-relative">
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-5 col-xxl-4">
+                    <div class="card mb-5" style="background: var(--bs-border-color-translucent);">
+                        <div class="card-body p-sm-5" style="">
+                            <form id="ads_form" method="POST" enctype="multipart/form-data">
+                                <div class="d-md-flex justify-content-md-center" style="margin: auto;width: 20vw;padding-top: 0.4em;padding-bottom: 0.5em">
+                                    <img src="{{ url_for('main.catch_all', path='no-image.png') }}" style="height: 15em;width: 15em" id="ads_image" alt="Advertisement Image">
+                                </div>
+                                <div class="mb-3">
+                                    <input class="form-control"
+                                           id="ads_file"
+                                           name="ads_file"
+                                           type="file"
+                                           accept=".jpg,.jpeg,.png,.gif,.webp"
+                                           style="color: white;background: var(--bs-border-color-translucent);"
+                                           onchange="disp_image(this)" required />
+                                </div>
+                                <div class="d-md-flex justify-content-md-center" style="margin: auto;width: 20vw;padding-top: 0.4em">
+                                    <p style="color:#8686e3;font-family: 'Fredericka the Great', serif;">Upload your advertisement image</p>
+                                </div>
+                                <div class="d-md-flex justify-content-md-center" style="margin: auto;width: 20vw;padding-top: 0.4em">
+                                    <input name="ad_link" type="url" class="form-control" placeholder="URL for Ad" style="background: var(--bs-border-color-translucent);color: white">
+                                </div>
+                                <div class="d-md-flex justify-content-md-center" style="">
+                                    <a id="upload" class="btn btn-primary" style="font-family: 'Fredericka the Great', serif;border-radius: 25px;width: 15em;margin-top: 1.6em">Upload</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="application/javascript" src="{{ url_for('main.catch_all', path='admin_ads.js') }}" defer></script>
+{% endblock %}

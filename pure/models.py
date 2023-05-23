@@ -1,10 +1,11 @@
 import pandas
+from flask import flash
 
 from pure import client, cursor, bcrypt, login_manager, app, sql_client, engine
 from flask_login import UserMixin
 from bson import ObjectId
 from itsdangerous import URLSafeTimedSerializer as Serializer
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 @login_manager.user_loader
@@ -837,3 +838,25 @@ class Feedback:
     def get_form_result(form_id, faculty_id, college):
         result = client[college]["summary"].find_one({'form_id': ObjectId(form_id), 'faculty_id': ObjectId(faculty_id)}, {'_id': 0, 'response': 1})['response']
         return result
+
+
+class Advertisement:
+    @staticmethod
+    def create_ad(ad_image, ad_link, college):
+        ad_info = {'image': ad_image, 'date': datetime.now(), 'link': ad_link}
+        client[college]["ads"].insert_one(ad_info)
+
+
+    @staticmethod
+    def get_all_ads():
+        colleges = client.list_database_names()
+        colleges.remove('admin')
+        colleges.remove('local')
+        colleges.remove('config')
+        colleges.remove('super_admin')
+        ads = []
+        for college in colleges:
+            college_ads = client[college]["ads"].find({}).sort('date', -1)
+            college_ads = [ad for ad in college_ads]
+            ads.extend(college_ads)
+        return ads
