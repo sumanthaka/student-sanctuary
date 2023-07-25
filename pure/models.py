@@ -376,9 +376,9 @@ class Admin(User):
         client[self.college]["info"].update_one({'room_ids': {'$exists': 'true'}}, {'$set': {f'room_ids.{course}': ObjectId()}})
         return True
 
-    def delete_course(self, semester, course):
+    def delete_course(self, course):
         # client[self.college]["info"].update_one({'courses': {'$exists': 'true'}}, {'$pull': {'courses': course}})
-        client[self.college]["courses"].delete_one({'semester': semester, 'course': course})
+        client[self.college]["courses"].delete_one({'course': course})
         client[self.college]["info"].update_one({'room_ids': {'$exists': 'true'}},
                                                 {'$unset': {f'room_ids.{course}': {'$exists': 'true'}}})
 
